@@ -2,6 +2,10 @@
 
 A modern, responsive dashboard application built with React and Material-UI.
 
+## 🚀 Live Demo
+
+**Deployed Application:** [https://juspay-assignment-pi.vercel.app/](https://juspay-assignment-pi.vercel.app/)
+
 ## How to Run This Project
 
 ### Prerequisites
