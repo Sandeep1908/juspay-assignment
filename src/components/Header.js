@@ -29,7 +29,8 @@ import {
 } from '@mui/icons-material';
 import { useTheme } from '../contexts/ThemeContext';
 
-const NOTIFICATIONS = [
+// Mock notification data - TODO: replace with API call
+const mockNotifications = [
   { id: 1, message: 'You have a bug that needs...', time: 'Just now', type: 'bug' },
   { id: 2, message: 'New user registered', time: '59 minutes ago', type: 'user' },
   { id: 3, message: 'You have a bug that needs...', time: '12 hours ago', type: 'bug' },
@@ -38,20 +39,22 @@ const NOTIFICATIONS = [
 
 const Header = () => {
   const { darkMode, toggleDarkMode } = useTheme();
-  const [notificationAnchor, setNotificationAnchor] = useState(null);
-  const [profileAnchor, setProfileAnchor] = useState(null);
+  const [notifMenuAnchor, setNotifMenuAnchor] = useState(null);
+  const [userMenuAnchor, setUserMenuAnchor] = useState(null);
+  
+  // const [searchQuery, setSearchQuery] = useState(''); // for future search functionality
 
-  const handleNotificationClick = useCallback((event) => {
-    setNotificationAnchor(event.currentTarget);
+  const handleNotificationMenuOpen = useCallback((e) => {
+    setNotifMenuAnchor(e.currentTarget);
   }, []);
 
-  const handleProfileClick = useCallback((event) => {
-    setProfileAnchor(event.currentTarget);
+  const handleUserMenuOpen = useCallback((e) => {
+    setUserMenuAnchor(e.currentTarget);
   }, []);
 
-  const handleClose = useCallback(() => {
-    setNotificationAnchor(null);
-    setProfileAnchor(null);
+  const handleMenuClose = useCallback(() => {
+    setNotifMenuAnchor(null);
+    setUserMenuAnchor(null);
   }, []);
 
   return (
@@ -114,14 +117,14 @@ const Header = () => {
           </IconButton>
 
           {/* Notifications */}
-          <IconButton color="inherit" onClick={handleNotificationClick}>
+          <IconButton color="inherit" onClick={handleNotificationMenuOpen}>
             <Badge badgeContent={4} color="error">
               <Notifications />
             </Badge>
           </IconButton>
 
           {/* Profile */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer' }} onClick={handleProfileClick}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer' }} onClick={handleUserMenuOpen}>
             <Avatar sx={{ width: 32, height: 32, bgcolor: 'grey.300' }}>
               <Person fontSize="small" />
             </Avatar>
@@ -133,9 +136,9 @@ const Header = () => {
 
         {/* Notifications Menu */}
         <Menu
-          anchorEl={notificationAnchor}
-          open={Boolean(notificationAnchor)}
-          onClose={handleClose}
+          anchorEl={notifMenuAnchor}
+          open={Boolean(notifMenuAnchor)}
+          onClose={handleMenuClose}
           PaperProps={{
             sx: { width: 320, mt: 1 },
           }}
@@ -146,24 +149,24 @@ const Header = () => {
             </Typography>
           </Box>
           <List sx={{ p: 0 }}>
-            {NOTIFICATIONS.map((notification) => (
-              <ListItem key={notification.id} sx={{ py: 1.5, px: 2 }}>
+            {mockNotifications.map((notif) => (
+              <ListItem key={notif.id} sx={{ py: 1.5, px: 2 }}>
                 <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5, width: '100%' }}>
                   <Box
                     sx={{
                       width: 8,
                       height: 8,
                       borderRadius: '50%',
-                      bgcolor: notification.type === 'bug' ? 'primary.main' : 'warning.main',
+                      bgcolor: notif.type === 'bug' ? 'primary.main' : 'warning.main',
                       mt: 1,
                     }}
                   />
                   <Box sx={{ flex: 1 }}>
                     <Typography variant="body2" sx={{ mb: 0.5 }}>
-                      {notification.message}
+                      {notif.message}
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
-                      {notification.time}
+                      {notif.time}
                     </Typography>
                   </Box>
                 </Box>
@@ -174,16 +177,16 @@ const Header = () => {
 
         {/* Profile Menu */}
         <Menu
-          anchorEl={profileAnchor}
-          open={Boolean(profileAnchor)}
-          onClose={handleClose}
+          anchorEl={userMenuAnchor}
+          open={Boolean(userMenuAnchor)}
+          onClose={handleMenuClose}
           PaperProps={{
             sx: { width: 200, mt: 1 },
           }}
         >
-          <MenuItem onClick={handleClose}>Profile</MenuItem>
-          <MenuItem onClick={handleClose}>Settings</MenuItem>
-          <MenuItem onClick={handleClose}>Logout</MenuItem>
+          <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+          <MenuItem onClick={handleMenuClose}>Settings</MenuItem>
+          <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
         </Menu>
       </Toolbar>
     </AppBar>

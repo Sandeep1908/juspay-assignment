@@ -9,23 +9,32 @@ import StatsCards from './components/StatsCards';
 import Charts from './components/Charts';
 import OrderListPage from './pages/OrderListPage';
 
+// TODO: Add routing with React Router later
 
+
+// Main app content wrapper
 const AppContent = () => {
   const { darkMode } = useTheme();
-  const [currentPage, setCurrentPage] = useState('eCommerce');
+  const [activePage, setActivePage] = useState('eCommerce'); // default page
+  
+  // Debug current page
+  // console.log('Current active page:', activePage);
 
-  const handleMenuClick = useCallback((menuItem) => {
-    if (menuItem === 'Orders') {
-      setCurrentPage('Orders');
+  const handleSidebarNavigation = useCallback((selectedMenuItem) => {
+    // Simple page switching logic - will replace with proper routing
+    if (selectedMenuItem === 'Orders') {
+      setActivePage('Orders');
     } else {
-      setCurrentPage('eCommerce');
+      setActivePage('eCommerce'); // fallback to dashboard
     }
   }, []);
 
-  const selectedTheme = useMemo(() => darkMode ? darkTheme : lightTheme, [darkMode]);
+  const currentTheme = useMemo(() => {
+    return darkMode ? darkTheme : lightTheme;
+  }, [darkMode]);
 
-  const renderMainContent = useMemo(() => {
-    const pages = {
+  const renderPageContent = useMemo(() => {
+    const pageComponents = {
       eCommerce: (
         <Box
           component="main"
@@ -45,11 +54,11 @@ const AppContent = () => {
       ),
       Orders: <OrderListPage />
     };
-    return pages[currentPage] || pages.eCommerce;
-  }, [currentPage]);
+    return pageComponents[activePage] || pageComponents.eCommerce;
+  }, [activePage]);
 
   return (
-    <ThemeProvider theme={selectedTheme}>
+    <ThemeProvider theme={currentTheme}>
       <CssBaseline />
       <Box sx={{ 
         display: 'flex', 
@@ -57,12 +66,12 @@ const AppContent = () => {
         transition: 'background-color 0.3s ease, color 0.3s ease',
         backgroundColor: 'background.default'
       }}>
-        <Sidebar onMenuClick={handleMenuClick} />
+        <Sidebar onMenuClick={handleSidebarNavigation} />
         <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
           <Header />
           <Box sx={{ display: 'flex', flexGrow: 1 }}>
-            {renderMainContent}
-            {currentPage === 'eCommerce' && <RightSidebar />}
+            {renderPageContent}
+            {activePage === 'eCommerce' && <RightSidebar />}
           </Box>
         </Box>
       </Box>
@@ -70,6 +79,7 @@ const AppContent = () => {
   );
 };
 
+// Root App component
 function App() {
   return (
     <ThemeContextProvider>

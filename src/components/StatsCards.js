@@ -4,10 +4,11 @@ import { TrendingUp, TrendingDown } from '@mui/icons-material';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { useTheme } from '../contexts/ThemeContext';
 
-const CHART_DATA = {
+// Chart data for projections vs actuals - TODO: get from API
+const chartConfig = {
   months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-  actuals: [18, 20, 18, 22, 14, 19],
-  projections: [20, 24, 20, 26, 16, 22]
+  actualValues: [18, 20, 18, 22, 14, 19],
+  projectedValues: [20, 24, 20, 26, 16, 22]
 };
 
 const sanitizeText = (text) => {
@@ -18,58 +19,63 @@ const sanitizeText = (text) => {
   });
 };
 
-const STATS_DATA = [
+// Stats card data - hardcoded for now
+const statsCardData = [
   {
     title: 'Customers',
     value: '3,781',
     change: '+11.01%',
     trend: 'up',
-    bgColor: '#E3F5FF',
-    darkBgColor: '#E3F5FF',
+    lightBg: '#E3F5FF',
+    darkBg: '#E3F5FF', // same for both modes
   },
   {
     title: 'Orders',
     value: '1,219',
     change: '-0.03%',
     trend: 'down',
-    bgColor: '#F7F9FB',
-    darkBgColor: '#FFFFFF0D',
+    lightBg: '#F7F9FB',
+    darkBg: '#FFFFFF0D',
   },
   {
     title: 'Revenue',
     value: '$695',
     change: '+15.03%',
     trend: 'up',
-    bgColor: '#F7F9FB',
-    darkBgColor: '#FFFFFF0D',
+    lightBg: '#F7F9FB',
+    darkBg: '#FFFFFF0D',
   },
   {
     title: 'Growth',
     value: '30.1%',
     change: '+6.08%',
     trend: 'up',
-    bgColor: '#E5ECF6',
-    darkBgColor: '#E3F5FF',
+    lightBg: '#E5ECF6',
+    darkBg: '#E3F5FF', // special case
   },
 ];
 
 const ProjectionsChart = () => {
   const { darkMode } = useTheme();
   
-  const chartSeries = useMemo(() => [
+  // Memoize chart series to prevent re-creation
+  const barChartSeries = useMemo(() => [
     {
-      data: CHART_DATA.actuals,
+      data: chartConfig.actualValues,
       label: 'Actuals',
       color: '#a7c7e7',
       stack: 'stack1',
     },
     {
-      data: CHART_DATA.projections,
-      label: 'Projections',
-      color: '#a7c7e7AA',
+      data: chartConfig.projectedValues,
+      label: 'Projections', 
+      color: '#a7c7e7AA', // with transparency
       stack: 'stack1',
     },
-  ], []);  
+  ], []);
+  
+  // Debug chart data
+  // console.log('Chart data:', chartConfig);  
 
   return (
     <Card sx={{ 
@@ -90,7 +96,7 @@ const ProjectionsChart = () => {
       <BarChart
         xAxis={[
           {
-            data: CHART_DATA.months,
+            data: chartConfig.months,
             scaleType: 'band',
             tickLabelStyle: { fontSize: 12, fill: '#9ca3af' },
             axisLine: false,
@@ -105,7 +111,7 @@ const ProjectionsChart = () => {
             tickFormatter: (value) => `${value}M`,
           },
         ]}
-        series={chartSeries}
+        series={barChartSeries}
         height={190}
         margin={{ left: 40, right: 20, top: 20, bottom: 40 }}
         grid={{ horizontal: true, vertical: false }}
@@ -127,15 +133,16 @@ const ProjectionsChart = () => {
 
 const StatsCards = () => {
   const { darkMode } = useTheme();
+  
   return (
     <Grid container spacing={2} sx={{ mb: 3 }}>
       <Grid item xs={12} md={6}>
         <Grid container spacing={2}>
-          {STATS_DATA.map((stat, index) => (
-            <Grid item xs={6} key={index}>
+          {statsCardData.map((statCard, idx) => (
+            <Grid item xs={6} key={idx}>
           <Card
             sx={{
-              backgroundColor: darkMode ? stat.darkBgColor : stat.bgColor,
+              backgroundColor: darkMode ? statCard.darkBg : statCard.lightBg,
               border: 'none',
               height: 120,
               cursor: 'pointer',
@@ -152,30 +159,30 @@ const StatsCards = () => {
             <CardContent sx={{ p: 2.5, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <Typography
                 variant="body2"
-                color={(stat.title === 'Customers' || stat.title === 'Growth') ? 'black' : (darkMode ? "text.secondary" : "black")}
+                color={(statCard.title === 'Customers' || statCard.title === 'Growth') ? 'black' : (darkMode ? "text.secondary" : "black")}
                 sx={{ mb: 1, fontWeight: 500 }}
               >
-                {sanitizeText(stat.title)}
+                {sanitizeText(statCard.title)}
               </Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 1 }}>
-                <Typography variant="h5" sx={{ fontWeight: 700, color: (stat.title === 'Customers' || stat.title === 'Growth') ? 'black' : 'text.primary', fontSize: '1.5rem' }}>
-                  {sanitizeText(stat.value)}
+                <Typography variant="h5" sx={{ fontWeight: 700, color: (statCard.title === 'Customers' || statCard.title === 'Growth') ? 'black' : 'text.primary', fontSize: '1.5rem' }}>
+                  {sanitizeText(statCard.value)}
                 </Typography>
                 <Box
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: 0.5,
-                    color: stat.trend === 'up' ? 'success.main' : 'error.main',
+                    color: statCard.trend === 'up' ? 'success.main' : 'error.main',
                   }}
                 >
-                  {stat.trend === 'up' ? (
+                  {statCard.trend === 'up' ? (
                     <TrendingUp fontSize="small" />
                   ) : (
                     <TrendingDown fontSize="small" />
                   )}
                   <Typography variant="body2" fontWeight={500}>
-                    {sanitizeText(stat.change)}
+                    {sanitizeText(statCard.change)}
                   </Typography>
                 </Box>
               </Box>

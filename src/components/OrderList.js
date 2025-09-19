@@ -28,12 +28,14 @@ import ContactIcon4 from '../assets/icons/contacts/IconSet (7).png';
 import ContactIcon5 from '../assets/icons/contacts/IconSet (8).png';
 import ContactIcon6 from '../assets/icons/contacts/IconSet (9).png';
 
-const ordersData = [
+// TODO: Move this to a separate data file later
+const mockOrdersData = [
   { id: '#CM9801', customer: 'Natali Craig', avatar: ContactIcon1, project: 'Landing Page', address: 'Meadow Lane Oakland', date: 'Just now', status: 'In Progress' },
   { id: '#CM9802', customer: 'Kate Morrison', avatar: ContactIcon5, project: 'CRM Admin pages', address: 'Larry San Francisco', date: 'A minute ago', status: 'Complete' },
   { id: '#CM9803', customer: 'Drew Cano', avatar: ContactIcon2, project: 'Client Project', address: 'Bagwell Avenue Ocala', date: '1 hour ago', status: 'Pending' },
   { id: '#CM9804', customer: 'Orlando Diggs', avatar: ContactIcon3, project: 'Admin Dashboard', address: 'Washburn Baton Rouge', date: 'Yesterday', status: 'Approved' },
   { id: '#CM9805', customer: 'Andi Lane', avatar: ContactIcon4, project: 'App Landing Page', address: 'Nest Lane Olivette', date: 'Feb 2, 2023', status: 'Rejected' },
+  // Adding more entries for pagination testing
   { id: '#CM9806', customer: 'Natali Craig', avatar: ContactIcon1, project: 'Landing Page', address: 'Meadow Lane Oakland', date: 'Just now', status: 'In Progress' },
   { id: '#CM9807', customer: 'Kate Morrison', avatar: ContactIcon5, project: 'CRM Admin pages', address: 'Larry San Francisco', date: 'A minute ago', status: 'Complete' },
   { id: '#CM9808', customer: 'Drew Cano', avatar: ContactIcon2, project: 'Client Project', address: 'Bagwell Avenue Ocala', date: '1 hour ago', status: 'Pending' },
@@ -41,89 +43,125 @@ const ordersData = [
   { id: '#CM9810', customer: 'Andi Lane', avatar: ContactIcon4, project: 'App Landing Page', address: 'Nest Lane Olivette', date: 'Feb 2, 2023', status: 'Rejected' },
 ];
 
+// Status color mapping - might need to adjust these colors later
 const getStatusColor = (status) => {
-  const colors = {
-    'Complete': '#10b981',
-    'In Progress': '#3b82f6', 
-    'Pending': '#06b6d4',
-    'Approved': '#f59e0b',
-    'Rejected': '#6b7280',
-  };
-  return colors[status] || '#6b7280';
+  // Using switch instead of object for better readability
+  switch(status) {
+    case 'Complete':
+      return '#10b981'; // green
+    case 'In Progress':
+      return '#3b82f6'; // blue
+    case 'Pending':
+      return '#06b6d4'; // cyan
+    case 'Approved':
+      return '#f59e0b'; // amber
+    case 'Rejected':
+      return '#6b7280'; // gray
+    default:
+      return '#6b7280';
+  }
 };
 
 const OrderList = () => {
   const { darkMode } = useTheme();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedItems, setSelectedItems] = useState(['#CM9804']);
-  const [page, setPage] = useState(1);
-  const [sortField, setSortField] = useState('');
-  const [sortDirection, setSortDirection] = useState('asc');
-  const [statusFilter, setStatusFilter] = useState('');
-  const itemsPerPage = 10;
+  const [searchQuery, setSearchQuery] = useState('');
+  const [checkedItems, setCheckedItems] = useState(['#CM9804']); // pre-select one item
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc');
+  const [filterStatus, setFilterStatus] = useState(''); // not used yet but keeping for future
+  const ITEMS_PER_PAGE = 10; // constant in caps
 
-  const handleSelectItem = (id) => {
-    setSelectedItems(prev => 
-      prev.includes(id) 
-        ? prev.filter(item => item !== id)
-        : [...prev, id]
-    );
+  // Handle individual item selection
+  const handleItemSelect = (orderId) => {
+    setCheckedItems(prevItems => {
+      if (prevItems.includes(orderId)) {
+        // Remove if already selected
+        return prevItems.filter(item => item !== orderId);
+      } else {
+        // Add to selection
+        return [...prevItems, orderId];
+      }
+    });
   };
 
-  const handleSort = (field) => {
-    if (sortField === field) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+  const handleSortClick = (fieldName) => {
+    if (sortBy === fieldName) {
+      // Toggle direction if same field
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     } else {
-      setSortField(field);
-      setSortDirection('asc');
+      // New field, start with ascending
+      setSortBy(fieldName);
+      setSortOrder('asc');
     }
   };
 
-  let filteredAndSortedOrders = ordersData.filter(order => {
-    if (!searchTerm) return true; // Show all if no search term
+  // Filter and search logic
+  let processedOrders = mockOrdersData;
+  
+  // Apply search filter
+  if (searchQuery.trim()) {
+    const query = searchQuery.toLowerCase().trim();
+    // console.log('Filtering with query:', query); // keeping for debugging
     
-    const searchLower = searchTerm.toLowerCase();
-    console.log('Searching for:', searchLower); // Debug log
-    
-    const matchesSearch = (
-      order.id.toLowerCase().includes(searchLower) ||
-      order.customer.toLowerCase().includes(searchLower) ||
-      order.project.toLowerCase().includes(searchLower) ||
-      order.address.toLowerCase().includes(searchLower) ||
-      order.status.toLowerCase().includes(searchLower)
-    );
-    
-    console.log('Order:', order.customer, 'Matches:', matchesSearch); // Debug log
-    return matchesSearch;
-  });
-
-  if (sortField) {
-    filteredAndSortedOrders.sort((a, b) => {
-      let aVal = a[sortField];
-      let bVal = b[sortField];
-      if (typeof aVal === 'string') {
-        aVal = aVal.toLowerCase();
-        bVal = bVal.toLowerCase();
-      }
-      if (sortDirection === 'asc') {
-        return aVal > bVal ? 1 : -1;
-      } else {
-        return aVal < bVal ? 1 : -1;
-      }
+    processedOrders = processedOrders.filter(order => {
+      const searchableFields = [
+        order.id,
+        order.customer,
+        order.project,
+        order.address,
+        order.status
+      ];
+      
+      return searchableFields.some(field => 
+        field.toLowerCase().includes(query)
+      );
     });
   }
 
-  const handleSelectAll = (event) => {
-    if (event.target.checked) {
-      setSelectedItems(filteredAndSortedOrders.map(order => order.id));
+  // Apply sorting if needed
+  if (sortBy) {
+    processedOrders = [...processedOrders].sort((orderA, orderB) => {
+      let valueA = orderA[sortBy];
+      let valueB = orderB[sortBy];
+      
+      // Handle string comparison
+      if (typeof valueA === 'string') {
+        valueA = valueA.toLowerCase();
+        valueB = valueB.toLowerCase();
+      }
+      
+      let comparison = 0;
+      if (valueA > valueB) {
+        comparison = 1;
+      } else if (valueA < valueB) {
+        comparison = -1;
+      }
+      
+      return sortOrder === 'desc' ? comparison * -1 : comparison;
+    });
+  }
+
+  const handleSelectAllToggle = (e) => {
+    const isChecked = e.target.checked;
+    if (isChecked) {
+      // Select all visible orders
+      const allIds = processedOrders.map(order => order.id);
+      setCheckedItems(allIds);
     } else {
-      setSelectedItems([]);
+      // Clear all selections
+      setCheckedItems([]);
     }
   };
 
-  const startIndex = (page - 1) * itemsPerPage;
-  const paginatedOrders = filteredAndSortedOrders.slice(startIndex, startIndex + itemsPerPage);
-  const totalPages = Math.ceil(filteredAndSortedOrders.length / itemsPerPage);
+  // Pagination calculations
+  const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIdx = startIdx + ITEMS_PER_PAGE;
+  const paginatedOrders = processedOrders.slice(startIdx, endIdx);
+  const totalPages = Math.ceil(processedOrders.length / ITEMS_PER_PAGE);
+  
+  // Debug info
+  // console.log(`Showing ${paginatedOrders.length} of ${processedOrders.length} orders`);
 
   return (
     <Box sx={{ 
@@ -190,8 +228,8 @@ const OrderList = () => {
         <TextField
           size="small"
           placeholder="Search"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
           inputProps={{ 'aria-label': 'Search orders' }}
           sx={{ 
             width: { xs: '100%', sm: 280 },
@@ -245,9 +283,9 @@ const OrderList = () => {
           alignItems: 'center' 
         }}>
           <Checkbox
-            checked={selectedItems.length === filteredAndSortedOrders.length && filteredAndSortedOrders.length > 0}
-            indeterminate={selectedItems.length > 0 && selectedItems.length < filteredAndSortedOrders.length}
-            onChange={handleSelectAll}
+            checked={checkedItems.length === processedOrders.length && processedOrders.length > 0}
+            indeterminate={checkedItems.length > 0 && checkedItems.length < processedOrders.length}
+            onChange={handleSelectAllToggle}
             size="small"
             inputProps={{ 'aria-label': 'Select all orders' }}
             sx={{
@@ -262,7 +300,7 @@ const OrderList = () => {
           />
           <Typography 
             variant="body2" 
-            onClick={() => handleSort('id')}
+            onClick={() => handleSortClick('id')}
             sx={{ 
               color: darkMode ? '#9ca3af' : '#6b7280', 
               fontSize: '0.75rem', 
@@ -275,13 +313,13 @@ const OrderList = () => {
             }}
           >
             Order ID
-            {sortField === 'id' && (
-              sortDirection === 'asc' ? <KeyboardArrowUp fontSize="small" /> : <KeyboardArrowDown fontSize="small" />
+            {sortBy === 'id' && (
+              sortOrder === 'asc' ? <KeyboardArrowUp fontSize="small" /> : <KeyboardArrowDown fontSize="small" />
             )}
           </Typography>
           <Typography 
             variant="body2" 
-            onClick={() => handleSort('customer')}
+            onClick={() => handleSortClick('customer')}
             sx={{ 
               color: darkMode ? '#9ca3af' : '#6b7280', 
               fontSize: '0.75rem', 
@@ -294,13 +332,13 @@ const OrderList = () => {
             }}
           >
             User
-            {sortField === 'customer' && (
-              sortDirection === 'asc' ? <KeyboardArrowUp fontSize="small" /> : <KeyboardArrowDown fontSize="small" />
+            {sortBy === 'customer' && (
+              sortOrder === 'asc' ? <KeyboardArrowUp fontSize="small" /> : <KeyboardArrowDown fontSize="small" />
             )}
           </Typography>
           <Typography 
             variant="body2" 
-            onClick={() => handleSort('project')}
+            onClick={() => handleSortClick('project')}
             sx={{ 
               color: darkMode ? '#9ca3af' : '#6b7280', 
               fontSize: '0.75rem', 
@@ -313,8 +351,8 @@ const OrderList = () => {
             }}
           >
             Project
-            {sortField === 'project' && (
-              sortDirection === 'asc' ? <KeyboardArrowUp fontSize="small" /> : <KeyboardArrowDown fontSize="small" />
+            {sortBy === 'project' && (
+              sortOrder === 'asc' ? <KeyboardArrowUp fontSize="small" /> : <KeyboardArrowDown fontSize="small" />
             )}
           </Typography>
           <Typography 
@@ -345,7 +383,7 @@ const OrderList = () => {
           </Typography>
           <Typography 
             variant="body2" 
-            onClick={() => handleSort('status')}
+            onClick={() => handleSortClick('status')}
             sx={{ 
               color: darkMode ? '#9ca3af' : '#6b7280', 
               fontSize: '0.75rem', 
@@ -358,8 +396,8 @@ const OrderList = () => {
             }}
           >
             Status
-            {sortField === 'status' && (
-              sortDirection === 'asc' ? <KeyboardArrowUp fontSize="small" /> : <KeyboardArrowDown fontSize="small" />
+            {sortBy === 'status' && (
+              sortOrder === 'asc' ? <KeyboardArrowUp fontSize="small" /> : <KeyboardArrowDown fontSize="small" />
             )}
           </Typography>
         </Box>
@@ -386,8 +424,8 @@ const OrderList = () => {
             }}
           >
             <Checkbox
-              checked={selectedItems.includes(order.id)}
-              onChange={() => handleSelectItem(order.id)}
+              checked={checkedItems.includes(order.id)}
+              onChange={() => handleItemSelect(order.id)}
               size="small"
               inputProps={{ 'aria-label': `Select order ${order.id}` }}
               sx={{
@@ -447,8 +485,8 @@ const OrderList = () => {
       <Box sx={{ display: 'flex', justifyContent: { xs: 'center', sm: 'flex-end' }, mt: 3 }}>
         <Pagination
           count={totalPages}
-          page={page}
-          onChange={(e, newPage) => setPage(newPage)}
+          page={currentPage}
+          onChange={(e, newPage) => setCurrentPage(newPage)}
           color="primary"
           size="small"
           sx={{
