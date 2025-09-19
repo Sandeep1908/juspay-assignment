@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { ThemeProvider, CssBaseline, Box, Typography } from '@mui/material';
 import { lightTheme, darkTheme } from './theme';
 import { ThemeContextProvider, useTheme } from './contexts/ThemeContext';
@@ -14,16 +14,42 @@ const AppContent = () => {
   const { darkMode } = useTheme();
   const [currentPage, setCurrentPage] = useState('eCommerce');
 
-  const handleMenuClick = (menuItem) => {
+  const handleMenuClick = useCallback((menuItem) => {
     if (menuItem === 'Orders') {
       setCurrentPage('Orders');
     } else {
       setCurrentPage('eCommerce');
     }
-  };
+  }, []);
+
+  const selectedTheme = useMemo(() => darkMode ? darkTheme : lightTheme, [darkMode]);
+
+  const renderMainContent = useMemo(() => {
+    const pages = {
+      eCommerce: (
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            p: 3,
+            backgroundColor: 'background.default',
+            minHeight: 'calc(100vh - 64px)',
+          }}
+        >
+          <Typography variant="h4" sx={{ mb: 3, fontWeight: 700 }}>
+            eCommerce
+          </Typography>
+          <StatsCards />
+          <Charts />
+        </Box>
+      ),
+      Orders: <OrderListPage />
+    };
+    return pages[currentPage] || pages.eCommerce;
+  }, [currentPage]);
 
   return (
-    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+    <ThemeProvider theme={selectedTheme}>
       <CssBaseline />
       <Box sx={{ 
         display: 'flex', 
@@ -35,26 +61,7 @@ const AppContent = () => {
         <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
           <Header />
           <Box sx={{ display: 'flex', flexGrow: 1 }}>
-            {currentPage === 'eCommerce' ? (
-              <Box
-                component="main"
-                sx={{
-                  flexGrow: 1,
-                  p: 3,
-                  backgroundColor: 'background.default',
-                  minHeight: 'calc(100vh - 64px)',
-                }}
-              >
-                <Typography variant="h4" sx={{ mb: 3, fontWeight: 700 }}>
-                  eCommerce
-                </Typography>
-                
-                <StatsCards />
-                <Charts />
-              </Box>
-            ) : (
-              <OrderListPage />
-            )}
+            {renderMainContent}
             {currentPage === 'eCommerce' && <RightSidebar />}
           </Box>
         </Box>

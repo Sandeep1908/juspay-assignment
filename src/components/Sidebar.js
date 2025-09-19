@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import {
   Drawer,
   List,
@@ -39,22 +39,23 @@ import DarkShoppingIcon from '../assets/icons/sidebar/dark/ShoppingBagOpen (1).p
 
 const drawerWidth = 240;
 
-const getFavoriteItems = (darkMode) => [
-  { icon: darkMode ? DarkSidebarIcon1 : SidebarIcon1, label: 'Overview' },
-  { icon: darkMode ? DarkSidebarIcon2 : SidebarIcon2, label: 'Projects' },
+const FAVORITE_ITEMS = [
+  { lightIcon: SidebarIcon1, darkIcon: DarkSidebarIcon1, label: 'Overview' },
+  { lightIcon: SidebarIcon2, darkIcon: DarkSidebarIcon2, label: 'Projects' },
 ];
 
-const getDashboardItems = (darkMode) => [
-  { icon: darkMode ? DarkSidebarIcon3 : SidebarIcon3, label: 'Default' },
-  { icon: darkMode ? DarkShoppingIcon : ShoppingIcon, label: 'eCommerce' },
-  { icon: darkMode ? DarkSidebarIcon2 : SidebarIcon2, label: 'Projects' },
-  { icon: darkMode ? DarkNotebook : SidebarIcon4, label: 'Online Courses' },
-  { icon: darkMode ? DarkSidebarIcon6 : ChatsIcon, label: 'Orders' },
+const DASHBOARD_ITEMS = [
+  { lightIcon: SidebarIcon3, darkIcon: DarkSidebarIcon3, label: 'Default' },
+  { lightIcon: ShoppingIcon, darkIcon: DarkShoppingIcon, label: 'eCommerce' },
+  { lightIcon: SidebarIcon2, darkIcon: DarkSidebarIcon2, label: 'Projects' },
+  { lightIcon: SidebarIcon4, darkIcon: DarkNotebook, label: 'Online Courses' },
+  { lightIcon: ChatsIcon, darkIcon: DarkSidebarIcon6, label: 'Orders' },
 ];
 
-const getPageItems = (darkMode) => [
+const PAGE_ITEMS = [
   { 
-    icon: darkMode ? DarkIdentificationCard : SidebarIcon5, 
+    lightIcon: SidebarIcon5, 
+    darkIcon: DarkIdentificationCard, 
     label: 'User Profile', 
     hasDropdown: true,
     children: [
@@ -65,10 +66,10 @@ const getPageItems = (darkMode) => [
       { label: 'Followers' },
     ]
   },
-  { icon: darkMode ? DarkSidebarIcon4 : SidebarIcon6, label: 'Account' },
-  { icon: darkMode ? DarkSidebarIcon5 : SidebarIcon7, label: 'Corporate' },
-  { icon: darkMode ? DarkSidebarIcon6 : ChatsIcon, label: 'Blog' },
-  { icon: darkMode ? DarkSidebarIcon1 : SidebarIcon1, label: 'Social' },
+  { lightIcon: SidebarIcon6, darkIcon: DarkSidebarIcon4, label: 'Account' },
+  { lightIcon: SidebarIcon7, darkIcon: DarkSidebarIcon5, label: 'Corporate' },
+  { lightIcon: ChatsIcon, darkIcon: DarkSidebarIcon6, label: 'Blog' },
+  { lightIcon: SidebarIcon1, darkIcon: DarkSidebarIcon1, label: 'Social' },
 ];
 
 const Sidebar = ({ onMenuClick }) => {
@@ -76,7 +77,7 @@ const Sidebar = ({ onMenuClick }) => {
   const [activeItem, setActiveItem] = useState('Default');
   const [expandedItems, setExpandedItems] = useState({});
 
-  const handleMenuClick = (item) => {
+  const handleMenuClick = useCallback((item) => {
     if (item.hasDropdown) {
       setExpandedItems(prev => ({
         ...prev,
@@ -88,7 +89,27 @@ const Sidebar = ({ onMenuClick }) => {
         onMenuClick(item.label);
       }
     }
-  };
+  }, [onMenuClick]);
+
+  const favoriteItems = useMemo(() => 
+    FAVORITE_ITEMS.map(item => ({
+      ...item,
+      icon: darkMode ? item.darkIcon : item.lightIcon
+    })), [darkMode]
+  );
+
+  const dashboardItems = useMemo(() => 
+    DASHBOARD_ITEMS.map(item => ({
+      ...item,
+      icon: darkMode ? item.darkIcon : item.lightIcon
+    })), [darkMode]
+  );
+
+  const pageItems = useMemo(() => 
+    PAGE_ITEMS.map(item => ({
+      ...item,
+      icon: darkMode ? item.darkIcon : item.lightIcon
+    })), [darkMode]);
 
   const renderMenuItems = (items, showIcon = true) => (
     items.map((item, index) => (
@@ -101,9 +122,9 @@ const Sidebar = ({ onMenuClick }) => {
               px: 2,
               borderRadius: 1,
               mb: 0.5,
-              backgroundColor: activeItem === item.label ? 'rgba(0,0,0,0.08)' : 'transparent',
+              backgroundColor: activeItem === item.label ? (darkMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)') : 'transparent',
               '&:hover': {
-                backgroundColor: 'rgba(0,0,0,0.04)',
+                backgroundColor: darkMode ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
               },
             }}
           >
@@ -144,9 +165,9 @@ const Sidebar = ({ onMenuClick }) => {
                       py: 0.5,
                       borderRadius: 1,
                       mb: 0.5,
-                      backgroundColor: activeItem === child.label ? 'rgba(0,0,0,0.08)' : 'transparent',
+                      backgroundColor: activeItem === child.label ? (darkMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)') : 'transparent',
                       '&:hover': {
-                        backgroundColor: 'rgba(0,0,0,0.04)',
+                        backgroundColor: darkMode ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
                       },
                     }}
                   >
@@ -228,7 +249,7 @@ const Sidebar = ({ onMenuClick }) => {
             </Typography>
           </Box>
           <List sx={{ py: 0 }}>
-            {renderMenuItems(getFavoriteItems(darkMode), false)}
+            {renderMenuItems(favoriteItems, false)}
           </List>
         </Box>
 
@@ -248,7 +269,7 @@ const Sidebar = ({ onMenuClick }) => {
             Dashboards
           </Typography>
           <List sx={{ py: 0 }}>
-            {renderMenuItems(getDashboardItems(darkMode))}
+            {renderMenuItems(dashboardItems)}
           </List>
         </Box>
 
@@ -268,7 +289,7 @@ const Sidebar = ({ onMenuClick }) => {
             Pages
           </Typography>
           <List sx={{ py: 0 }}>
-            {renderMenuItems(getPageItems(darkMode))}
+            {renderMenuItems(pageItems)}
           </List>
         </Box>
       </Box>

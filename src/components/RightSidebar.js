@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Box,
   Typography,
@@ -26,70 +26,83 @@ import ContactIcon4 from '../assets/icons/contacts/IconSet (7).png';
 import ContactIcon5 from '../assets/icons/contacts/IconSet (8).png';
 import ContactIcon6 from '../assets/icons/contacts/IconSet (9).png';
 
+const NOTIFICATIONS = [
+  {
+    icon: NotifIcon1,
+    text: 'You have a bug that needs...',
+    time: 'Just now',
+    bgColor: '#e0f7fa'
+  },
+  {
+    icon: NotifIcon2,
+    text: 'New user registered',
+    time: '59 minutes ago',
+    bgColor: '#f3f4f6'
+  },
+  {
+    icon: NotifIcon3,
+    text: 'You have a bug that needs...',
+    time: '12 hours ago',
+    bgColor: '#e0f7fa'
+  },
+  {
+    icon: NotifIcon4,
+    text: 'Andi Lane subscribed to you',
+    time: 'Today, 11:59 AM',
+    bgColor: '#f3f4f6'
+  }
+];
+
+const ACTIVITIES = [
+  {
+    avatar: ActivityIcon1,
+    text: 'You have a bug that needs...',
+    time: 'Just now'
+  },
+  {
+    avatar: ActivityIcon2,
+    text: 'Released a new version',
+    time: '59 minutes ago'
+  },
+  {
+    avatar: ActivityIcon3,
+    text: 'Submitted a bug',
+    time: '12 hours ago'
+  },
+  {
+    avatar: ActivityIcon4,
+    text: 'Modified A data in Page X',
+    time: 'Today, 11:59 AM'
+  },
+  {
+    avatar: Male11,
+    text: 'Deleted a page in Project X',
+    time: 'Feb 2, 2023'
+  }
+];
+
+const CONTACTS = [
+  { name: 'Natali Craig', avatar: ContactIcon1 },
+  { name: 'Drew Cano', avatar: ContactIcon2 },
+  { name: 'Orlando Diggs', avatar: ContactIcon3 },
+  { name: 'Andi Lane', avatar: ContactIcon4 },
+  { name: 'Kate Morrison', avatar: ContactIcon5 },
+  { name: 'Koray Okumus', avatar: ContactIcon6 }
+];
+
+const commonTextStyle = {
+  fontWeight: 400,
+  color: 'text.primary',
+  mb: 0.5,
+  lineHeight: 1.4,
+};
+
+const timeTextStyle = {
+  color: 'text.secondary',
+  fontSize: '0.75rem',
+};
+
 const RightSidebar = () => {
-  const notifications = [
-    {
-      icon: NotifIcon1,
-      text: 'You have a bug that needs...',
-      time: 'Just now',
-      bgColor: '#e0f7fa'
-    },
-    {
-      icon: NotifIcon2,
-      text: 'New user registered',
-      time: '59 minutes ago',
-      bgColor: '#f3f4f6'
-    },
-    {
-      icon: NotifIcon3,
-      text: 'You have a bug that needs...',
-      time: '12 hours ago',
-      bgColor: '#e0f7fa'
-    },
-    {
-      icon: NotifIcon4,
-      text: 'Andi Lane subscribed to you',
-      time: 'Today, 11:59 AM',
-      bgColor: '#f3f4f6'
-    }
-  ];
-
-  const activities = [
-    {
-      avatar: ActivityIcon1,
-      text: 'You have a bug that needs...',
-      time: 'Just now'
-    },
-    {
-      avatar: ActivityIcon2,
-      text: 'Released a new version',
-      time: '59 minutes ago'
-    },
-    {
-      avatar: ActivityIcon3,
-      text: 'Submitted a bug',
-      time: '12 hours ago'
-    },
-    {
-      avatar: ActivityIcon4,
-      text: 'Modified A data in Page X',
-      time: 'Today, 11:59 AM'
-    },
-    {
-      avatar: Male11,
-      text: 'Deleted a page in Project X',
-      time: 'Feb 2, 2023'
-    }
-  ];
-
-  const contacts = [
-    { name: 'Natali Craig', avatar: ContactIcon1 },
-    { name: 'Drew Cano', avatar: ContactIcon2 },
-    { name: 'Orlando Diggs', avatar: ContactIcon3 },
-    { name: 'Andi Lane', avatar: ContactIcon4 },
-    { name: 'Kate Morrison', avatar: ContactIcon5 },
-    { name: 'Koray Okumus', avatar: ContactIcon6 }
-  ];
 
   return (
     <Box
@@ -109,7 +122,7 @@ const RightSidebar = () => {
       </Typography>
       
       <List sx={{ p: 0, mb: 4 }}>
-        {notifications.map((notification, index) => (
+        {NOTIFICATIONS.map((notification, index) => (
           <ListItem key={index} sx={{ p: 0, mb: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5, width: '100%' }}>
               <Box
@@ -127,24 +140,10 @@ const RightSidebar = () => {
                 <img src={notification.icon} alt="notification" style={{ width: 16, height: 16 }} />
               </Box>
               <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    fontWeight: 400,
-                    color: 'text.primary',
-                    mb: 0.5,
-                    lineHeight: 1.4,
-                  }}
-                >
+                <Typography variant="body2" sx={commonTextStyle}>
                   {notification.text}
                 </Typography>
-                <Typography
-                  variant="caption"
-                  sx={{
-                    color: 'text.secondary',
-                    fontSize: '0.75rem',
-                  }}
-                >
+                <Typography variant="caption" sx={timeTextStyle}>
                   {notification.time}
                 </Typography>
               </Box>
@@ -159,7 +158,7 @@ const RightSidebar = () => {
       </Typography>
       
       <List sx={{ p: 0, mb: 4 }}>
-        {activities.map((activity, index) => (
+        {ACTIVITIES.map((activity, index) => (
           <ListItem key={index} sx={{ p: 0, mb: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5, width: '100%' }}>
               <Avatar
@@ -170,24 +169,10 @@ const RightSidebar = () => {
                 }}
               />
               <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    fontWeight: 400,
-                    color: 'text.primary',
-                    mb: 0.5,
-                    lineHeight: 1.4,
-                  }}
-                >
+                <Typography variant="body2" sx={commonTextStyle}>
                   {activity.text}
                 </Typography>
-                <Typography
-                  variant="caption"
-                  sx={{
-                    color: 'text.secondary',
-                    fontSize: '0.75rem',
-                  }}
-                >
+                <Typography variant="caption" sx={timeTextStyle}>
                   {activity.time}
                 </Typography>
               </Box>
@@ -202,7 +187,7 @@ const RightSidebar = () => {
       </Typography>
       
       <List sx={{ p: 0 }}>
-        {contacts.map((contact, index) => (
+        {CONTACTS.map((contact, index) => (
           <ListItem key={index} sx={{ p: 0, mb: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, width: '100%' }}>
               <Avatar
@@ -212,13 +197,7 @@ const RightSidebar = () => {
                   height: 32,
                 }}
               />
-              <Typography
-                variant="body2"
-                sx={{
-                  fontWeight: 400,
-                  color: 'text.primary',
-                }}
-              >
+              <Typography variant="body2" sx={{ fontWeight: 400, color: 'text.primary' }}>
                 {contact.name}
               </Typography>
             </Box>

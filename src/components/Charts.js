@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Card, CardContent, Typography, Box, Grid } from '@mui/material';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { LineChart } from '@mui/x-charts/LineChart';
@@ -6,11 +6,42 @@ import { PieChart } from '@mui/x-charts/PieChart';
 import { useTheme } from '../contexts/ThemeContext';
 import worldmap from '../assets/world.svg'
 
+const REVENUE_DATA = {
+  currentWeek: [12, 8, 10, 15, 18, 20],
+  previousWeek: [8, 15, 17, 12, 10, 22],
+  xLabels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+};
+
+const LOCATION_DATA = [
+  { name: 'New York', value: '72K' },
+  { name: 'San Francisco', value: '39K' },
+  { name: 'Sydney', value: '25K' },
+];
+
+const PRODUCTS_DATA = [
+  { name: 'ASOS Ridley High Waist', price: '$79.49', sold: 82, revenue: '$6,518.18' },
+  { name: 'Marco Lightweight Shirt', price: '$128.50', sold: 37, revenue: '$4,754.50' },
+  { name: 'Half Sleeve Shirt', price: '$39.99', sold: 64, revenue: '$2,559.36' },
+  { name: 'Lightweight Jacket', price: '$20.00', sold: 184, revenue: '$3,680.00' },
+  { name: 'Marco Shoes', price: '$79.49', sold: 64, revenue: '$1,965.81' },
+];
+
+const SALES_DATA = [
+  { id: 0, value: 38.6, label: 'Direct', color: '#1f2937', salesValue: '$300.56' },
+  { id: 1, value: 22.5, label: 'Affiliate', color: '#10b981', salesValue: '$135.18' },
+  { id: 2, value: 30.8, label: 'Sponsored', color: '#8b5cf6', salesValue: '$154.02' },
+  { id: 3, value: 8.1, label: 'E-mail', color: '#06b6d4', salesValue: '$48.96' },
+];
+
+const MAP_MARKERS = [
+  { top: '43%', left: '25%' },
+  { top: '55%', left: '18%' },
+  { top: '85%', left: '82%' },
+  { top: '50%', left: '90%' }
+];
+
 const RevenueChart = () => {
   const { darkMode } = useTheme();
-  const currentWeek = [12, 8, 10, 15, 18, 20];
-  const previousWeek = [8, 15, 17, 12, 10, 22];
-  const xLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
 
   return (
     <Card sx={{ 
@@ -53,20 +84,20 @@ const RevenueChart = () => {
           <LineChart
             series={[
               { 
-                data: currentWeek, 
+                data: REVENUE_DATA.currentWeek, 
                 color: '#000000', 
                 curve: 'natural',
                 connectNulls: true
               },
               { 
-                data: previousWeek, 
+                data: REVENUE_DATA.previousWeek, 
                 color: '#a7c7e7', 
                 curve: 'natural',
                 connectNulls: true
               },
             ]}
             xAxis={[{ 
-              data: xLabels, 
+              data: REVENUE_DATA.xLabels, 
               scaleType: 'band', 
               tickLabelStyle: { fontSize: 12, fill: '#9ca3af' },
               axisLine: false,
@@ -92,12 +123,13 @@ const RevenueChart = () => {
 
 const LocationChart = () => {
   const { darkMode } = useTheme();
-  const locations = [
-    { name: 'New York', value: '72K' },
-    { name: 'San Francisco', value: '39K' },
-    { name: 'Sydney', value: '25K' },
-   
-  ];
+  
+  const locationPercentages = useMemo(() => 
+    LOCATION_DATA.map(location => ({
+      ...location,
+      percent: (parseInt(location.value) / 72) * 100
+    })), []
+  );
 
   return (
     <Card
@@ -125,64 +157,26 @@ const LocationChart = () => {
         <Box sx={{ position: 'relative', height: 150, mb: 2 }}>
           <img src={worldmap} alt="World Map" width="100%" height="100%" style={{objectFit:"cover"}} />
 
-           <Box
-    sx={{
-      position: 'absolute',
-      top: '43%', // adjust to match location
-      left: '25%',
-      width: 8,
-      height: 8,
-      bgcolor: '#111827',
-      border: '1px solid #fff',
-      borderRadius: '50%',
-      transform: 'translate(-50%, -50%)',
-    }}
-  />
-  <Box
-    sx={{
-      position: 'absolute',
-      top: '55%', // adjust to match location
-      left: '18%',
-      width: 8,
-      height: 8,
-      bgcolor: '#111827',
-      border: '1px solid #fff',
-      borderRadius: '50%',
-      transform: 'translate(-50%, -50%)',
-    }}
-  />
-  <Box
-    sx={{
-      position: 'absolute',
-      top: '85%',
-      left: '82%',
-      width: 8,
-      height: 8,
-      bgcolor: '#111827',
-      border: '1px solid #fff',
-      borderRadius: '50%',
-      transform: 'translate(-50%, -50%)',
-    }}
-  />
-  <Box
-    sx={{
-      position: 'absolute',
-      top: '50%',
-      left: '90%',
-      width: 8,
-      height: 8,
-      bgcolor: '#111827',
-      border: '1px solid #fff',
-      borderRadius: '50%',
-      transform: 'translate(-50%, -50%)',
-    }}
-  />
+          {MAP_MARKERS.map((marker, index) => (
+            <Box
+              key={index}
+              sx={{
+                position: 'absolute',
+                top: marker.top,
+                left: marker.left,
+                width: 8,
+                height: 8,
+                bgcolor: '#111827',
+                border: '1px solid #fff',
+                borderRadius: '50%',
+                transform: 'translate(-50%, -50%)',
+              }}
+            />
+          ))}
         </Box>
 
         {/* Location list */}
-        {locations.map((location, index) => {
-          const percent = (parseInt(location.value) / 72) * 100;
-          return (
+        {locationPercentages.map((location, index) => (
             <Box key={index} sx={{ mb: 1.5 }}>
               <Box
                 sx={{
@@ -214,7 +208,7 @@ const LocationChart = () => {
               >
                 <Box
                   sx={{
-                    width: `${percent}%`,
+                    width: `${location.percent}%`,
                     height: '100%',
                     backgroundColor: '#A8C5DA',
                     borderRadius: 2,
@@ -222,8 +216,7 @@ const LocationChart = () => {
                 />
               </Box>
             </Box>
-          );
-        })}
+          ))}
       </CardContent>
     </Card>
   );
@@ -234,13 +227,6 @@ const LocationChart = () => {
 
 const TopProducts = () => {
   const { darkMode } = useTheme();
-  const products = [
-    { name: 'ASOS Ridley High Waist', price: '$79.49', sold: 82, revenue: '$6,518.18' },
-    { name: 'Marco Lightweight Shirt', price: '$128.50', sold: 37, revenue: '$4,754.50' },
-    { name: 'Half Sleeve Shirt', price: '$39.99', sold: 64, revenue: '$2,559.36' },
-    { name: 'Lightweight Jacket', price: '$20.00', sold: 184, revenue: '$3,680.00' },
-    { name: 'Marco Shoes', price: '$79.49', sold: 64, revenue: '$1,965.81' },
-  ];
 
   return (
     <Card sx={{ 
@@ -275,7 +261,7 @@ const TopProducts = () => {
           </Box>
           
           {/* Data Rows */}
-          {products.map((product, index) => (
+          {PRODUCTS_DATA.map((product, index) => (
             <Box key={index} sx={{ 
               display: 'flex', 
               py: 1.5, 
@@ -310,19 +296,6 @@ const TopProducts = () => {
 
 const TotalSalesChart = () => {
   const { darkMode } = useTheme();
-  const data = [
-    { id: 0, value: 38.6, label: 'Direct', color: '#1f2937' },
-    { id: 1, value: 22.5, label: 'Affiliate', color: '#10b981' },
-    { id: 2, value: 30.8, label: 'Sponsored', color: '#8b5cf6' },
-    { id: 3, value: 8.1, label: 'E-mail', color: '#06b6d4' },
-  ];
-
-  const salesData = [
-    { label: 'Direct', value: '$300.56', color: '#1f2937' },
-    { label: 'Affiliate', value: '$135.18', color: '#10b981' },
-    { label: 'Sponsored', value: '$154.02', color: '#8b5cf6' },
-    { label: 'E-mail', value: '$48.96', color: '#06b6d4' },
-  ];
 
   return (
     <Card sx={{ 
@@ -344,7 +317,7 @@ const TotalSalesChart = () => {
                <PieChart
         series={[
           {
-            data,
+            data: SALES_DATA,
             innerRadius: 35, // makes it a ring
             outerRadius: 60,
             paddingAngle: 3,
@@ -360,7 +333,7 @@ const TotalSalesChart = () => {
            
           </Box>
           <Box sx={{ width: '100%' }}>
-            {salesData.map((item, index) => (
+            {SALES_DATA.map((item, index) => (
               <Box
                 key={index}
                 sx={{
@@ -384,7 +357,7 @@ const TotalSalesChart = () => {
                   </Typography>
                 </Box>
                 <Typography variant="body2" fontWeight={600} sx={{ fontSize: '0.8rem', color: darkMode?"white":"#374151", }}>
-                  {item.value}
+                  {item.salesValue}
                 </Typography>
               </Box>
             ))}

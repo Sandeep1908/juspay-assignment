@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -29,30 +29,30 @@ import {
 } from '@mui/icons-material';
 import { useTheme } from '../contexts/ThemeContext';
 
+const NOTIFICATIONS = [
+  { id: 1, message: 'You have a bug that needs...', time: 'Just now', type: 'bug' },
+  { id: 2, message: 'New user registered', time: '59 minutes ago', type: 'user' },
+  { id: 3, message: 'You have a bug that needs...', time: '12 hours ago', type: 'bug' },
+  { id: 4, message: 'Andi Lane subscribed to you', time: 'Today, 11:59 AM', type: 'subscription' },
+];
+
 const Header = () => {
   const { darkMode, toggleDarkMode } = useTheme();
   const [notificationAnchor, setNotificationAnchor] = useState(null);
   const [profileAnchor, setProfileAnchor] = useState(null);
 
-  const notifications = [
-    { id: 1, message: 'You have a bug that needs...', time: 'Just now', type: 'bug' },
-    { id: 2, message: 'New user registered', time: '59 minutes ago', type: 'user' },
-    { id: 3, message: 'You have a bug that needs...', time: '12 hours ago', type: 'bug' },
-    { id: 4, message: 'Andi Lane subscribed to you', time: 'Today, 11:59 AM', type: 'subscription' },
-  ];
-
-  const handleNotificationClick = (event) => {
+  const handleNotificationClick = useCallback((event) => {
     setNotificationAnchor(event.currentTarget);
-  };
+  }, []);
 
-  const handleProfileClick = (event) => {
+  const handleProfileClick = useCallback((event) => {
     setProfileAnchor(event.currentTarget);
-  };
+  }, []);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setNotificationAnchor(null);
     setProfileAnchor(null);
-  };
+  }, []);
 
   return (
     <AppBar
@@ -90,7 +90,7 @@ const Header = () => {
             sx={{
               width: 250,
               '& .MuiOutlinedInput-root': {
-                backgroundColor: darkMode?"black":'grey.50',
+                backgroundColor: darkMode ? 'rgba(255,255,255,0.05)' : 'grey.50',
                 borderRadius: 2,
               },
             }}
@@ -146,7 +146,7 @@ const Header = () => {
             </Typography>
           </Box>
           <List sx={{ p: 0 }}>
-            {notifications.map((notification) => (
+            {NOTIFICATIONS.map((notification) => (
               <ListItem key={notification.id} sx={{ py: 1.5, px: 2 }}>
                 <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5, width: '100%' }}>
                   <Box
