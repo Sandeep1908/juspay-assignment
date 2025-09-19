@@ -5,82 +5,90 @@ import {
   List,
   ListItem,
   Avatar,
-  Divider,
 } from '@mui/material';
-import {
-  BugReport,
-  Person,
-  Radio,
-} from '@mui/icons-material';
+
+// Notification icons
+import NotifIcon1 from '../assets/icons/notification/IconSet.png';
+import NotifIcon2 from '../assets/icons/notification/IconSet (1).png';
+import NotifIcon3 from '../assets/icons/notification/IconSet (2).png';
+import NotifIcon4 from '../assets/icons/notification/IconSet (3).png';
+// Activities icons
+import ActivityIcon1 from '../assets/icons/activity/IconSet.png';
+import ActivityIcon2 from '../assets/icons/activity/IconSet (1).png';
+import ActivityIcon3 from '../assets/icons/activity/IconSet (2).png';
+import ActivityIcon4 from '../assets/icons/activity/IconSet (3).png';
+import Male11 from '../assets/icons/activity/Male11.png';
+// Contact icons
+import ContactIcon1 from '../assets/icons/contacts/IconSet (4).png';
+import ContactIcon2 from '../assets/icons/contacts/IconSet (5).png';
+import ContactIcon3 from '../assets/icons/contacts/IconSet (6).png';
+import ContactIcon4 from '../assets/icons/contacts/IconSet (7).png';
+import ContactIcon5 from '../assets/icons/contacts/IconSet (8).png';
+import ContactIcon6 from '../assets/icons/contacts/IconSet (9).png';
 
 const RightSidebar = () => {
   const notifications = [
     {
-      icon: <BugReport sx={{ color: '#06b6d4', fontSize: 20 }} />,
+      icon: NotifIcon1,
       text: 'You have a bug that needs...',
       time: 'Just now',
       bgColor: '#e0f7fa'
     },
     {
-      icon: <Person sx={{ color: '#9ca3af', fontSize: 20 }} />,
+      icon: NotifIcon2,
       text: 'New user registered',
       time: '59 minutes ago',
-      bgColor: '#f5f5f5'
+      bgColor: '#f3f4f6'
     },
     {
-      icon: <BugReport sx={{ color: '#06b6d4', fontSize: 20 }} />,
+      icon: NotifIcon3,
       text: 'You have a bug that needs...',
       time: '12 hours ago',
       bgColor: '#e0f7fa'
     },
     {
-      icon: <Radio sx={{ color: '#9ca3af', fontSize: 20 }} />,
+      icon: NotifIcon4,
       text: 'Andi Lane subscribed to you',
       time: 'Today, 11:59 AM',
-      bgColor: '#f5f5f5'
+      bgColor: '#f3f4f6'
     }
   ];
 
   const activities = [
     {
-      avatar: '/api/placeholder/32/32',
+      avatar: ActivityIcon1,
       text: 'You have a bug that needs...',
-      time: 'Just now',
-      color: '#10b981'
+      time: 'Just now'
     },
     {
-      avatar: '/api/placeholder/32/32',
+      avatar: ActivityIcon2,
       text: 'Released a new version',
-      time: '59 minutes ago',
-      color: '#8b5cf6'
+      time: '59 minutes ago'
     },
     {
-      avatar: '/api/placeholder/32/32',
+      avatar: ActivityIcon3,
       text: 'Submitted a bug',
-      time: '12 hours ago',
-      color: '#06b6d4'
+      time: '12 hours ago'
     },
     {
-      avatar: '/api/placeholder/32/32',
+      avatar: ActivityIcon4,
       text: 'Modified A data in Page X',
-      time: 'Today, 11:59 AM',
-      color: '#374151'
+      time: 'Today, 11:59 AM'
     },
     {
-      avatar: '/api/placeholder/32/32',
+      avatar: Male11,
       text: 'Deleted a page in Project X',
-      time: 'Feb 2, 2023',
-      color: '#6b7280'
+      time: 'Feb 2, 2023'
     }
   ];
 
   const contacts = [
-    { name: 'Natali Craig', avatar: '/api/placeholder/32/32', color: '#6b7280' },
-    { name: 'Drew Cano', avatar: '/api/placeholder/32/32', color: '#dc2626' },
-    { name: 'Orlando Diggs', avatar: '/api/placeholder/32/32', color: '#d97706' },
-    { name: 'Andi Lane', avatar: '/api/placeholder/32/32', color: '#8b5cf6' },
-    { name: 'Kate Morrison', avatar: '/api/placeholder/32/32', color: '#ec4899' },
-    { name: 'Koray Okumus', avatar: '/api/placeholder/32/32', color: '#06b6d4' }
+    { name: 'Natali Craig', avatar: ContactIcon1 },
+    { name: 'Drew Cano', avatar: ContactIcon2 },
+    { name: 'Orlando Diggs', avatar: ContactIcon3 },
+    { name: 'Andi Lane', avatar: ContactIcon4 },
+    { name: 'Kate Morrison', avatar: ContactIcon5 },
+    { name: 'Koray Okumus', avatar: ContactIcon6 }
   ];
 
   return (
@@ -106,9 +114,9 @@ const RightSidebar = () => {
             <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5, width: '100%' }}>
               <Box
                 sx={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 2,
+                  width: 32,
+                  height: 32,
+                  borderRadius: 1.5,
                   backgroundColor: notification.bgColor,
                   display: 'flex',
                   alignItems: 'center',
@@ -116,7 +124,7 @@ const RightSidebar = () => {
                   flexShrink: 0,
                 }}
               >
-                {notification.icon}
+                <img src={notification.icon} alt="notification" style={{ width: 16, height: 16 }} />
               </Box>
               <Box sx={{ flex: 1, minWidth: 0 }}>
                 <Typography
@@ -155,16 +163,12 @@ const RightSidebar = () => {
           <ListItem key={index} sx={{ p: 0, mb: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5, width: '100%' }}>
               <Avatar
+                src={activity.avatar}
                 sx={{
                   width: 32,
                   height: 32,
-                  backgroundColor: activity.color,
-                  fontSize: '0.875rem',
-                  fontWeight: 600,
                 }}
-              >
-                {activity.text.charAt(0)}
-              </Avatar>
+              />
               <Box sx={{ flex: 1, minWidth: 0 }}>
                 <Typography
                   variant="body2"
@@ -202,17 +206,12 @@ const RightSidebar = () => {
           <ListItem key={index} sx={{ p: 0, mb: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, width: '100%' }}>
               <Avatar
+                src={contact.avatar}
                 sx={{
                   width: 32,
                   height: 32,
-                  backgroundColor: contact.color,
-                  fontSize: '0.875rem',
-                  fontWeight: 600,
-                  color: 'white',
                 }}
-              >
-                {contact.name.split(' ').map(n => n[0]).join('')}
-              </Avatar>
+              />
               <Typography
                 variant="body2"
                 sx={{

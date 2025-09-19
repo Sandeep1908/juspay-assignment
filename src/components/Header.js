@@ -24,6 +24,8 @@ import {
   DarkMode,
   LightMode,
   Person,
+  Menu as MenuIcon,
+  Star,
 } from '@mui/icons-material';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -66,6 +68,8 @@ const Header = () => {
       <Toolbar sx={{ justifyContent: 'space-between', px: 3 }}>
         {/* Breadcrumb */}
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <MenuIcon sx={{ color: 'text.secondary', mr: 1, fontSize: '1.2rem' }} />
+          <Star sx={{ color: 'text.secondary', mr: 2, fontSize: '1.2rem' }} />
           <Typography variant="body2" color="text.secondary">
             Dashboards
           </Typography>

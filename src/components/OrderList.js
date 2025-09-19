@@ -1,227 +1,291 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import {
-  Card,
-  CardContent,
-  Typography,
   Box,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Chip,
-  Button,
+  Typography,
+  Avatar,
   TextField,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Pagination,
-  IconButton,
   InputAdornment,
+  Checkbox,
+  IconButton,
+  Pagination,
 } from '@mui/material';
 import {
-  Add,
   Search,
+  Add,
   FilterList,
+  Sort,
+  CalendarToday,
   MoreHoriz,
 } from '@mui/icons-material';
+import { useTheme } from '../contexts/ThemeContext';
+// Contact icons for user avatars
+import ContactIcon1 from '../assets/icons/contacts/IconSet (4).png';
+import ContactIcon2 from '../assets/icons/contacts/IconSet (5).png';
+import ContactIcon3 from '../assets/icons/contacts/IconSet (6).png';
+import ContactIcon4 from '../assets/icons/contacts/IconSet (7).png';
+import ContactIcon5 from '../assets/icons/contacts/IconSet (8).png';
+import ContactIcon6 from '../assets/icons/contacts/IconSet (9).png';
 
 const ordersData = [
-  { id: '#CM9801', customer: 'Natali Craig', project: 'Landing Page', address: 'Meadow Lane Oakland', date: 'Just now', status: 'In Progress' },
-  { id: '#CM9802', customer: 'Kate Morrison', project: 'CRM Admin pages', address: 'Larry San Francisco', date: 'A minute ago', status: 'Complete' },
-  { id: '#CM9803', customer: 'Drew Cano', project: 'Client Project', address: 'Bagwell Avenue Ocala', date: '1 hour ago', status: 'Pending' },
-  { id: '#CM9804', customer: 'Orlando Diggs', project: 'Admin Dashboard', address: 'Washburn Baton Rouge', date: 'Yesterday', status: 'Approved' },
-  { id: '#CM9805', customer: 'Andi Lane', project: 'App Landing Page', address: 'Nest Lane Olivette', date: 'Feb 2, 2023', status: 'Rejected' },
-  { id: '#CM9806', customer: 'Natali Craig', project: 'Landing Page', address: 'Meadow Lane Oakland', date: 'Just now', status: 'In Progress' },
-  { id: '#CM9807', customer: 'Kate Morrison', project: 'CRM Admin pages', address: 'Larry San Francisco', date: 'A minute ago', status: 'Complete' },
-  { id: '#CM9808', customer: 'Drew Cano', project: 'Client Project', address: 'Bagwell Avenue Ocala', date: '1 hour ago', status: 'Pending' },
-  { id: '#CM9809', customer: 'Orlando Diggs', project: 'Admin Dashboard', address: 'Washburn Baton Rouge', date: 'Yesterday', status: 'Approved' },
-  { id: '#CM9810', customer: 'Andi Lane', project: 'App Landing Page', address: 'Nest Lane Olivette', date: 'Feb 2, 2023', status: 'Rejected' },
+  { id: '#CM9801', customer: 'Natali Craig', avatar: ContactIcon1, project: 'Landing Page', address: 'Meadow Lane Oakland', date: 'Just now', status: 'In Progress' },
+  { id: '#CM9802', customer: 'Kate Morrison', avatar: ContactIcon5, project: 'CRM Admin pages', address: 'Larry San Francisco', date: 'A minute ago', status: 'Complete' },
+  { id: '#CM9803', customer: 'Drew Cano', avatar: ContactIcon2, project: 'Client Project', address: 'Bagwell Avenue Ocala', date: '1 hour ago', status: 'Pending' },
+  { id: '#CM9804', customer: 'Orlando Diggs', avatar: ContactIcon3, project: 'Admin Dashboard', address: 'Washburn Baton Rouge', date: 'Yesterday', status: 'Approved' },
+  { id: '#CM9805', customer: 'Andi Lane', avatar: ContactIcon4, project: 'App Landing Page', address: 'Nest Lane Olivette', date: 'Feb 2, 2023', status: 'Rejected' },
+  { id: '#CM9801', customer: 'Natali Craig', avatar: ContactIcon1, project: 'Landing Page', address: 'Meadow Lane Oakland', date: 'Just now', status: 'In Progress' },
+  { id: '#CM9802', customer: 'Kate Morrison', avatar: ContactIcon5, project: 'CRM Admin pages', address: 'Larry San Francisco', date: 'A minute ago', status: 'Complete' },
+  { id: '#CM9803', customer: 'Drew Cano', avatar: ContactIcon2, project: 'Client Project', address: 'Bagwell Avenue Ocala', date: '1 hour ago', status: 'Pending' },
+  { id: '#CM9804', customer: 'Orlando Diggs', avatar: ContactIcon3, project: 'Admin Dashboard', address: 'Washburn Baton Rouge', date: 'Yesterday', status: 'Approved' },
+  { id: '#CM9805', customer: 'Andi Lane', avatar: ContactIcon4, project: 'App Landing Page', address: 'Nest Lane Olivette', date: 'Feb 2, 2023', status: 'Rejected' },
 ];
 
 const getStatusColor = (status) => {
   const colors = {
-    'Complete': 'success',
-    'In Progress': 'primary',
-    'Pending': 'warning',
-    'Approved': 'secondary',
-    'Rejected': 'error',
+    'Complete': '#10b981',
+    'In Progress': '#3b82f6', 
+    'Pending': '#06b6d4',
+    'Approved': '#f59e0b',
+    'Rejected': '#6b7280',
   };
-  return colors[status] || 'default';
+  return colors[status] || '#6b7280';
 };
 
 const OrderList = () => {
+  const { darkMode } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [selectedItems, setSelectedItems] = useState(['#CM9804']);
   const [page, setPage] = useState(1);
-  const [sortBy, setSortBy] = useState('date');
   const itemsPerPage = 10;
 
-  const filteredOrders = useMemo(() => {
-    return ordersData.filter(order => {
-      const matchesSearch = 
-        order.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.project.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.id.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      const matchesStatus = statusFilter === 'all' || order.status === statusFilter;
-      
-      return matchesSearch && matchesStatus;
-    });
-  }, [searchTerm, statusFilter]);
-
-  const paginatedOrders = useMemo(() => {
-    const startIndex = (page - 1) * itemsPerPage;
-    return filteredOrders.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredOrders, page]);
-
-  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
-
-  const handlePageChange = (event, newPage) => {
-    setPage(newPage);
+  const handleSelectAll = (event) => {
+    if (event.target.checked) {
+      setSelectedItems(ordersData.map(order => order.id));
+    } else {
+      setSelectedItems([]);
+    }
   };
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-    setPage(1);
-  };
-
-  const handleStatusFilterChange = (event) => {
-    setStatusFilter(event.target.value);
-    setPage(1);
+  const handleSelectItem = (id) => {
+    setSelectedItems(prev => 
+      prev.includes(id) 
+        ? prev.filter(item => item !== id)
+        : [...prev, id]
+    );
   };
 
   return (
-    <Card>
-      <CardContent sx={{ p: 0 }}>
-        {/* Header */}
-        <Box sx={{ p: 3, borderBottom: '1px solid', borderColor: 'divider' }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-            <Typography variant="h6" sx={{ fontWeight: 600 }}>
-              Order List
-            </Typography>
-            <Box sx={{ display: 'flex', gap: 1 }}>
-              <Button
-                variant="contained"
-                startIcon={<Add />}
-                sx={{ textTransform: 'none' }}
-              >
-                Add order
-              </Button>
-              <IconButton>
-                <FilterList />
-              </IconButton>
-              <IconButton>
-                <MoreHoriz />
-              </IconButton>
-            </Box>
-          </Box>
+    <Box sx={{ p: 3, backgroundColor: 'background.default', minHeight: '100vh' }}>
+      {/* Header */}
+      <Box sx={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        mb: 3,
+        py: 2,
+        px: 3,
+        backgroundColor: 'white',
+        borderRadius: 2,
+        boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+      }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <IconButton 
+            sx={{ 
+              p: 1.5, 
+              backgroundColor: '#f9fafb',
+              border: '1px solid #e5e7eb', 
+              borderRadius: 1.5,
+              '&:hover': {
+                backgroundColor: '#f3f4f6'
+              }
+            }}
+          >
+            <Add fontSize="small" sx={{ color: '#374151' }} />
+          </IconButton>
+          <IconButton 
+            sx={{ 
+              p: 1.5, 
+              backgroundColor: '#f9fafb',
+              border: '1px solid #e5e7eb', 
+              borderRadius: 1.5,
+              '&:hover': {
+                backgroundColor: '#f3f4f6'
+              }
+            }}
+          >
+            <FilterList fontSize="small" sx={{ color: '#374151' }} />
+          </IconButton>
+          <IconButton 
+            sx={{ 
+              p: 1.5, 
+              backgroundColor: '#f9fafb',
+              border: '1px solid #e5e7eb', 
+              borderRadius: 1.5,
+              '&:hover': {
+                backgroundColor: '#f3f4f6'
+              }
+            }}
+          >
+            <Sort fontSize="small" sx={{ color: '#374151' }} />
+          </IconButton>
+        </Box>
+        <TextField
+          size="small"
+          placeholder="Search"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          sx={{ 
+            width: 280,
+            '& .MuiOutlinedInput-root': {
+              backgroundColor: '#f9fafb',
+              borderRadius: 3,
+              border: '1px solid #e5e7eb',
+              fontSize: '0.875rem',
+              '&:hover': {
+                borderColor: '#d1d5db',
+              },
+              '&.Mui-focused': {
+                borderColor: '#3b82f6',
+                backgroundColor: 'white',
+              }
+            },
+            '& .MuiOutlinedInput-input': {
+              py: 1.5,
+              px: 2,
+              color: '#6b7280',
+              '&::placeholder': {
+                color: '#9ca3af',
+                opacity: 1
+              }
+            }
+          }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start" sx={{ ml: 1 }}>
+                <Search fontSize="small" sx={{ color: '#9ca3af' }} />
+              </InputAdornment>
+            ),
+          }}
+        />
+      </Box>
 
-          {/* Filters */}
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            <TextField
+      {/* Table */}
+      <Box sx={{ backgroundColor: 'white', borderRadius: 2, overflow: 'hidden' }}>
+        {/* Table Header */}
+        <Box sx={{ display: 'grid', gridTemplateColumns: '60px 1fr 1fr 1fr 1fr 1fr 1fr', py: 2, px: 3, backgroundColor: 'white', borderBottom: '1px solid #f3f4f6', alignItems: 'center' }}>
+          <Checkbox
+            checked={selectedItems.length === ordersData.length}
+            indeterminate={selectedItems.length > 0 && selectedItems.length < ordersData.length}
+            onChange={handleSelectAll}
+            size="small"
+            sx={{
+              color: '#9ca3af',
+              '&.Mui-checked': {
+                color: darkMode ? '#C6C7F8' : '#000000',
+              },
+              '&.MuiCheckbox-indeterminate': {
+                color: darkMode ? '#C6C7F8' : '#000000',
+              }
+            }}
+          />
+          <Typography variant="body2" sx={{ color: '#6b7280', fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', display: 'flex', alignItems: 'center' }}>Order ID</Typography>
+          <Typography variant="body2" sx={{ color: '#6b7280', fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', display: 'flex', alignItems: 'center' }}>User</Typography>
+          <Typography variant="body2" sx={{ color: '#6b7280', fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', display: 'flex', alignItems: 'center' }}>Project</Typography>
+          <Typography variant="body2" sx={{ color: '#6b7280', fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', display: 'flex', alignItems: 'center' }}>Address</Typography>
+          <Typography variant="body2" sx={{ color: '#6b7280', fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', display: 'flex', alignItems: 'center' }}>Date</Typography>
+          <Typography variant="body2" sx={{ color: '#6b7280', fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', display: 'flex', alignItems: 'center' }}>Status</Typography>
+        </Box>
+        
+        {/* Table Rows */}
+        {ordersData.map((order, index) => (
+          <Box
+            key={index}
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: '60px 1fr 1fr 1fr 1fr 1fr 1fr',
+              py: 2.5,
+              px: 3,
+              alignItems: 'center',
+              borderBottom: index < ordersData.length - 1 ? '1px solid #f3f4f6' : 'none',
+              '&:hover': {
+                backgroundColor: '#f9fafb',
+              },
+            }}
+          >
+            <Checkbox
+              checked={selectedItems.includes(order.id)}
+              onChange={() => handleSelectItem(order.id)}
               size="small"
-              placeholder="Search orders..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-              sx={{ minWidth: 250 }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Search fontSize="small" />
-                  </InputAdornment>
-                ),
+              sx={{
+                color: '#9ca3af',
+                '&.Mui-checked': {
+                  color: darkMode ? '#C6C7F8' : '#000000',
+                }
               }}
             />
-            <FormControl size="small" sx={{ minWidth: 150 }}>
-              <InputLabel>Status</InputLabel>
-              <Select
-                value={statusFilter}
-                onChange={handleStatusFilterChange}
-                label="Status"
+            <Typography variant="body2" sx={{ fontSize: '0.875rem', fontWeight: 500, color: '#111827', display: 'flex', alignItems: 'center' }}>
+              {order.id}
+            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Avatar src={order.avatar} sx={{ width: 32, height: 32 }} />
+              <Typography variant="body2" sx={{ fontSize: '0.875rem', color: '#111827', fontWeight: 500 }}>
+                {order.customer}
+              </Typography>
+            </Box>
+            <Typography variant="body2" sx={{ fontSize: '0.875rem', color: '#111827', display: 'flex', alignItems: 'center' }}>
+              {order.project}
+            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <Typography variant="body2" sx={{ fontSize: '0.875rem', color: '#6b7280' }}>
+                {order.address}
+              </Typography>
+          
+              
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <CalendarToday sx={{ fontSize: 16, color: '#6b7280' }} />
+              <Typography variant="body2" sx={{ fontSize: '0.875rem', color: '#6b7280' }}>
+                {order.date}
+              </Typography>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <Box
+                sx={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: '50%',
+                  backgroundColor: getStatusColor(order.status),
+                }}
+              />
+              <Typography
+                variant="body2"
+                sx={{
+                  color: getStatusColor(order.status),
+                  fontSize: '0.875rem',
+                }}
               >
-                <MenuItem value="all">All Status</MenuItem>
-                <MenuItem value="Complete">Complete</MenuItem>
-                <MenuItem value="In Progress">In Progress</MenuItem>
-                <MenuItem value="Pending">Pending</MenuItem>
-                <MenuItem value="Approved">Approved</MenuItem>
-                <MenuItem value="Rejected">Rejected</MenuItem>
-              </Select>
-            </FormControl>
+                {order.status}
+              </Typography>
+            </Box>
           </Box>
-        </Box>
+        ))}
+      </Box>
 
-        {/* Table */}
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ fontWeight: 600, textTransform: 'uppercase', fontSize: '0.75rem' }}>
-                  Order ID
-                </TableCell>
-                <TableCell sx={{ fontWeight: 600, textTransform: 'uppercase', fontSize: '0.75rem' }}>
-                  Customer
-                </TableCell>
-                <TableCell sx={{ fontWeight: 600, textTransform: 'uppercase', fontSize: '0.75rem' }}>
-                  Project
-                </TableCell>
-                <TableCell sx={{ fontWeight: 600, textTransform: 'uppercase', fontSize: '0.75rem' }}>
-                  Address
-                </TableCell>
-                <TableCell sx={{ fontWeight: 600, textTransform: 'uppercase', fontSize: '0.75rem' }}>
-                  Date
-                </TableCell>
-                <TableCell sx={{ fontWeight: 600, textTransform: 'uppercase', fontSize: '0.75rem' }}>
-                  Status
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {paginatedOrders.map((order, index) => (
-                <TableRow
-                  key={index}
-                  sx={{
-                    '&:hover': {
-                      backgroundColor: 'action.hover',
-                    },
-                  }}
-                >
-                  <TableCell sx={{ fontWeight: 500 }}>{order.id}</TableCell>
-                  <TableCell>{order.customer}</TableCell>
-                  <TableCell>{order.project}</TableCell>
-                  <TableCell color="text.secondary">{order.address}</TableCell>
-                  <TableCell color="text.secondary">{order.date}</TableCell>
-                  <TableCell>
-                    <Chip
-                      label={order.status}
-                      color={getStatusColor(order.status)}
-                      size="small"
-                      sx={{ fontWeight: 500 }}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-
-        {/* Pagination */}
-        <Box sx={{ p: 3, borderTop: '1px solid', borderColor: 'divider', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="body2" color="text.secondary">
-            Showing {((page - 1) * itemsPerPage) + 1} to {Math.min(page * itemsPerPage, filteredOrders.length)} of {filteredOrders.length} results
-          </Typography>
-          <Pagination
-            count={totalPages}
-            page={page}
-            onChange={handlePageChange}
-            color="primary"
-            size="small"
-          />
-        </Box>
-      </CardContent>
-    </Card>
+      {/* Pagination */}
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
+        <Pagination
+          count={5}
+          page={page}
+          onChange={(e, newPage) => setPage(newPage)}
+          color="primary"
+          size="small"
+          sx={{
+            '& .MuiPaginationItem-root': {
+              fontSize: '0.875rem',
+            }
+          }}
+        />
+      </Box>
+    </Box>
   );
 };
 

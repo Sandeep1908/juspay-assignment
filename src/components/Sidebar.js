@@ -9,59 +9,71 @@ import {
   Typography,
   Box,
   Avatar,
-  Divider,
   Collapse,
 } from '@mui/material';
 import {
-  Dashboard,
-  FolderOpen,
-  People,
-  ShoppingCart,
-  MenuBook,
-  Person,
-  Campaign,
-  Description,
-  Group,
-  AccountBalance,
-  Business,
-  Article,
-  Public,
   ChevronRight,
   ExpandMore,
 } from '@mui/icons-material';
+import { useTheme } from '../contexts/ThemeContext';
+// Light theme sidebar icons
+import SidebarIcon1 from '../assets/icons/sidebar/IconSet (10).png';
+import SidebarIcon2 from '../assets/icons/sidebar/IconSet (11).png';
+import SidebarIcon3 from '../assets/icons/sidebar/IconSet (12).png';
+import SidebarIcon4 from '../assets/icons/sidebar/IconSet (13).png';
+import SidebarIcon5 from '../assets/icons/sidebar/IconSet (14).png';
+import SidebarIcon6 from '../assets/icons/sidebar/IconSet (15).png';
+import SidebarIcon7 from '../assets/icons/sidebar/IconSet (16).png';
+import ChatsIcon from '../assets/icons/sidebar/ChatsTeardrop.png';
+import ShoppingIcon from '../assets/icons/sidebar/ShoppingBagOpen.png';
+// Dark theme sidebar icons
+import DarkSidebarIcon1 from '../assets/icons/sidebar/dark/IconSet (17).png';
+import DarkSidebarIcon2 from '../assets/icons/sidebar/dark/IconSet (18).png';
+import DarkSidebarIcon3 from '../assets/icons/sidebar/dark/IconSet (19).png';
+import DarkSidebarIcon4 from '../assets/icons/sidebar/dark/IconSet (20).png';
+import DarkSidebarIcon5 from '../assets/icons/sidebar/dark/IconSet (21).png';
+import DarkSidebarIcon6 from '../assets/icons/sidebar/dark/IconSet (22).png';
+import DarkIdentificationCard from '../assets/icons/sidebar/dark/IdentificationCard.png';
+import DarkNotebook from '../assets/icons/sidebar/dark/Notebook.png';
+import DarkShoppingIcon from '../assets/icons/sidebar/dark/ShoppingBagOpen (1).png';
 
-const drawerWidth = 200;
+const drawerWidth = 240;
 
-const favoriteItems = [
-  { icon: Dashboard, label: 'Overview', active: false },
-  { icon: FolderOpen, label: 'Projects', active: false },
-  { icon: People, label: 'Customers', active: false },
-  { icon: ShoppingCart, label: 'Orders', active: false },
-  { icon: MenuBook, label: 'Online Courses', active: false },
+const getFavoriteItems = (darkMode) => [
+  { icon: darkMode ? DarkSidebarIcon1 : SidebarIcon1, label: 'Overview' },
+  { icon: darkMode ? DarkSidebarIcon2 : SidebarIcon2, label: 'Projects' },
 ];
 
-const defaultItems = [
+const getDashboardItems = (darkMode) => [
+  { icon: darkMode ? DarkSidebarIcon3 : SidebarIcon3, label: 'Default', active: true },
+  { icon: darkMode ? DarkShoppingIcon : ShoppingIcon, label: 'eCommerce' },
+  { icon: darkMode ? DarkSidebarIcon2 : SidebarIcon2, label: 'Projects' },
+  { icon: darkMode ? DarkNotebook : SidebarIcon4, label: 'Online Courses' },
+  { icon: darkMode ? DarkSidebarIcon6 : ChatsIcon, label: 'Orders' },
+];
+
+const getPageItems = (darkMode) => [
   { 
-    icon: Person, 
+    icon: darkMode ? DarkIdentificationCard : SidebarIcon5, 
     label: 'User Profile', 
     hasDropdown: true,
     children: [
-      { icon: Dashboard, label: 'Overview' },
-      { icon: FolderOpen, label: 'Projects' },
-      { icon: Campaign, label: 'Campaigns' },
-      { icon: Description, label: 'Documents' },
+      { label: 'Overview' },
+      { label: 'Projects' },
+      { label: 'Campaigns' },
+      { label: 'Documents' },
+      { label: 'Followers' },
     ]
   },
-  { icon: Group, label: 'Followers', hasDropdown: false },
-  { icon: AccountBalance, label: 'Account', hasDropdown: false },
-  { icon: Business, label: 'Corporate', hasDropdown: false },
-  { icon: Article, label: 'Blog', hasDropdown: false },
-  { icon: Public, label: 'Social', hasDropdown: false },
+  { icon: darkMode ? DarkSidebarIcon4 : SidebarIcon6, label: 'Account' },
+  { icon: darkMode ? DarkSidebarIcon5 : SidebarIcon7, label: 'Corporate' },
+  { icon: darkMode ? DarkSidebarIcon6 : ChatsIcon, label: 'Blog' },
+  { icon: darkMode ? DarkSidebarIcon1 : SidebarIcon1, label: 'Social' },
 ];
 
 const Sidebar = ({ onMenuClick }) => {
+  const { darkMode } = useTheme();
   const [activeItem, setActiveItem] = useState('Default');
-  const [expandedSection, setExpandedSection] = useState('default');
   const [expandedItems, setExpandedItems] = useState({});
 
   const handleMenuClick = (item) => {
@@ -78,84 +90,72 @@ const Sidebar = ({ onMenuClick }) => {
     }
   };
 
-  const toggleSection = () => {
-    setExpandedSection(expandedSection === 'default' ? '' : 'default');
-  };
-
-  const renderMenuItems = (items, section) => (
+  const renderMenuItems = (items, showIcon = true) => (
     items.map((item, index) => (
-      <Box key={`${section}-${index}`}>
+      <Box key={index}>
         <ListItem disablePadding>
           <ListItemButton
             onClick={() => handleMenuClick(item)}
             sx={{
-              borderRadius: 2,
+              py: 1,
+              px: 2,
+              borderRadius: 1,
               mb: 0.5,
-              backgroundColor: activeItem === item.label ? 'primary.50' : 'transparent',
-              color: activeItem === item.label ? 'primary.main' : 'text.primary',
-              transition: 'all 0.2s ease',
+              backgroundColor: (activeItem === item.label || item.active) ? 'rgba(0,0,0,0.08)' : 'transparent',
               '&:hover': {
-                backgroundColor: activeItem === item.label ? 'primary.100' : 'action.hover',
-                transform: 'translateX(4px)',
+                backgroundColor: 'rgba(0,0,0,0.04)',
               },
             }}
           >
-            {expandedItems[item.label] ? 
-              <ExpandMore fontSize="small" sx={{ color: 'text.secondary', mr: 1 }} /> : 
-              <ChevronRight fontSize="small" sx={{ color: 'text.secondary', mr: 1 }} />
-            }
-            <ListItemIcon
-              sx={{
-                color: activeItem === item.label ? 'primary.main' : 'text.secondary',
-                minWidth: 32,
-              }}
-            >
-              <item.icon fontSize="small" />
-            </ListItemIcon>
+            {item.hasDropdown && (
+              <Box sx={{ mr: 1 }}>
+                {expandedItems[item.label] ? 
+                  <ExpandMore fontSize="small" sx={{ color: 'text.secondary' }} /> : 
+                  <ChevronRight fontSize="small" sx={{ color: 'text.secondary' }} />
+                }
+              </Box>
+            )}
+            {showIcon && item.icon && (
+              <ListItemIcon sx={{ minWidth: 32 }}>
+                <img src={item.icon} alt={item.label} style={{ width: 16, height: 16 }} />
+              </ListItemIcon>
+            )}
             <ListItemText
               primary={item.label}
               primaryTypographyProps={{
-                fontSize: '0.7rem',
-                fontWeight: activeItem === item.label ? 600 : 400,
+                fontSize: '0.875rem',
+                fontWeight: (activeItem === item.label || item.active) ? 500 : 400,
+                color: 'text.primary',
               }}
             />
           </ListItemButton>
         </ListItem>
         {item.hasDropdown && (
           <Collapse in={expandedItems[item.label]}>
-            <List sx={{ pl: 2 }}>
+            <List sx={{ pl: 4 }}>
               {item.children?.map((child, childIndex) => (
-                <ListItem key={`${section}-${index}-${childIndex}`} disablePadding>
+                <ListItem key={childIndex} disablePadding>
                   <ListItemButton
                     onClick={() => {
                       setActiveItem(child.label);
                       if (onMenuClick) onMenuClick(child.label);
                     }}
                     sx={{
-                      borderRadius: 2,
-                      mx: 1,
+                      py: 0.5,
+                      borderRadius: 1,
                       mb: 0.5,
-                      backgroundColor: activeItem === child.label ? 'primary.50' : 'transparent',
-                      color: activeItem === child.label ? 'primary.main' : 'text.primary',
+                      backgroundColor: activeItem === child.label ? 'rgba(0,0,0,0.08)' : 'transparent',
                       '&:hover': {
-                        backgroundColor: activeItem === child.label ? 'primary.100' : 'action.hover',
+                        backgroundColor: 'rgba(0,0,0,0.04)',
                       },
                     }}
                   >
-                    <ChevronRight fontSize="small" sx={{ color: 'text.secondary', mr: 1 }} />
-                    <ListItemIcon
-                      sx={{
-                        color: activeItem === child.label ? 'primary.main' : 'text.secondary',
-                        minWidth: 32,
-                      }}
-                    >
-                      <child.icon fontSize="small" />
-                    </ListItemIcon>
                     <ListItemText
                       primary={child.label}
                       primaryTypographyProps={{
-                        fontSize: '0.6rem',
-                        fontWeight: activeItem === child.label ? 600 : 400,
+                        fontSize: '0.8rem',
+                        fontWeight: activeItem === child.label ? 500 : 400,
+                        color: 'text.secondary',
                       }}
                     />
                   </ListItemButton>
@@ -183,76 +183,94 @@ const Sidebar = ({ onMenuClick }) => {
         },
       }}
     >
-      <Box sx={{ p: 3 }}>
+      <Box sx={{ p: 2 }}>
         {/* Logo */}
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 4 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, px: 1 }}>
           <Avatar
             sx={{
-              width: 32,
-              height: 32,
+              width: 24,
+              height: 24,
               bgcolor: 'text.primary',
-              mr: 1,
-              fontSize: '0.875rem',
+              mr: 2,
+              fontSize: '0.75rem',
               fontWeight: 700,
             }}
           >
             B
           </Avatar>
-          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+          <Typography variant="h6" sx={{ fontWeight: 600, fontSize: '1rem' }}>
             ByeWind
           </Typography>
         </Box>
 
         {/* Favorites Section */}
-        <Typography
-          variant="caption"
-          sx={{
-            color: 'text.secondary',
-            textTransform: 'uppercase',
-            letterSpacing: 1,
-            fontWeight: 500,
-            mb: 1,
-            display: 'block',
-          }}
-        >
-          Favorites
-        </Typography>
-        <List sx={{ mb: 1 }}>
-          {renderMenuItems(favoriteItems, 'favorites')}
-        </List>
+        <Box sx={{ mb: 3 }}>
+          <Box sx={{ display: 'flex', gap: 2, mb: 2, px: 1 }}>
+            <Typography
+              variant="caption"
+              sx={{
+                color: 'text.secondary',
+                fontSize: '0.75rem',
+                fontWeight: 500,
+              }}
+            >
+              Favorites
+            </Typography>
+            <Typography
+              variant="caption"
+              sx={{
+                color: 'text.secondary',
+                fontSize: '0.75rem',
+                fontWeight: 400,
+              }}
+            >
+              Recently
+            </Typography>
+          </Box>
+          <List sx={{ py: 0 }}>
+            {renderMenuItems(getFavoriteItems(darkMode), false)}
+          </List>
+        </Box>
 
-        {/* Default Section */}
-        <ListItemButton
-          onClick={toggleSection}
-          sx={{
-            borderRadius: 2,
-            mx: 1,
-            mb: 1,
-            px: 1,
-          }}
-        >
-          <Avatar
+        {/* Dashboards Section */}
+        <Box sx={{ mb: 3 }}>
+          <Typography
+            variant="caption"
             sx={{
-              width: 16,
-              height: 16,
-              bgcolor: 'primary.main',
-              mr: 1,
-              fontSize: '0.625rem',
-              fontWeight: 700,
+              color: 'text.secondary',
+              fontSize: '0.75rem',
+              fontWeight: 500,
+              mb: 1,
+              display: 'block',
+              px: 1,
             }}
           >
-            D
-          </Avatar>
-          <Typography variant="body2" sx={{ fontWeight: 500, flex: 1 }}>
-            Default
+            Dashboards
           </Typography>
-          {expandedSection === 'default' ? <ExpandMore fontSize="small" /> : <ChevronRight fontSize="small" />}
-        </ListItemButton>
-        <Collapse in={expandedSection === 'default'}>
-          <List>
-            {renderMenuItems(defaultItems, 'default')}
+          <List sx={{ py: 0 }}>
+            {renderMenuItems(getDashboardItems(darkMode))}
           </List>
-        </Collapse>
+        </Box>
+
+        {/* Pages Section */}
+        <Box>
+          <Typography
+            variant="caption"
+            sx={{
+              color: 'text.secondary',
+              fontSize: '0.75rem',
+              fontWeight: 500,
+              mb: 1,
+              display: 'block',
+              px: 1,
+            }}
+          >
+            Pages
+          </Typography>
+          <List sx={{ py: 0 }}>
+            {renderMenuItems(getPageItems(darkMode))}
+          </List>
+        </Box>
       </Box>
     </Drawer>
   );
