@@ -13,10 +13,14 @@ import {
   Search,
   Add,
   FilterList,
-  Sort,
   CalendarToday,
   MoreHoriz,
+  KeyboardArrowUp,
+  KeyboardArrowDown,
 } from '@mui/icons-material';
+
+
+import SwapVertIcon from '@mui/icons-material/SwapVert';
 import { useTheme } from '../contexts/ThemeContext';
 // Contact icons for user avatars
 import ContactIcon1 from '../assets/icons/contacts/IconSet (4).png';
@@ -59,7 +63,7 @@ const OrderList = () => {
 
   const handleSelectAll = (event) => {
     if (event.target.checked) {
-      setSelectedItems(ordersData.map(order => order.id));
+      setSelectedItems(filteredOrders.map(order => order.id));
     } else {
       setSelectedItems([]);
     }
@@ -73,8 +77,19 @@ const OrderList = () => {
     );
   };
 
+  const filteredOrders = ordersData.filter(order => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      order.id.toLowerCase().includes(searchLower) ||
+      order.customer.toLowerCase().includes(searchLower) ||
+      order.project.toLowerCase().includes(searchLower) ||
+      order.address.toLowerCase().includes(searchLower) ||
+      order.status.toLowerCase().includes(searchLower)
+    );
+  });
+
   return (
-    <Box sx={{ p: 3, backgroundColor: 'background.default', minHeight: '100vh' }}>
+    <Box sx={{ p: 3, backgroundColor: darkMode ? '#1a1a1a' : '#f8fafc', minHeight: '100vh' }}>
       {/* Header */}
       <Box sx={{ 
         display: 'flex', 
@@ -83,50 +98,51 @@ const OrderList = () => {
         mb: 3,
         py: 2,
         px: 3,
-        backgroundColor: 'white',
+        backgroundColor: darkMode ? '#2d2d2d' : 'white',
         borderRadius: 2,
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+        boxShadow: darkMode ? '0 1px 3px rgba(0,0,0,0.3)' : '0 1px 3px rgba(0,0,0,0.1)'
       }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <IconButton 
             sx={{ 
               p: 1.5, 
-              backgroundColor: '#f9fafb',
-              border: '1px solid #e5e7eb', 
+              backgroundColor: darkMode ? '#404040' : '#f9fafb',
+              border: darkMode ? '1px solid #555' : '1px solid #e5e7eb', 
               borderRadius: 1.5,
               '&:hover': {
-                backgroundColor: '#f3f4f6'
+                backgroundColor: darkMode ? '#4a4a4a' : '#f3f4f6'
               }
             }}
           >
-            <Add fontSize="small" sx={{ color: '#374151' }} />
+            <Add fontSize="small" sx={{ color: darkMode ? '#d1d5db' : '#374151' }} />
           </IconButton>
           <IconButton 
             sx={{ 
               p: 1.5, 
-              backgroundColor: '#f9fafb',
-              border: '1px solid #e5e7eb', 
+              backgroundColor: darkMode ? '#404040' : '#f9fafb',
+              border: darkMode ? '1px solid #555' : '1px solid #e5e7eb', 
               borderRadius: 1.5,
               '&:hover': {
-                backgroundColor: '#f3f4f6'
+                backgroundColor: darkMode ? '#4a4a4a' : '#f3f4f6'
               }
             }}
           >
-            <FilterList fontSize="small" sx={{ color: '#374151' }} />
+            <FilterList fontSize="small" sx={{ color: darkMode ? '#d1d5db' : '#374151' }} />
           </IconButton>
           <IconButton 
             sx={{ 
               p: 1.5, 
-              backgroundColor: '#f9fafb',
-              border: '1px solid #e5e7eb', 
+              backgroundColor: darkMode ? '#404040' : '#f9fafb',
+              border: darkMode ? '1px solid #555' : '1px solid #e5e7eb', 
               borderRadius: 1.5,
               '&:hover': {
-                backgroundColor: '#f3f4f6'
+                backgroundColor: darkMode ? '#4a4a4a' : '#f3f4f6'
               }
             }}
           >
-            <Sort fontSize="small" sx={{ color: '#374151' }} />
+            <SwapVertIcon fontSize="small" sx={{ color: darkMode ? '#d1d5db' : '#374151' }} />
           </IconButton>
+   
         </Box>
         <TextField
           size="small"
@@ -136,24 +152,24 @@ const OrderList = () => {
           sx={{ 
             width: 280,
             '& .MuiOutlinedInput-root': {
-              backgroundColor: '#f9fafb',
+              backgroundColor: darkMode ? '#404040' : '#f9fafb',
               borderRadius: 3,
-              border: '1px solid #e5e7eb',
+              border: darkMode ? '1px solid #555' : '1px solid #e5e7eb',
               fontSize: '0.875rem',
               '&:hover': {
-                borderColor: '#d1d5db',
+                borderColor: darkMode ? '#666' : '#d1d5db',
               },
               '&.Mui-focused': {
                 borderColor: '#3b82f6',
-                backgroundColor: 'white',
+                backgroundColor: darkMode ? '#4a4a4a' : 'white',
               }
             },
             '& .MuiOutlinedInput-input': {
               py: 1.5,
               px: 2,
-              color: '#6b7280',
+              color: darkMode ? '#e5e7eb' : '#6b7280',
               '&::placeholder': {
-                color: '#9ca3af',
+                color: darkMode ? '#9ca3af' : '#9ca3af',
                 opacity: 1
               }
             }
@@ -161,7 +177,7 @@ const OrderList = () => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start" sx={{ ml: 1 }}>
-                <Search fontSize="small" sx={{ color: '#9ca3af' }} />
+                <Search fontSize="small" sx={{ color: darkMode ? '#9ca3af' : '#9ca3af' }} />
               </InputAdornment>
             ),
           }}
@@ -169,12 +185,12 @@ const OrderList = () => {
       </Box>
 
       {/* Table */}
-      <Box sx={{ backgroundColor: 'white', borderRadius: 2, overflow: 'hidden' }}>
+      <Box sx={{ backgroundColor: darkMode ? '#2d2d2d' : 'white', borderRadius: 2, overflow: 'hidden' }}>
         {/* Table Header */}
-        <Box sx={{ display: 'grid', gridTemplateColumns: '60px 1fr 1fr 1fr 1fr 1fr 1fr', py: 2, px: 3, backgroundColor: 'white', borderBottom: '1px solid #f3f4f6', alignItems: 'center' }}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: '60px 1fr 1fr 1fr 1fr 1fr 1fr', py: 2, px: 3, backgroundColor: darkMode ? '#2d2d2d' : 'white', borderBottom: darkMode ? '1px solid #404040' : '1px solid #f3f4f6', alignItems: 'center' }}>
           <Checkbox
-            checked={selectedItems.length === ordersData.length}
-            indeterminate={selectedItems.length > 0 && selectedItems.length < ordersData.length}
+            checked={selectedItems.length === filteredOrders.length && filteredOrders.length > 0}
+            indeterminate={selectedItems.length > 0 && selectedItems.length < filteredOrders.length}
             onChange={handleSelectAll}
             size="small"
             sx={{
@@ -187,16 +203,16 @@ const OrderList = () => {
               }
             }}
           />
-          <Typography variant="body2" sx={{ color: '#6b7280', fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', display: 'flex', alignItems: 'center' }}>Order ID</Typography>
-          <Typography variant="body2" sx={{ color: '#6b7280', fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', display: 'flex', alignItems: 'center' }}>User</Typography>
-          <Typography variant="body2" sx={{ color: '#6b7280', fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', display: 'flex', alignItems: 'center' }}>Project</Typography>
-          <Typography variant="body2" sx={{ color: '#6b7280', fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', display: 'flex', alignItems: 'center' }}>Address</Typography>
-          <Typography variant="body2" sx={{ color: '#6b7280', fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', display: 'flex', alignItems: 'center' }}>Date</Typography>
-          <Typography variant="body2" sx={{ color: '#6b7280', fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', display: 'flex', alignItems: 'center' }}>Status</Typography>
+          <Typography variant="body2" sx={{ color: darkMode ? '#9ca3af' : '#6b7280', fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', display: 'flex', alignItems: 'center' }}>Order ID</Typography>
+          <Typography variant="body2" sx={{ color: darkMode ? '#9ca3af' : '#6b7280', fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', display: 'flex', alignItems: 'center' }}>User</Typography>
+          <Typography variant="body2" sx={{ color: darkMode ? '#9ca3af' : '#6b7280', fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', display: 'flex', alignItems: 'center' }}>Project</Typography>
+          <Typography variant="body2" sx={{ color: darkMode ? '#9ca3af' : '#6b7280', fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', display: 'flex', alignItems: 'center' }}>Address</Typography>
+          <Typography variant="body2" sx={{ color: darkMode ? '#9ca3af' : '#6b7280', fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', display: 'flex', alignItems: 'center' }}>Date</Typography>
+          <Typography variant="body2" sx={{ color: darkMode ? '#9ca3af' : '#6b7280', fontSize: '0.75rem', fontWeight: 500, textTransform: 'uppercase', display: 'flex', alignItems: 'center' }}>Status</Typography>
         </Box>
         
         {/* Table Rows */}
-        {ordersData.map((order, index) => (
+        {filteredOrders.map((order, index) => (
           <Box
             key={index}
             sx={{
@@ -205,9 +221,9 @@ const OrderList = () => {
               py: 2.5,
               px: 3,
               alignItems: 'center',
-              borderBottom: index < ordersData.length - 1 ? '1px solid #f3f4f6' : 'none',
+              borderBottom: index < filteredOrders.length - 1 ? (darkMode ? '1px solid #404040' : '1px solid #f3f4f6') : 'none',
               '&:hover': {
-                backgroundColor: '#f9fafb',
+                backgroundColor: darkMode ? '#363636' : '#f9fafb',
               },
             }}
           >
@@ -222,28 +238,28 @@ const OrderList = () => {
                 }
               }}
             />
-            <Typography variant="body2" sx={{ fontSize: '0.875rem', fontWeight: 500, color: '#111827', display: 'flex', alignItems: 'center' }}>
+            <Typography variant="body2" sx={{ fontSize: '0.875rem', fontWeight: 500, color: darkMode ? '#e5e7eb' : '#111827', display: 'flex', alignItems: 'center' }}>
               {order.id}
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <Avatar src={order.avatar} sx={{ width: 32, height: 32 }} />
-              <Typography variant="body2" sx={{ fontSize: '0.875rem', color: '#111827', fontWeight: 500 }}>
+              <Typography variant="body2" sx={{ fontSize: '0.875rem', color: darkMode ? '#e5e7eb' : '#111827', fontWeight: 500 }}>
                 {order.customer}
               </Typography>
             </Box>
-            <Typography variant="body2" sx={{ fontSize: '0.875rem', color: '#111827', display: 'flex', alignItems: 'center' }}>
+            <Typography variant="body2" sx={{ fontSize: '0.875rem', color: darkMode ? '#e5e7eb' : '#111827', display: 'flex', alignItems: 'center' }}>
               {order.project}
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-              <Typography variant="body2" sx={{ fontSize: '0.875rem', color: '#6b7280' }}>
+              <Typography variant="body2" sx={{ fontSize: '0.875rem', color: darkMode ? '#9ca3af' : '#6b7280' }}>
                 {order.address}
               </Typography>
           
               
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-              <CalendarToday sx={{ fontSize: 16, color: '#6b7280' }} />
-              <Typography variant="body2" sx={{ fontSize: '0.875rem', color: '#6b7280' }}>
+              <CalendarToday sx={{ fontSize: 16, color: darkMode ? '#9ca3af' : '#6b7280' }} />
+              <Typography variant="body2" sx={{ fontSize: '0.875rem', color: darkMode ? '#9ca3af' : '#6b7280' }}>
                 {order.date}
               </Typography>
             </Box>

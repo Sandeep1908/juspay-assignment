@@ -45,7 +45,7 @@ const getFavoriteItems = (darkMode) => [
 ];
 
 const getDashboardItems = (darkMode) => [
-  { icon: darkMode ? DarkSidebarIcon3 : SidebarIcon3, label: 'Default', active: true },
+  { icon: darkMode ? DarkSidebarIcon3 : SidebarIcon3, label: 'Default' },
   { icon: darkMode ? DarkShoppingIcon : ShoppingIcon, label: 'eCommerce' },
   { icon: darkMode ? DarkSidebarIcon2 : SidebarIcon2, label: 'Projects' },
   { icon: darkMode ? DarkNotebook : SidebarIcon4, label: 'Online Courses' },
@@ -101,7 +101,7 @@ const Sidebar = ({ onMenuClick }) => {
               px: 2,
               borderRadius: 1,
               mb: 0.5,
-              backgroundColor: (activeItem === item.label || item.active) ? 'rgba(0,0,0,0.08)' : 'transparent',
+              backgroundColor: activeItem === item.label ? 'rgba(0,0,0,0.08)' : 'transparent',
               '&:hover': {
                 backgroundColor: 'rgba(0,0,0,0.04)',
               },
@@ -124,7 +124,7 @@ const Sidebar = ({ onMenuClick }) => {
               primary={item.label}
               primaryTypographyProps={{
                 fontSize: '0.875rem',
-                fontWeight: (activeItem === item.label || item.active) ? 500 : 400,
+                fontWeight: activeItem === item.label ? 500 : 400,
                 color: 'text.primary',
               }}
             />
