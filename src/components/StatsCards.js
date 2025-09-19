@@ -2,8 +2,10 @@ import React from 'react';
 import { Card, CardContent, Typography, Box, Grid } from '@mui/material';
 import { TrendingUp, TrendingDown } from '@mui/icons-material';
 import { BarChart } from '@mui/x-charts/BarChart';
+import { useTheme } from '../contexts/ThemeContext';
 
-const ProjectionsChart = ({ darkMode }) => {
+const ProjectionsChart = () => {
+  const { darkMode } = useTheme();
    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
   const actuals = [18, 20, 18, 22, 14, 19];  
   const projections = [20, 24, 20, 26, 16, 22];  
@@ -109,7 +111,8 @@ const statsData = [
   },
 ];
 
-const StatsCards = ({ darkMode }) => {
+const StatsCards = () => {
+  const { darkMode } = useTheme();
   return (
     <Grid container spacing={2} sx={{ mb: 3 }}>
       <Grid item xs={12} md={6}>
@@ -135,7 +138,7 @@ const StatsCards = ({ darkMode }) => {
             <CardContent sx={{ p: 2.5, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <Typography
                 variant="body2"
-                color="text.secondary"
+                color={darkMode? "text.secondary": "black"}
                 sx={{ mb: 1, fontWeight: 500 }}
               >
                 {stat.title}
@@ -169,7 +172,7 @@ const StatsCards = ({ darkMode }) => {
         </Grid>
       </Grid>
       <Grid item xs={12} md={6}>
-        <ProjectionsChart darkMode={darkMode} />
+        <ProjectionsChart />
       </Grid>
     </Grid>
   );

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ThemeProvider, CssBaseline, Box, Typography } from '@mui/material';
 import { lightTheme, darkTheme } from './theme';
+import { ThemeContextProvider, useTheme } from './contexts/ThemeContext';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import RightSidebar from './components/RightSidebar';
@@ -9,13 +10,9 @@ import Charts from './components/Charts';
 import OrderListPage from './pages/OrderListPage';
 
 
-function App() {
-  const [darkMode, setDarkMode] = useState(false);
+const AppContent = () => {
+  const { darkMode } = useTheme();
   const [currentPage, setCurrentPage] = useState('eCommerce');
-
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
 
   const handleMenuClick = (menuItem) => {
     if (menuItem === 'Orders') {
@@ -36,7 +33,7 @@ function App() {
       }}>
         <Sidebar onMenuClick={handleMenuClick} />
         <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-          <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+          <Header />
           <Box sx={{ display: 'flex', flexGrow: 1 }}>
             {currentPage === 'eCommerce' ? (
               <Box
@@ -52,8 +49,8 @@ function App() {
                   eCommerce
                 </Typography>
                 
-                <StatsCards darkMode={darkMode} />
-                <Charts darkMode={darkMode} />
+                <StatsCards />
+                <Charts />
               </Box>
             ) : (
               <OrderListPage />
@@ -63,6 +60,14 @@ function App() {
         </Box>
       </Box>
     </ThemeProvider>
+  );
+};
+
+function App() {
+  return (
+    <ThemeContextProvider>
+      <AppContent />
+    </ThemeContextProvider>
   );
 }
 

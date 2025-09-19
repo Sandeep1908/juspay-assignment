@@ -1,11 +1,13 @@
 import React from 'react';
-import { Card, CardContent, Typography, Box, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Card, CardContent, Typography, Box, Grid } from '@mui/material';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { PieChart } from '@mui/x-charts/PieChart';
+import { useTheme } from '../contexts/ThemeContext';
 import worldmap from '../assets/world.svg'
 
-const RevenueChart = ({ darkMode }) => {
+const RevenueChart = () => {
+  const { darkMode } = useTheme();
   const currentWeek = [12, 8, 10, 15, 18, 20];
   const previousWeek = [8, 15, 17, 12, 10, 22];
   const xLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
@@ -88,7 +90,8 @@ const RevenueChart = ({ darkMode }) => {
 
 
 
-const LocationChart = ({ darkMode }) => {
+const LocationChart = () => {
+  const { darkMode } = useTheme();
   const locations = [
     { name: 'New York', value: '72K' },
     { name: 'San Francisco', value: '39K' },
@@ -112,7 +115,7 @@ const LocationChart = ({ darkMode }) => {
             mb: 2,
             fontWeight: 600,
             fontSize: '1rem',
-            color: '#374151',
+            color: darkMode?"white":"#374151",
           }}
         >
           Revenue by Location
@@ -188,14 +191,14 @@ const LocationChart = ({ darkMode }) => {
                   mb: 0.5,
                 }}
               >
-                <Typography sx={{ fontSize: '0.8rem', color: '#374151' }}>
+                <Typography sx={{ fontSize: '0.8rem', color: darkMode?"white":"#374151", }}>
                   {location.name}
                 </Typography>
                 <Typography
                   sx={{
                     fontSize: '0.8rem',
                     fontWeight: 600,
-                    color: '#374151',
+                   color: darkMode?"white":"#374151",
                   }}
                 >
                   {location.value}
@@ -229,7 +232,8 @@ const LocationChart = ({ darkMode }) => {
  
 
 
-const TopProducts = ({ darkMode }) => {
+const TopProducts = () => {
+  const { darkMode } = useTheme();
   const products = [
     { name: 'ASOS Ridley High Waist', price: '$79.49', sold: 82, revenue: '$6,518.18' },
     { name: 'Marco Lightweight Shirt', price: '$128.50', sold: 37, revenue: '$4,754.50' },
@@ -250,7 +254,7 @@ const TopProducts = ({ darkMode }) => {
       }
     }}>
       <CardContent sx={{ p: 2.5, height: '100%' }}>
-        <Typography variant="body1" sx={{ mb: 3, fontWeight: 600, fontSize: '1rem', color: '#374151' }}>
+        <Typography variant="body1" sx={{ mb: 3, fontWeight: 600, fontSize: '1rem', color: darkMode?"white":'#374151' }}>
           Top Selling Products
         </Typography>
         <Box sx={{ height: 'calc(100% - 50px)' }}>
@@ -284,16 +288,16 @@ const TopProducts = ({ darkMode }) => {
                 transform: 'translateX(4px)',
               }
             }}>
-              <Typography variant="body2" sx={{ flex: 3, fontSize: '0.85rem', color: '#374151', fontWeight: 400 }}>
+              <Typography variant="body2" sx={{ flex: 3, fontSize: '0.85rem', color: darkMode?"white":'#374151', fontWeight: 400 }}>
                 {product.name}
               </Typography>
-              <Typography variant="body2" sx={{ flex: 1, fontSize: '0.85rem', color: '#374151', textAlign: 'center' }}>
+              <Typography variant="body2" sx={{ flex: 1, fontSize: '0.85rem', color: darkMode?"white":'#374151', textAlign: 'center' }}>
                 {product.price}
               </Typography>
-              <Typography variant="body2" sx={{ flex: 1, fontSize: '0.85rem', color: '#374151', textAlign: 'center' }}>
+              <Typography variant="body2" sx={{ flex: 1, fontSize: '0.85rem', color: darkMode?"white":'#374151', textAlign: 'center' }}>
                 {product.sold}
               </Typography>
-              <Typography variant="body2" sx={{ flex: 1, fontSize: '0.85rem', color: '#374151', fontWeight: 500, textAlign: 'right' }}>
+              <Typography variant="body2" sx={{ flex: 1, fontSize: '0.85rem', color: darkMode?"white":'#374151', fontWeight: 500, textAlign: 'right' }}>
                 {product.revenue}
               </Typography>
             </Box>
@@ -304,7 +308,8 @@ const TopProducts = ({ darkMode }) => {
   );
 };
 
-const TotalSalesChart = ({ darkMode }) => {
+const TotalSalesChart = () => {
+  const { darkMode } = useTheme();
   const data = [
     { id: 0, value: 38.6, label: 'Direct', color: '#1f2937' },
     { id: 1, value: 22.5, label: 'Affiliate', color: '#10b981' },
@@ -331,7 +336,7 @@ const TotalSalesChart = ({ darkMode }) => {
       }
     }}>
       <CardContent sx={{ p: 2.5, height: '100%' }}>
-        <Typography variant="body1" sx={{ mb: 3, fontWeight: 600, fontSize: '1rem', color: '#374151' }}>
+        <Typography variant="body1" sx={{ mb: 3, fontWeight: 600, fontSize: '1rem', color: darkMode?"white":"#374151", }}>
           Total Sales
         </Typography>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: 'calc(100% - 40px)' }}>
@@ -374,11 +379,11 @@ const TotalSalesChart = ({ darkMode }) => {
                       backgroundColor: item.color,
                     }}
                   />
-                  <Typography variant="body2" sx={{ fontSize: '0.8rem', color: '#374151' }}>
+                  <Typography variant="body2" sx={{ fontSize: '0.8rem', color: darkMode?"white":"#374151", }}>
                     {item.label}
                   </Typography>
                 </Box>
-                <Typography variant="body2" fontWeight={600} sx={{ fontSize: '0.8rem', color: '#374151' }}>
+                <Typography variant="body2" fontWeight={600} sx={{ fontSize: '0.8rem', color: darkMode?"white":"#374151", }}>
                   {item.value}
                 </Typography>
               </Box>
@@ -390,24 +395,26 @@ const TotalSalesChart = ({ darkMode }) => {
   );
 };
 
-const Charts = ({ darkMode }) => {
+const Charts = () => {
+  const { darkMode } = useTheme();
+  
   return (
     <>
       <Grid container spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={12} md={8.4}>
-          <RevenueChart darkMode={darkMode} />
+          <RevenueChart />
         </Grid>
         <Grid item xs={12} md={3.6}>
-          <LocationChart darkMode={darkMode} />
+          <LocationChart />
         </Grid>
       </Grid>
 
       <Grid container spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={12} md={8.4}>
-          <TopProducts darkMode={darkMode} />
+          <TopProducts />
         </Grid>
         <Grid item xs={12} md={3.6}>
-          <TotalSalesChart darkMode={darkMode} />
+          <TotalSalesChart />
         </Grid>
       </Grid>
     </>

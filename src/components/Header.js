@@ -25,8 +25,10 @@ import {
   LightMode,
   Person,
 } from '@mui/icons-material';
+import { useTheme } from '../contexts/ThemeContext';
 
-const Header = ({ darkMode, toggleDarkMode }) => {
+const Header = () => {
+  const { darkMode, toggleDarkMode } = useTheme();
   const [notificationAnchor, setNotificationAnchor] = useState(null);
   const [profileAnchor, setProfileAnchor] = useState(null);
 
@@ -84,7 +86,7 @@ const Header = ({ darkMode, toggleDarkMode }) => {
             sx={{
               width: 250,
               '& .MuiOutlinedInput-root': {
-                backgroundColor: 'grey.50',
+                backgroundColor: darkMode?"black":'grey.50',
                 borderRadius: 2,
               },
             }}
