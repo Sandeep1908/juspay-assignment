@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Typography,
@@ -34,11 +34,11 @@ const ordersData = [
   { id: '#CM9803', customer: 'Drew Cano', avatar: ContactIcon2, project: 'Client Project', address: 'Bagwell Avenue Ocala', date: '1 hour ago', status: 'Pending' },
   { id: '#CM9804', customer: 'Orlando Diggs', avatar: ContactIcon3, project: 'Admin Dashboard', address: 'Washburn Baton Rouge', date: 'Yesterday', status: 'Approved' },
   { id: '#CM9805', customer: 'Andi Lane', avatar: ContactIcon4, project: 'App Landing Page', address: 'Nest Lane Olivette', date: 'Feb 2, 2023', status: 'Rejected' },
-  { id: '#CM9801', customer: 'Natali Craig', avatar: ContactIcon1, project: 'Landing Page', address: 'Meadow Lane Oakland', date: 'Just now', status: 'In Progress' },
-  { id: '#CM9802', customer: 'Kate Morrison', avatar: ContactIcon5, project: 'CRM Admin pages', address: 'Larry San Francisco', date: 'A minute ago', status: 'Complete' },
-  { id: '#CM9803', customer: 'Drew Cano', avatar: ContactIcon2, project: 'Client Project', address: 'Bagwell Avenue Ocala', date: '1 hour ago', status: 'Pending' },
-  { id: '#CM9804', customer: 'Orlando Diggs', avatar: ContactIcon3, project: 'Admin Dashboard', address: 'Washburn Baton Rouge', date: 'Yesterday', status: 'Approved' },
-  { id: '#CM9805', customer: 'Andi Lane', avatar: ContactIcon4, project: 'App Landing Page', address: 'Nest Lane Olivette', date: 'Feb 2, 2023', status: 'Rejected' },
+  { id: '#CM9806', customer: 'Natali Craig', avatar: ContactIcon1, project: 'Landing Page', address: 'Meadow Lane Oakland', date: 'Just now', status: 'In Progress' },
+  { id: '#CM9807', customer: 'Kate Morrison', avatar: ContactIcon5, project: 'CRM Admin pages', address: 'Larry San Francisco', date: 'A minute ago', status: 'Complete' },
+  { id: '#CM9808', customer: 'Drew Cano', avatar: ContactIcon2, project: 'Client Project', address: 'Bagwell Avenue Ocala', date: '1 hour ago', status: 'Pending' },
+  { id: '#CM9809', customer: 'Orlando Diggs', avatar: ContactIcon3, project: 'Admin Dashboard', address: 'Washburn Baton Rouge', date: 'Yesterday', status: 'Approved' },
+  { id: '#CM9810', customer: 'Andi Lane', avatar: ContactIcon4, project: 'App Landing Page', address: 'Nest Lane Olivette', date: 'Feb 2, 2023', status: 'Rejected' },
 ];
 
 const getStatusColor = (status) => {
@@ -62,69 +62,67 @@ const OrderList = () => {
   const [statusFilter, setStatusFilter] = useState('');
   const itemsPerPage = 10;
 
-  const handleSelectAll = useCallback((event) => {
-    if (event.target.checked) {
-      setSelectedItems(filteredAndSortedOrders.map(order => order.id));
-    } else {
-      setSelectedItems([]);
-    }
-  }, []);
-
-  const handleSelectItem = useCallback((id) => {
+  const handleSelectItem = (id) => {
     setSelectedItems(prev => 
       prev.includes(id) 
         ? prev.filter(item => item !== id)
         : [...prev, id]
     );
-  }, []);
+  };
 
-  const handleSort = useCallback((field) => {
+  const handleSort = (field) => {
     if (sortField === field) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     } else {
       setSortField(field);
       setSortDirection('asc');
     }
-  }, [sortField, sortDirection]);
+  };
 
-  const filteredAndSortedOrders = useMemo(() => {
-    let filtered = ordersData.filter(order => {
-      const searchLower = searchTerm.toLowerCase();
-      const matchesSearch = (
-        order.id.toLowerCase().includes(searchLower) ||
-        order.customer.toLowerCase().includes(searchLower) ||
-        order.project.toLowerCase().includes(searchLower) ||
-        order.address.toLowerCase().includes(searchLower) ||
-        order.status.toLowerCase().includes(searchLower)
-      );
-      const matchesStatus = !statusFilter || order.status === statusFilter;
-      return matchesSearch && matchesStatus;
+  let filteredAndSortedOrders = ordersData.filter(order => {
+    if (!searchTerm) return true; // Show all if no search term
+    
+    const searchLower = searchTerm.toLowerCase();
+    console.log('Searching for:', searchLower); // Debug log
+    
+    const matchesSearch = (
+      order.id.toLowerCase().includes(searchLower) ||
+      order.customer.toLowerCase().includes(searchLower) ||
+      order.project.toLowerCase().includes(searchLower) ||
+      order.address.toLowerCase().includes(searchLower) ||
+      order.status.toLowerCase().includes(searchLower)
+    );
+    
+    console.log('Order:', order.customer, 'Matches:', matchesSearch); // Debug log
+    return matchesSearch;
+  });
+
+  if (sortField) {
+    filteredAndSortedOrders.sort((a, b) => {
+      let aVal = a[sortField];
+      let bVal = b[sortField];
+      if (typeof aVal === 'string') {
+        aVal = aVal.toLowerCase();
+        bVal = bVal.toLowerCase();
+      }
+      if (sortDirection === 'asc') {
+        return aVal > bVal ? 1 : -1;
+      } else {
+        return aVal < bVal ? 1 : -1;
+      }
     });
+  }
 
-    if (sortField) {
-      filtered.sort((a, b) => {
-        let aVal = a[sortField];
-        let bVal = b[sortField];
-        if (typeof aVal === 'string') {
-          aVal = aVal.toLowerCase();
-          bVal = bVal.toLowerCase();
-        }
-        if (sortDirection === 'asc') {
-          return aVal > bVal ? 1 : -1;
-        } else {
-          return aVal < bVal ? 1 : -1;
-        }
-      });
+  const handleSelectAll = (event) => {
+    if (event.target.checked) {
+      setSelectedItems(filteredAndSortedOrders.map(order => order.id));
+    } else {
+      setSelectedItems([]);
     }
+  };
 
-    return filtered;
-  }, [searchTerm, statusFilter, sortField, sortDirection]);
-
-  const paginatedOrders = useMemo(() => {
-    const startIndex = (page - 1) * itemsPerPage;
-    return filteredAndSortedOrders.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredAndSortedOrders, page, itemsPerPage]);
-
+  const startIndex = (page - 1) * itemsPerPage;
+  const paginatedOrders = filteredAndSortedOrders.slice(startIndex, startIndex + itemsPerPage);
   const totalPages = Math.ceil(filteredAndSortedOrders.length / itemsPerPage);
 
   return (

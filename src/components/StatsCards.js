@@ -112,8 +112,7 @@ const ProjectionsChart = () => {
         /** Make bars thin */
         slotProps={{
           bar: {
-            rx:1,
-            barThickness: 90, // thinner bars
+            rx: 1,
           },
         }}
        
