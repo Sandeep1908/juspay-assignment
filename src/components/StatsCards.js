@@ -49,7 +49,7 @@ const STATS_DATA = [
     change: '+6.08%',
     trend: 'up',
     bgColor: '#E5ECF6',
-    darkBgColor: '#FFFFFF0D',
+    darkBgColor: '#E3F5FF',
   },
 ];
 
@@ -153,13 +153,13 @@ const StatsCards = () => {
             <CardContent sx={{ p: 2.5, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <Typography
                 variant="body2"
-                color={darkMode ? "text.secondary" : "black"}
+                color={(stat.title === 'Customers' || stat.title === 'Growth') ? 'black' : (darkMode ? "text.secondary" : "black")}
                 sx={{ mb: 1, fontWeight: 500 }}
               >
                 {sanitizeText(stat.title)}
               </Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 1 }}>
-                <Typography variant="h5" sx={{ fontWeight: 700, color: 'text.primary', fontSize: '1.5rem' }}>
+                <Typography variant="h5" sx={{ fontWeight: 700, color: (stat.title === 'Customers' || stat.title === 'Growth') ? 'black' : 'text.primary', fontSize: '1.5rem' }}>
                   {sanitizeText(stat.value)}
                 </Typography>
                 <Box
