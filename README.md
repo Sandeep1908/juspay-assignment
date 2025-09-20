@@ -6,6 +6,46 @@ A modern, responsive dashboard application built with React and Material-UI.
 
 **Deployed Application:** [https://juspay-assignment-pi.vercel.app/](https://juspay-assignment-pi.vercel.app/)
 
+## 📋 Deliverables
+
+### 1. GitHub Repository
+**Repository Link:** [https://github.com/Sandeep1908/juspay-assignment](https://github.com/Sandeep1908/juspay-assignment)
+- Clean and organized code structure
+- Proper commit history
+- Complete documentation
+
+### 2. Deployed Application
+**Live Demo:** [https://juspay-assignment-pi.vercel.app/](https://juspay-assignment-pi.vercel.app/)
+- Hosted on Vercel
+- Production-ready build
+- Cross-browser compatible
+
+### 3. Video Walkthrough
+**Demo Video:** [https://www.loom.com/share/17be28b36af84184b66f27c519e43f18?sid=4353c3df-d152-449e-9cd9-d9b9e99acac2](https://www.loom.com/share/17be28b36af84184b66f27c519e43f18?sid=4353c3df-d152-449e-9cd9-d9b9e99acac2)
+- Functionality demonstration
+- Code approach explanation
+- Feature walkthrough
+
+## ✨ Features Implemented
+
+### Core Functionality
+- ✅ **Responsive Dashboard** - Works on desktop, tablet, and mobile
+- ✅ **Dark/Light Theme Toggle** - Persistent theme switching
+- ✅ **Real-time Search** - Instant search across all order fields
+- ✅ **Multi-column Sorting** - Sort by ID, Customer, Project, Status
+- ✅ **Advanced Filtering** - Filter and search functionality
+- ✅ **Pagination** - Efficient data pagination with page controls
+- ✅ **Interactive Charts** - Dynamic data visualization
+- ✅ **Statistics Cards** - Real-time metrics display
+
+### Technical Features
+- ✅ **Modern React** - Hooks, Context API, ES6+
+- ✅ **Material-UI Integration** - Complete theming system
+- ✅ **Performance Optimized** - useMemo, useCallback optimizations
+- ✅ **Cross-browser Compatible** - Chrome, Firefox, Safari, Edge
+- ✅ **Pixel-perfect Design** - Exact implementation of provided designs
+- ✅ **Smooth Animations** - Hover effects and transitions
+
 ## How to Run This Project
 
 ### Prerequisites

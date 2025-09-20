@@ -28,9 +28,9 @@ const PRODUCTS_DATA = [
 
 const SALES_DATA = [
   { id: 0, value: 38.6, label: 'Direct', color: '#1f2937', salesValue: '$300.56' },
-  { id: 1, value: 22.5, label: 'Affiliate', color: '#10b981', salesValue: '$135.18' },
-  { id: 2, value: 30.8, label: 'Sponsored', color: '#8b5cf6', salesValue: '$154.02' },
-  { id: 3, value: 8.1, label: 'E-mail', color: '#06b6d4', salesValue: '$48.96' },
+  { id: 1, value: 22.5, label: 'Affiliate', color: '#a7c7e7', salesValue: '$135.18' },
+  { id: 2, value: 30.8, label: 'Sponsored', color: '#90ee90', salesValue: '$154.02' },
+  { id: 3, value: 8.1, label: 'E-mail', color: '#dda0dd', salesValue: '$48.96' },
 ];
 
 const MAP_MARKERS = [
@@ -230,7 +230,7 @@ const TopProducts = () => {
 
   return (
     <Card sx={{ 
-      height: 350, 
+      height: 360, 
       backgroundColor: darkMode ? '#FFFFFF0D' : '#F7F9FB',
       cursor: 'pointer',
       transition: 'all 0.3s ease',
@@ -299,7 +299,7 @@ const TotalSalesChart = () => {
 
   return (
     <Card sx={{ 
-      height: 350, 
+      height: 360, 
       backgroundColor: darkMode ? '#FFFFFF0D' : '#F7F9FB',
       cursor: 'pointer',
       transition: 'all 0.3s ease',
@@ -313,23 +313,23 @@ const TotalSalesChart = () => {
           Total Sales
         </Typography>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: 'calc(100% - 40px)' }}>
-          <Box sx={{ width: 140, height: 120, position: 'relative', mb: 2 }}>
-               <PieChart
-        series={[
-          {
-            data: SALES_DATA,
-            innerRadius: 35, // makes it a ring
-            outerRadius: 60,
-            paddingAngle: 3,
-    
-          },
-        ]}
-        slotProps={{
-          legend: { hidden: true }, // hide built-in legend
-        }}
-        width={220}
-        height={130}
-      />
+          <Box sx={{ width: 300, margin:"auto",  position: 'relative', mb: 2, display: 'flex', justifyContent: 'center' }}>
+            <PieChart
+              series={[
+                {
+                  data: SALES_DATA,
+                  innerRadius: 45,
+                  outerRadius: 75,
+                  paddingAngle: 2,
+                  cornerRadius: 10,
+                },
+              ]}
+              slotProps={{
+                legend: { hidden: true },
+              }}
+              width={120}
+              height={150}
+            />
            
           </Box>
           <Box sx={{ width: '100%' }}>
@@ -340,23 +340,31 @@ const TotalSalesChart = () => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  mb: 1.5,
+                  mb: 1.2,
+                  p: 1,
+                  borderRadius: 1,
+                  '&:hover': {
+                    backgroundColor: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
+                  }
                 }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                   <Box
                     sx={{
-                      width: 8,
-                      height: 8,
+                      width: 10,
+                      height: 10,
                       borderRadius: '50%',
                       backgroundColor: item.color,
                     }}
                   />
-                  <Typography variant="body2" sx={{ fontSize: '0.8rem', color: darkMode?"white":"#374151", }}>
+                  <Typography variant="body2" sx={{ fontSize: '0.85rem', color: darkMode?"white":"#374151", fontWeight: 500 }}>
                     {item.label}
                   </Typography>
+                  <Typography variant="body2" sx={{ fontSize: '0.75rem', color: darkMode ? '#9ca3af' : '#6b7280' }}>
+                    {item.value}%
+                  </Typography>
                 </Box>
-                <Typography variant="body2" fontWeight={600} sx={{ fontSize: '0.8rem', color: darkMode?"white":"#374151", }}>
+                <Typography variant="body2" fontWeight={600} sx={{ fontSize: '0.85rem', color: darkMode?"white":"#374151", }}>
                   {item.salesValue}
                 </Typography>
               </Box>
