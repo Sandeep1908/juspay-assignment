@@ -84,10 +84,15 @@ const ProjectionsChart = () => {
       height: { xs: 200, sm: 250 }, 
       backgroundColor: darkMode ? '#FFFFFF0D' : '#f8fafc',
       cursor: 'pointer',
-      transition: 'all 0.3s ease',
+      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+      animation: 'fadeInUp 0.6s ease 0.4s both',
       '&:hover': {
-        transform: 'translateY(-2px)',
-        boxShadow: '0 6px 20px rgba(0,0,0,0.08)',
+        transform: 'translateY(-4px) scale(1.01)',
+        boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
+      },
+      '@keyframes fadeInUp': {
+        '0%': { opacity: 0, transform: 'translateY(20px)' },
+        '100%': { opacity: 1, transform: 'translateY(0)' },
       }
     }}>
       <CardContent sx={{ p: { xs: 1.5, sm: 2.5 }, height: '100%' }}>
@@ -150,13 +155,18 @@ const StatsCards = () => {
               border: 'none',
               height: { xs: 100, sm: 120 },
               cursor: 'pointer',
-              transition: 'all 0.3s ease',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              animation: `fadeInUp 0.6s ease ${idx * 0.1}s both`,
               '&:hover': {
-                transform: 'translateY(-4px)',
-                boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
+                transform: 'translateY(-8px) scale(1.02)',
+                boxShadow: '0 12px 40px rgba(0,0,0,0.15)',
               },
               '&:active': {
-                transform: 'translateY(-2px)',
+                transform: 'translateY(-2px) scale(0.98)',
+              },
+              '@keyframes fadeInUp': {
+                '0%': { opacity: 0, transform: 'translateY(20px)' },
+                '100%': { opacity: 1, transform: 'translateY(0)' },
               }
             }}
           >
@@ -178,13 +188,31 @@ const StatsCards = () => {
                     alignItems: 'center',
                     gap: 0.5,
                     color: statCard.trend === 'up' ? 'success.main' : 'error.main',
+                    transition: 'transform 0.2s ease',
+                    '&:hover': {
+                      transform: 'scale(1.1)',
+                    }
                   }}
                 >
-                  {statCard.trend === 'up' ? (
-                    <TrendingUp fontSize="small" />
-                  ) : (
-                    <TrendingDown fontSize="small" />
-                  )}
+                  <Box sx={{
+                    animation: statCard.trend === 'up' ? 'bounceUp 2s infinite' : 'bounceDown 2s infinite',
+                    '@keyframes bounceUp': {
+                      '0%, 20%, 50%, 80%, 100%': { transform: 'translateY(0)' },
+                      '40%': { transform: 'translateY(-3px)' },
+                      '60%': { transform: 'translateY(-1px)' },
+                    },
+                    '@keyframes bounceDown': {
+                      '0%, 20%, 50%, 80%, 100%': { transform: 'translateY(0)' },
+                      '40%': { transform: 'translateY(3px)' },
+                      '60%': { transform: 'translateY(1px)' },
+                    }
+                  }}>
+                    {statCard.trend === 'up' ? (
+                      <TrendingUp fontSize="small" />
+                    ) : (
+                      <TrendingDown fontSize="small" />
+                    )}
+                  </Box>
                   <Typography variant="body2" fontWeight={500} sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
                     {sanitizeText(statCard.change)}
                   </Typography>

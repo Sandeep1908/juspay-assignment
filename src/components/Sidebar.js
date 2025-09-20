@@ -134,8 +134,10 @@ const Sidebar = ({ onMenuClick, mobileOpen, onMobileClose }) => {
               minHeight: 32,
               position: 'relative',
               backgroundColor: activeItem === item.label ? (darkMode ? 'rgba(255,255,255,0.08)' : '#f3f4f6') : 'transparent',
+              transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
               '&:hover': {
                 backgroundColor: darkMode ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
+                transform: 'translateX(4px)',
               },
               '&::before': activeItem === item.label ? {
                 content: '""',
@@ -146,20 +148,42 @@ const Sidebar = ({ onMenuClick, mobileOpen, onMobileClose }) => {
                 width: '3px',
                 backgroundColor: darkMode ? '#C6C7F8' : '#000',
                 borderRadius: '0 2px 2px 0',
+                animation: 'slideInLeft 0.3s ease',
+                '@keyframes slideInLeft': {
+                  '0%': { width: 0, opacity: 0 },
+                  '100%': { width: '3px', opacity: 1 },
+                }
               } : {},
             }}
           >
             {item.hasDropdown && (
               <Box sx={{ mr: 1 }}>
-                {expandedItems[item.label] ? 
-                  <ExpandMore fontSize="small" sx={{ color: 'text.secondary' }} /> : 
+                <Box sx={{
+                  transition: 'transform 0.2s ease',
+                  transform: expandedItems[item.label] ? 'rotate(90deg)' : 'rotate(0deg)',
+                }}>
                   <ChevronRight fontSize="small" sx={{ color: 'text.secondary' }} />
-                }
+                </Box>
               </Box>
             )}
             {showIcon && item.icon && (
-              <ListItemIcon sx={{ minWidth: 24, mr: 1 }}>
-                <img src={item.icon} alt={item.label} style={{ width: 16, height: 16 }} />
+              <ListItemIcon sx={{ 
+                minWidth: 24, 
+                mr: 1,
+                transition: 'transform 0.2s ease',
+                '&:hover': {
+                  transform: 'scale(1.1)',
+                }
+              }}>
+                <img 
+                  src={item.icon} 
+                  alt={item.label} 
+                  style={{ 
+                    width: 16, 
+                    height: 16,
+                    transition: 'all 0.2s ease',
+                  }} 
+                />
               </ListItemIcon>
             )}
             <ListItemText
@@ -173,7 +197,10 @@ const Sidebar = ({ onMenuClick, mobileOpen, onMobileClose }) => {
           </ListItemButton>
         </ListItem>
         {item.hasDropdown && (
-          <Collapse in={expandedItems[item.label]}>
+          <Collapse 
+            in={expandedItems[item.label]}
+            timeout={300}
+          >
             <List sx={{ pl: 4 }}>
               {item.children?.map((child, childIndex) => (
                 <ListItem key={childIndex} disablePadding>
@@ -193,8 +220,10 @@ const Sidebar = ({ onMenuClick, mobileOpen, onMobileClose }) => {
                       minHeight: 28,
                       position: 'relative',
                       backgroundColor: activeItem === child.label ? (darkMode ? 'rgba(255,255,255,0.08)' : '#f3f4f6') : 'transparent',
+                      transition: 'all 0.2s ease',
                       '&:hover': {
                         backgroundColor: darkMode ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
+                        transform: 'translateX(2px)',
                       },
                       '&::before': activeItem === child.label ? {
                         content: '""',
@@ -205,6 +234,11 @@ const Sidebar = ({ onMenuClick, mobileOpen, onMobileClose }) => {
                         width: '3px',
                         backgroundColor: darkMode ? '#C6C7F8' : '#000',
                         borderRadius: '0 2px 2px 0',
+                        animation: 'slideInLeft 0.3s ease',
+                        '@keyframes slideInLeft': {
+                          '0%': { width: 0, opacity: 0 },
+                          '100%': { width: '3px', opacity: 1 },
+                        }
                       } : {},
                     }}
                   >

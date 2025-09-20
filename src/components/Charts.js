@@ -50,10 +50,15 @@ const RevenueChart = () => {
       height: { xs: 280, sm: 350 }, 
       backgroundColor: darkMode ? '#FFFFFF0D' : '#f8fafc',
       cursor: 'pointer',
-      transition: 'all 0.3s ease',
+      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+      animation: 'fadeInLeft 0.8s ease both',
       '&:hover': {
-        transform: 'translateY(-2px)',
-        boxShadow: '0 6px 20px rgba(0,0,0,0.08)',
+        transform: 'translateY(-4px) scale(1.01)',
+        boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
+      },
+      '@keyframes fadeInLeft': {
+        '0%': { opacity: 0, transform: 'translateX(-30px)' },
+        '100%': { opacity: 1, transform: 'translateX(0)' },
       }
     }}>
       <CardContent sx={{ p: { xs: 1.5, sm: 2.5 }, height: '100%' }}>
@@ -141,6 +146,17 @@ const LocationChart = () => {
         height: { xs: 280, sm: 350 },
         backgroundColor: darkMode ? '#FFFFFF0D' : '#F8FAFC',
         borderRadius: 3,
+        cursor: 'pointer',
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        animation: 'fadeInRight 0.8s ease both',
+        '&:hover': {
+          transform: 'translateY(-4px) scale(1.01)',
+          boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
+        },
+        '@keyframes fadeInRight': {
+          '0%': { opacity: 0, transform: 'translateX(30px)' },
+          '100%': { opacity: 1, transform: 'translateX(0)' },
+        }
       }}
     >
       <CardContent sx={{ p: { xs: 1.5, sm: 2.5 } }}>

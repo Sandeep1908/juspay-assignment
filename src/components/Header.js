@@ -83,30 +83,79 @@ const Header = ({ onMenuClick }) => {
               aria-label="open drawer"
               edge="start"
               onClick={onMenuClick}
-              sx={{ mr: 2 }}
+              sx={{ 
+                mr: 2,
+                transition: 'all 0.2s ease',
+                '&:hover': {
+                  transform: 'scale(1.1)',
+                  backgroundColor: 'rgba(0,0,0,0.04)',
+                }
+              }}
             >
-              <MenuIcon />
+              <MenuIcon sx={{ transition: 'transform 0.2s ease' }} />
             </IconButton>
           )}
           
           {/* Breadcrumb - hidden on mobile */}
           <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center' }}>
-            <MenuIcon sx={{ color: 'text.secondary', mr: 1, fontSize: '1.2rem' }} />
-            <Star sx={{ color: 'text.secondary', mr: 2, fontSize: '1.2rem' }} />
-            <Typography variant="body2" color="text.secondary">
+            <MenuIcon sx={{ 
+              color: 'text.secondary', 
+              mr: 1, 
+              fontSize: '1.2rem',
+              transition: 'all 0.2s ease',
+              '&:hover': { transform: 'scale(1.1)', color: 'text.primary' }
+            }} />
+            <Star sx={{ 
+              color: 'text.secondary', 
+              mr: 2, 
+              fontSize: '1.2rem',
+              transition: 'all 0.2s ease',
+              animation: 'twinkle 3s infinite',
+              '&:hover': { transform: 'scale(1.2)', color: '#ffd700' },
+              '@keyframes twinkle': {
+                '0%, 100%': { opacity: 1 },
+                '50%': { opacity: 0.7 },
+              }
+            }} />
+            <Typography 
+              variant="body2" 
+              color="text.secondary"
+              sx={{
+                transition: 'color 0.2s ease',
+                '&:hover': { color: 'text.primary' }
+              }}
+            >
               Dashboards
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mx: 1 }}>
               /
             </Typography>
-            <Typography variant="body2" color="text.primary" fontWeight={500}>
+            <Typography 
+              variant="body2" 
+              color="text.primary" 
+              fontWeight={500}
+              sx={{
+                transition: 'all 0.2s ease',
+                '&:hover': { transform: 'scale(1.05)' }
+              }}
+            >
               Default
             </Typography>
           </Box>
           
           {/* Mobile title */}
           {isMobile && (
-            <Typography variant="h6" sx={{ fontWeight: 600 }}>
+            <Typography 
+              variant="h6" 
+              sx={{ 
+                fontWeight: 600,
+                animation: 'fadeInLeft 0.5s ease',
+                '@keyframes fadeInLeft': {
+                  '0%': { opacity: 0, transform: 'translateX(-20px)' },
+                  '100%': { opacity: 1, transform: 'translateX(0)' },
+                }
+              }}
+            >
               ByeWind
             </Typography>
           )}
@@ -121,15 +170,32 @@ const Header = ({ onMenuClick }) => {
               placeholder="Search..."
               sx={{
                 width: { sm: 200, md: 250 },
+                transition: 'all 0.3s ease',
                 '& .MuiOutlinedInput-root': {
                   backgroundColor: darkMode ? 'rgba(255,255,255,0.05)' : 'grey.50',
                   borderRadius: 2,
+                  transition: 'all 0.2s ease',
+                  '&:hover': {
+                    backgroundColor: darkMode ? 'rgba(255,255,255,0.08)' : 'grey.100',
+                    transform: 'scale(1.02)',
+                  },
+                  '&.Mui-focused': {
+                    transform: 'scale(1.02)',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                  }
                 },
               }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <Search fontSize="small" color="action" />
+                    <Search 
+                      fontSize="small" 
+                      color="action" 
+                      sx={{
+                        transition: 'transform 0.2s ease',
+                        '&:hover': { transform: 'rotate(15deg)' }
+                      }}
+                    />
                   </InputAdornment>
                 ),
               }}
@@ -138,37 +204,127 @@ const Header = ({ onMenuClick }) => {
           
           {/* Mobile search icon */}
           {isMobile && (
-            <IconButton color="inherit">
+            <IconButton 
+              color="inherit"
+              sx={{
+                transition: 'all 0.2s ease',
+                '&:hover': {
+                  transform: 'scale(1.1) rotate(15deg)',
+                  backgroundColor: 'rgba(0,0,0,0.04)',
+                }
+              }}
+            >
               <Search />
             </IconButton>
           )}
 
           {/* Theme Toggle */}
-          <IconButton onClick={toggleDarkMode} color="inherit">
-            {darkMode ? <LightMode /> : <DarkMode />}
+          <IconButton 
+            onClick={toggleDarkMode} 
+            color="inherit"
+            sx={{
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'rotate(180deg) scale(1.1)',
+                backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)',
+              }
+            }}
+          >
+            <Box sx={{ 
+              transition: 'all 0.3s ease',
+              display: 'flex',
+              alignItems: 'center'
+            }}>
+              {darkMode ? <LightMode /> : <DarkMode />}
+            </Box>
           </IconButton>
 
           {/* Settings - hidden on mobile */}
           {!isMobile && (
-            <IconButton color="inherit">
-              <Settings />
+            <IconButton 
+              color="inherit"
+              sx={{
+                transition: 'all 0.2s ease',
+                '&:hover': {
+                  transform: 'rotate(90deg) scale(1.05)',
+                  backgroundColor: 'rgba(0,0,0,0.04)',
+                }
+              }}
+            >
+              <Settings sx={{ transition: 'transform 0.2s ease' }} />
             </IconButton>
           )}
 
           {/* Notifications */}
-          <IconButton color="inherit" onClick={handleNotificationMenuOpen}>
-            <Badge badgeContent={4} color="error">
-              <Notifications />
+          <IconButton 
+            color="inherit" 
+            onClick={handleNotificationMenuOpen}
+            sx={{
+              transition: 'all 0.2s ease',
+              '&:hover': {
+                transform: 'scale(1.1)',
+                backgroundColor: 'rgba(0,0,0,0.04)',
+              }
+            }}
+          >
+            <Badge 
+              badgeContent={4} 
+              color="error"
+              sx={{
+                '& .MuiBadge-badge': {
+                  animation: 'pulse 2s infinite',
+                  '@keyframes pulse': {
+                    '0%': { transform: 'scale(1)' },
+                    '50%': { transform: 'scale(1.1)' },
+                    '100%': { transform: 'scale(1)' },
+                  }
+                }
+              }}
+            >
+              <Notifications sx={{ 
+                transition: 'transform 0.2s ease',
+                '&:hover': { transform: 'rotate(15deg)' }
+              }} />
             </Badge>
           </IconButton>
 
           {/* Profile */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer' }} onClick={handleUserMenuOpen}>
-            <Avatar sx={{ width: 32, height: 32, bgcolor: 'grey.300' }}>
+          <Box 
+            sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 1, 
+              cursor: 'pointer',
+              p: 0.5,
+              borderRadius: 2,
+              transition: 'all 0.2s ease',
+              '&:hover': {
+                backgroundColor: 'rgba(0,0,0,0.04)',
+                transform: 'translateY(-1px)',
+              }
+            }} 
+            onClick={handleUserMenuOpen}
+          >
+            <Avatar 
+              sx={{ 
+                width: 32, 
+                height: 32, 
+                bgcolor: 'grey.300',
+                transition: 'all 0.2s ease',
+                '&:hover': {
+                  transform: 'scale(1.05)',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                }
+              }}
+            >
               <Person fontSize="small" />
             </Avatar>
             {!isMobile && (
-              <Typography variant="body2" fontWeight={500}>
+              <Typography 
+                variant="body2" 
+                fontWeight={500}
+                sx={{ transition: 'color 0.2s ease' }}
+              >
                 ByeWind
               </Typography>
             )}
@@ -180,8 +336,21 @@ const Header = ({ onMenuClick }) => {
           anchorEl={notifMenuAnchor}
           open={Boolean(notifMenuAnchor)}
           onClose={handleMenuClose}
+          TransitionProps={{
+            timeout: 300,
+          }}
           PaperProps={{
-            sx: { width: 320, mt: 1 },
+            sx: { 
+              width: 320, 
+              mt: 1,
+              borderRadius: 2,
+              boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+              animation: Boolean(notifMenuAnchor) ? 'slideIn 0.3s ease' : 'none',
+              '@keyframes slideIn': {
+                '0%': { opacity: 0, transform: 'translateY(-10px)' },
+                '100%': { opacity: 1, transform: 'translateY(0)' },
+              }
+            },
           }}
         >
           <Box sx={{ p: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
@@ -190,8 +359,24 @@ const Header = ({ onMenuClick }) => {
             </Typography>
           </Box>
           <List sx={{ p: 0 }}>
-            {mockNotifications.map((notif) => (
-              <ListItem key={notif.id} sx={{ py: 1.5, px: 2 }}>
+            {mockNotifications.map((notif, index) => (
+              <ListItem 
+                key={notif.id} 
+                sx={{ 
+                  py: 1.5, 
+                  px: 2,
+                  transition: 'all 0.2s ease',
+                  animation: `fadeInUp 0.3s ease ${index * 0.1}s both`,
+                  '&:hover': {
+                    backgroundColor: 'rgba(0,0,0,0.02)',
+                    transform: 'translateX(4px)',
+                  },
+                  '@keyframes fadeInUp': {
+                    '0%': { opacity: 0, transform: 'translateY(10px)' },
+                    '100%': { opacity: 1, transform: 'translateY(0)' },
+                  }
+                }}
+              >
                 <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5, width: '100%' }}>
                   <Box
                     sx={{
@@ -221,13 +406,38 @@ const Header = ({ onMenuClick }) => {
           anchorEl={userMenuAnchor}
           open={Boolean(userMenuAnchor)}
           onClose={handleMenuClose}
+          TransitionProps={{
+            timeout: 300,
+          }}
           PaperProps={{
-            sx: { width: 200, mt: 1 },
+            sx: { 
+              width: 200, 
+              mt: 1,
+              borderRadius: 2,
+              boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+            },
           }}
         >
-          <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-          <MenuItem onClick={handleMenuClose}>Settings</MenuItem>
-          <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+          {['Profile', 'Settings', 'Logout'].map((item, index) => (
+            <MenuItem 
+              key={item}
+              onClick={handleMenuClose}
+              sx={{
+                transition: 'all 0.2s ease',
+                animation: `fadeInUp 0.2s ease ${index * 0.05}s both`,
+                '&:hover': {
+                  backgroundColor: 'rgba(0,0,0,0.04)',
+                  transform: 'translateX(4px)',
+                },
+                '@keyframes fadeInUp': {
+                  '0%': { opacity: 0, transform: 'translateY(5px)' },
+                  '100%': { opacity: 1, transform: 'translateY(0)' },
+                }
+              }}
+            >
+              {item}
+            </MenuItem>
+          ))}
         </Menu>
       </Toolbar>
     </AppBar>

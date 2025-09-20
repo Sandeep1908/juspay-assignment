@@ -194,8 +194,15 @@ const OrderList = () => {
               backgroundColor: darkMode ? '#404040' : '#f9fafb',
               border: darkMode ? '1px solid #555' : '1px solid #e5e7eb', 
               borderRadius: 1.5,
+              transition: 'all 0.2s ease',
+              animation: 'slideInLeft 0.4s ease 0.1s both',
               '&:hover': {
-                backgroundColor: darkMode ? '#4a4a4a' : '#f3f4f6'
+                backgroundColor: darkMode ? '#4a4a4a' : '#f3f4f6',
+                transform: 'scale(1.05) rotate(90deg)',
+              },
+              '@keyframes slideInLeft': {
+                '0%': { opacity: 0, transform: 'translateX(-20px)' },
+                '100%': { opacity: 1, transform: 'translateX(0)' },
               }
             }}
           >
@@ -207,8 +214,15 @@ const OrderList = () => {
               backgroundColor: darkMode ? '#404040' : '#f9fafb',
               border: darkMode ? '1px solid #555' : '1px solid #e5e7eb', 
               borderRadius: 1.5,
+              transition: 'all 0.2s ease',
+              animation: 'slideInLeft 0.4s ease 0.2s both',
               '&:hover': {
-                backgroundColor: darkMode ? '#4a4a4a' : '#f3f4f6'
+                backgroundColor: darkMode ? '#4a4a4a' : '#f3f4f6',
+                transform: 'scale(1.05)',
+              },
+              '@keyframes slideInLeft': {
+                '0%': { opacity: 0, transform: 'translateX(-20px)' },
+                '100%': { opacity: 1, transform: 'translateX(0)' },
               }
             }}
           >
@@ -220,8 +234,15 @@ const OrderList = () => {
               backgroundColor: darkMode ? '#404040' : '#f9fafb',
               border: darkMode ? '1px solid #555' : '1px solid #e5e7eb', 
               borderRadius: 1.5,
+              transition: 'all 0.2s ease',
+              animation: 'slideInLeft 0.4s ease 0.3s both',
               '&:hover': {
-                backgroundColor: darkMode ? '#4a4a4a' : '#f3f4f6'
+                backgroundColor: darkMode ? '#4a4a4a' : '#f3f4f6',
+                transform: 'scale(1.05) rotate(180deg)',
+              },
+              '@keyframes slideInLeft': {
+                '0%': { opacity: 0, transform: 'translateX(-20px)' },
+                '100%': { opacity: 1, transform: 'translateX(0)' },
               }
             }}
           >
@@ -237,17 +258,22 @@ const OrderList = () => {
           inputProps={{ 'aria-label': 'Search orders' }}
           sx={{ 
             width: { xs: '100%', sm: 280 },
+            animation: 'slideInRight 0.4s ease 0.2s both',
             '& .MuiOutlinedInput-root': {
               backgroundColor: darkMode ? '#404040' : '#f9fafb',
               borderRadius: 3,
               border: darkMode ? '1px solid #555' : '1px solid #e5e7eb',
               fontSize: '0.875rem',
+              transition: 'all 0.2s ease',
               '&:hover': {
                 borderColor: darkMode ? '#666' : '#d1d5db',
+                transform: 'scale(1.02)',
               },
               '&.Mui-focused': {
                 borderColor: '#3b82f6',
                 backgroundColor: darkMode ? '#4a4a4a' : 'white',
+                transform: 'scale(1.02)',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
               }
             },
             '& .MuiOutlinedInput-input': {
@@ -258,6 +284,10 @@ const OrderList = () => {
                 color: darkMode ? '#9ca3af' : '#9ca3af',
                 opacity: 1
               }
+            },
+            '@keyframes slideInRight': {
+              '0%': { opacity: 0, transform: 'translateX(20px)' },
+              '100%': { opacity: 1, transform: 'translateX(0)' },
             }
           }}
           InputProps={{
