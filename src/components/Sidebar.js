@@ -119,7 +119,7 @@ const Sidebar = ({ onMenuClick, mobileOpen, onMobileClose }) => {
       icon: darkMode ? item.darkIcon : item.lightIcon
     })), [darkMode]);
 
-  const renderMenuItems = (items, showIcon = true) => (
+  const renderMenuItems = (items, showIcon = true, showDots = false) => (
     items.map((item, index) => (
       <Box key={index}>
         <ListItem disablePadding>
@@ -129,7 +129,7 @@ const Sidebar = ({ onMenuClick, mobileOpen, onMobileClose }) => {
             sx={{
               py: 0.25,
               px: 1,
-              borderRadius: 3,
+              borderRadius: 2,
               mb: 0.25,
               minHeight: 32,
               position: 'relative',
@@ -156,14 +156,26 @@ const Sidebar = ({ onMenuClick, mobileOpen, onMobileClose }) => {
               } : {},
             }}
           >
-            {item.hasDropdown && (
+            {activeItem !== item.label && (
               <Box sx={{ mr: 1 }}>
-                <Box sx={{
-                  transition: 'transform 0.2s ease',
-                  transform: expandedItems[item.label] ? 'rotate(90deg)' : 'rotate(0deg)',
-                }}>
-                  <ChevronRight fontSize="small" sx={{ color: 'text.secondary' }} />
-                </Box>
+                {showDots ? (
+                  <Box sx={{
+                    width: 6,
+                    height: 6,
+                    borderRadius: '50%',
+                    backgroundColor: 'text.secondary',
+                    opacity: 0.6,
+                  }}
+                  />
+                ) : (
+                  <Box sx={{
+                    transition: 'transform 0.2s ease',
+                    transform: item.hasDropdown && expandedItems[item.label] ? 'rotate(90deg)' : 'rotate(0deg)',
+                    opacity: item.hasDropdown ? 1 : 0.3,
+                  }}>
+                    <ChevronRight fontSize="small" sx={{ color: 'text.secondary' }} />
+                  </Box>
+                )}
               </Box>
             )}
             {showIcon && item.icon && (
@@ -306,7 +318,7 @@ const Sidebar = ({ onMenuClick, mobileOpen, onMobileClose }) => {
             </Typography>
           </Box>
           <List sx={{ py: 0 }}>
-            {renderMenuItems(favoriteItems, false)}
+            {renderMenuItems(favoriteItems, false, true)}
           </List>
         </Box>
 
