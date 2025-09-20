@@ -10,6 +10,8 @@ import {
   Box,
   Avatar,
   Collapse,
+  useMediaQuery,
+  useTheme as useMuiTheme,
 } from '@mui/material';
 import {
   ChevronRight,
@@ -72,8 +74,10 @@ const PAGE_ITEMS = [
   { lightIcon: SidebarIcon1, darkIcon: DarkSidebarIcon1, label: 'Social' },
 ];
 
-const Sidebar = ({ onMenuClick }) => {
+const Sidebar = ({ onMenuClick, mobileOpen, onMobileClose }) => {
   const { darkMode } = useTheme();
+  const muiTheme = useMuiTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down('md'));
   const [activeItem, setActiveItem] = useState('Default');
   const [expandedItems, setExpandedItems] = useState({});
 
@@ -88,8 +92,12 @@ const Sidebar = ({ onMenuClick }) => {
       if (onMenuClick) {
         onMenuClick(item.label);
       }
+      // Close mobile drawer when item is clicked
+      if (isMobile && onMobileClose) {
+        onMobileClose();
+      }
     }
-  }, [onMenuClick]);
+  }, [onMenuClick, isMobile, onMobileClose]);
 
   const favoriteItems = useMemo(() => 
     FAVORITE_ITEMS.map(item => ({
@@ -117,15 +125,28 @@ const Sidebar = ({ onMenuClick }) => {
         <ListItem disablePadding>
           <ListItemButton
             onClick={() => handleMenuClick(item)}
+            
             sx={{
-              py: 1,
-              px: 2,
-              borderRadius: 1,
-              mb: 0.5,
-              backgroundColor: activeItem === item.label ? (darkMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)') : 'transparent',
+              py: 0.25,
+              px: 1,
+              borderRadius: 3,
+              mb: 0.25,
+              minHeight: 32,
+              position: 'relative',
+              backgroundColor: activeItem === item.label ? (darkMode ? 'rgba(255,255,255,0.08)' : '#f3f4f6') : 'transparent',
               '&:hover': {
                 backgroundColor: darkMode ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
               },
+              '&::before': activeItem === item.label ? {
+                content: '""',
+                position: 'absolute',
+                left: 2,
+                top: '20%',
+                bottom: '20%',
+                width: '3px',
+                backgroundColor: darkMode ? '#C6C7F8' : '#000',
+                borderRadius: '0 2px 2px 0',
+              } : {},
             }}
           >
             {item.hasDropdown && (
@@ -137,14 +158,14 @@ const Sidebar = ({ onMenuClick }) => {
               </Box>
             )}
             {showIcon && item.icon && (
-              <ListItemIcon sx={{ minWidth: 32 }}>
+              <ListItemIcon sx={{ minWidth: 24, mr: 1 }}>
                 <img src={item.icon} alt={item.label} style={{ width: 16, height: 16 }} />
               </ListItemIcon>
             )}
             <ListItemText
               primary={item.label}
               primaryTypographyProps={{
-                fontSize: '0.875rem',
+                fontSize: '0.8rem',
                 fontWeight: activeItem === item.label ? 500 : 400,
                 color: 'text.primary',
               }}
@@ -160,21 +181,37 @@ const Sidebar = ({ onMenuClick }) => {
                     onClick={() => {
                       setActiveItem(child.label);
                       if (onMenuClick) onMenuClick(child.label);
+                      if (isMobile && onMobileClose) {
+                        onMobileClose();
+                      }
                     }}
                     sx={{
-                      py: 0.5,
+                      py: 0.125,
+                      px: 0.5,
                       borderRadius: 1,
-                      mb: 0.5,
-                      backgroundColor: activeItem === child.label ? (darkMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)') : 'transparent',
+                      mb: 0.125,
+                      minHeight: 28,
+                      position: 'relative',
+                      backgroundColor: activeItem === child.label ? (darkMode ? 'rgba(255,255,255,0.08)' : '#f3f4f6') : 'transparent',
                       '&:hover': {
                         backgroundColor: darkMode ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
                       },
+                      '&::before': activeItem === child.label ? {
+                        content: '""',
+                        position: 'absolute',
+                        left: 0,
+                        top: '20%',
+                        bottom: '20%',
+                        width: '3px',
+                        backgroundColor: darkMode ? '#C6C7F8' : '#000',
+                        borderRadius: '0 2px 2px 0',
+                      } : {},
                     }}
                   >
                     <ListItemText
                       primary={child.label}
                       primaryTypographyProps={{
-                        fontSize: '0.8rem',
+                        fontSize: '0.75rem',
                         fontWeight: activeItem === child.label ? 500 : 400,
                         color: 'text.secondary',
                       }}
@@ -189,43 +226,29 @@ const Sidebar = ({ onMenuClick }) => {
     ))
   );
 
-  return (
-    <Drawer
-      variant="permanent"
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        '& .MuiDrawer-paper': {
-          width: drawerWidth,
-          boxSizing: 'border-box',
-          borderRight: '1px solid',
-          borderColor: 'divider',
-          transition: 'background-color 0.3s ease, border-color 0.3s ease',
-        },
-      }}
-    >
-      <Box sx={{ p: 2 }}>
-        {/* Logo */}
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, px: 1 }}>
-          <Avatar
-            sx={{
-              width: 24,
-              height: 24,
-              bgcolor: 'text.primary',
-              mr: 2,
-              fontSize: '0.75rem',
-              fontWeight: 700,
-            }}
-          >
-            B
-          </Avatar>
-          <Typography variant="h6" sx={{ fontWeight: 600, fontSize: '1rem' }}>
-            ByeWind
-          </Typography>
-        </Box>
+  const drawer = (
+    <Box sx={{ p: { xs: 2, md: 2 } }}>
+      {/* Logo */}
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, px: 1 }}>
+        <Avatar
+          sx={{
+            width: { xs: 28, md: 24 },
+            height: { xs: 28, md: 24 },
+            bgcolor: 'text.primary',
+            mr: 2,
+            fontSize: '0.75rem',
+            fontWeight: 700,
+          }}
+        >
+          B
+        </Avatar>
+        <Typography variant="h6" sx={{ fontWeight: 600, fontSize: { xs: '1.1rem', md: '1rem' } }}>
+          ByeWind
+        </Typography>
+      </Box>
 
         {/* Favorites Section */}
-        <Box sx={{ mb: 3 }}>
+        <Box sx={{ mb: 2 }}>
           <Box sx={{ display: 'flex', gap: 2, mb: 2, px: 1 }}>
             <Typography
               variant="caption"
@@ -254,7 +277,7 @@ const Sidebar = ({ onMenuClick }) => {
         </Box>
 
         {/* Dashboards Section */}
-        <Box sx={{ mb: 3 }}>
+        <Box sx={{ mb: 2 }}>
           <Typography
             variant="caption"
             sx={{
@@ -291,9 +314,55 @@ const Sidebar = ({ onMenuClick }) => {
           <List sx={{ py: 0 }}>
             {renderMenuItems(pageItems)}
           </List>
-        </Box>
       </Box>
-    </Drawer>
+    </Box>
+  );
+
+  return (
+    <Box
+      component="nav"
+      sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
+    >
+      {/* Mobile drawer */}
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={onMobileClose}
+        ModalProps={{
+          keepMounted: true, // Better open performance on mobile.
+        }}
+        sx={{
+          display: { xs: 'block', md: 'none' },
+          '& .MuiDrawer-paper': {
+            boxSizing: 'border-box',
+            width: drawerWidth,
+            borderRight: '1px solid',
+            borderColor: 'divider',
+            transition: 'background-color 0.3s ease, border-color 0.3s ease',
+          },
+        }}
+      >
+        {drawer}
+      </Drawer>
+      
+      {/* Desktop drawer */}
+      <Drawer
+        variant="permanent"
+        sx={{
+          display: { xs: 'none', md: 'block' },
+          '& .MuiDrawer-paper': {
+            boxSizing: 'border-box',
+            width: drawerWidth,
+            borderRight: '1px solid',
+            borderColor: 'divider',
+            transition: 'background-color 0.3s ease, border-color 0.3s ease',
+          },
+        }}
+        open
+      >
+        {drawer}
+      </Drawer>
+    </Box>
   );
 };
 

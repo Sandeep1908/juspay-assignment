@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Card, CardContent, Typography, Box, Grid } from '@mui/material';
+import { Card, CardContent, Typography, Box, Grid, useMediaQuery, useTheme as useMuiTheme } from '@mui/material';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { PieChart } from '@mui/x-charts/PieChart';
@@ -42,10 +42,12 @@ const MAP_MARKERS = [
 
 const RevenueChart = () => {
   const { darkMode } = useTheme();
+  const muiTheme = useMuiTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
 
   return (
     <Card sx={{ 
-      height: 350, 
+      height: { xs: 280, sm: 350 }, 
       backgroundColor: darkMode ? '#FFFFFF0D' : '#f8fafc',
       cursor: 'pointer',
       transition: 'all 0.3s ease',
@@ -54,12 +56,12 @@ const RevenueChart = () => {
         boxShadow: '0 6px 20px rgba(0,0,0,0.08)',
       }
     }}>
-      <CardContent sx={{ p: 2.5, height: '100%' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+      <CardContent sx={{ p: { xs: 1.5, sm: 2.5 }, height: '100%' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2, flexDirection: { xs: 'column', sm: 'row' }, gap: { xs: 1, sm: 0 } }}>
           <Typography variant="body1" sx={{ fontWeight: 600, fontSize: '1rem', color: darkMode ? '#ffffff' : '#374151' }}>
             Revenue
           </Typography>
-          <Box sx={{ display: 'flex', gap: 3, fontSize: '0.75rem' }}>
+          <Box sx={{ display: 'flex', gap: { xs: 2, sm: 3 }, fontSize: '0.75rem', flexDirection: { xs: 'column', sm: 'row' } }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Box sx={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#000000' }} />
               <Typography variant="body2" sx={{ fontSize: '0.8rem', color: darkMode ? '#ffffff' : '#374151' }}>
@@ -80,7 +82,7 @@ const RevenueChart = () => {
             </Box>
           </Box>
         </Box>
-        <Box sx={{ height: 220, width: '100%' }}>
+        <Box sx={{ height: { xs: 180, sm: 220 }, width: '100%' }}>
           <LineChart
             series={[
               { 
@@ -109,8 +111,8 @@ const RevenueChart = () => {
               tickLine: false,
               tickFormatter: (value) => `${value}M`
             }]}
-            height={220}
-            margin={{ left: 40, right: 20, top: 20, bottom: 40 }}
+            height={isMobile ? 180 : 220}
+            margin={{ left: isMobile ? 30 : 40, right: 20, top: 20, bottom: isMobile ? 30 : 40 }}
             grid={{ horizontal: true, vertical: false }}
           />
         </Box>
@@ -123,6 +125,8 @@ const RevenueChart = () => {
 
 const LocationChart = () => {
   const { darkMode } = useTheme();
+  const muiTheme = useMuiTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
   
   const locationPercentages = useMemo(() => 
     LOCATION_DATA.map(location => ({
@@ -134,14 +138,12 @@ const LocationChart = () => {
   return (
     <Card
       sx={{
-       
-        height: 350,
+        height: { xs: 280, sm: 350 },
         backgroundColor: darkMode ? '#FFFFFF0D' : '#F8FAFC',
         borderRadius: 3,
- 
       }}
     >
-      <CardContent sx={{ p: 2.5 }}>
+      <CardContent sx={{ p: { xs: 1.5, sm: 2.5 } }}>
         <Typography
           sx={{
             mb: 2,
@@ -154,7 +156,7 @@ const LocationChart = () => {
         </Typography>
 
         {/* Mini world map */}
-        <Box sx={{ position: 'relative', height: 150, mb: 2 }}>
+        <Box sx={{ position: 'relative', height: { xs: 120, sm: 150 }, mb: 2 }}>
           <img src={worldmap} alt="World Map" width="100%" height="100%" style={{objectFit:"cover"}} />
 
           {MAP_MARKERS.map((marker, index) => (
@@ -381,20 +383,20 @@ const Charts = () => {
   
   return (
     <>
-      <Grid container spacing={2} sx={{ mb: 2 }}>
-        <Grid item xs={12} md={8.4}>
+      <Grid container spacing={{ xs: 1.5, sm: 2 }} sx={{ mb: { xs: 1.5, sm: 2 } }}>
+        <Grid item xs={12} lg={8.4}>
           <RevenueChart />
         </Grid>
-        <Grid item xs={12} md={3.6}>
+        <Grid item xs={12} lg={3.6}>
           <LocationChart />
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} sx={{ mb: 2 }}>
-        <Grid item xs={12} md={8.4}>
+      <Grid container spacing={{ xs: 1.5, sm: 2 }} sx={{ mb: { xs: 1.5, sm: 2 } }}>
+        <Grid item xs={12} lg={8.4}>
           <TopProducts />
         </Grid>
-        <Grid item xs={12} md={3.6}>
+        <Grid item xs={12} lg={3.6}>
           <TotalSalesChart />
         </Grid>
       </Grid>

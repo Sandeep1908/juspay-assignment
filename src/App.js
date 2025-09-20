@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { ThemeProvider, CssBaseline, Box, Typography } from '@mui/material';
+import { ThemeProvider, CssBaseline, Box, Typography, useMediaQuery } from '@mui/material';
 import { lightTheme, darkTheme } from './theme';
 import { ThemeContextProvider, useTheme } from './contexts/ThemeContext';
 import Sidebar from './components/Sidebar';
@@ -8,6 +8,7 @@ import RightSidebar from './components/RightSidebar';
 import StatsCards from './components/StatsCards';
 import Charts from './components/Charts';
 import OrderListPage from './pages/OrderListPage';
+import './styles/responsive.css';
 
 // TODO: Add routing with React Router later
 
@@ -16,6 +17,7 @@ import OrderListPage from './pages/OrderListPage';
 const AppContent = () => {
   const { darkMode } = useTheme();
   const [activePage, setActivePage] = useState('eCommerce'); // default page
+  const [mobileOpen, setMobileOpen] = useState(false);
   
   // Debug current page
   // console.log('Current active page:', activePage);
@@ -33,6 +35,13 @@ const AppContent = () => {
     return darkMode ? darkTheme : lightTheme;
   }, [darkMode]);
 
+  const isMobile = useMediaQuery(currentTheme.breakpoints.down('md'));
+  const isTablet = useMediaQuery(currentTheme.breakpoints.between('md', 'lg'));
+
+  const handleDrawerToggle = useCallback(() => {
+    setMobileOpen(!mobileOpen);
+  }, [mobileOpen]);
+
   const renderPageContent = useMemo(() => {
     const pageComponents = {
       eCommerce: (
@@ -40,12 +49,15 @@ const AppContent = () => {
           component="main"
           sx={{
             flexGrow: 1,
-            p: 3,
+            p: { xs: 2, sm: 3 },
             backgroundColor: 'background.default',
             minHeight: 'calc(100vh - 64px)',
           }}
         >
-          <Typography variant="h4" sx={{ mb: 3, fontWeight: 700 }}>
+          <Typography 
+            variant={isMobile ? "h5" : "h4"} 
+            sx={{ mb: { xs: 2, sm: 3 }, fontWeight: 700 }}
+          >
             eCommerce
           </Typography>
           <StatsCards />
@@ -66,12 +78,25 @@ const AppContent = () => {
         transition: 'background-color 0.3s ease, color 0.3s ease',
         backgroundColor: 'background.default'
       }}>
-        <Sidebar onMenuClick={handleSidebarNavigation} />
-        <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-          <Header />
-          <Box sx={{ display: 'flex', flexGrow: 1 }}>
+        <Sidebar 
+          onMenuClick={handleSidebarNavigation} 
+          mobileOpen={mobileOpen}
+          onMobileClose={() => setMobileOpen(false)}
+        />
+        <Box sx={{ 
+          flexGrow: 1, 
+          display: 'flex', 
+          flexDirection: 'column',
+          width: { xs: '100%', md: 'calc(100% - 240px)' }
+        }}>
+          <Header onMenuClick={handleDrawerToggle} />
+          <Box sx={{ 
+            display: 'flex', 
+            flexGrow: 1,
+            flexDirection: { xs: 'column', lg: 'row' }
+          }}>
             {renderPageContent}
-            {activePage === 'eCommerce' && <RightSidebar />}
+            {activePage === 'eCommerce' && !isMobile && <RightSidebar />}
           </Box>
         </Box>
       </Box>

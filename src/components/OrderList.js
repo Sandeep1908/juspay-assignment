@@ -8,6 +8,8 @@ import {
   Checkbox,
   IconButton,
   Pagination,
+  useMediaQuery,
+  useTheme as useMuiTheme,
 } from '@mui/material';
 import {
   Search,
@@ -64,6 +66,8 @@ const getStatusColor = (status) => {
 
 const OrderList = () => {
   const { darkMode } = useTheme();
+  const muiTheme = useMuiTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
   const [searchQuery, setSearchQuery] = useState('');
   const [checkedItems, setCheckedItems] = useState(['#CM9804']); // pre-select one item
   const [currentPage, setCurrentPage] = useState(1);
@@ -268,20 +272,17 @@ const OrderList = () => {
 
       {/* Table */}
       <Box sx={{ backgroundColor: darkMode ? '#2d2d2d' : 'white', borderRadius: 2, overflow: 'hidden' }}>
-        {/* Table Header */}
-        <Box sx={{ 
-          display: 'grid', 
-          gridTemplateColumns: { 
-            xs: '40px 1fr 1fr', 
-            sm: '50px 1fr 1fr 1fr', 
-            md: '60px 1fr 1fr 1fr 1fr 1fr 1fr' 
-          }, 
-          py: 2, 
-          px: { xs: 2, sm: 3 }, 
-          backgroundColor: darkMode ? '#2d2d2d' : 'white', 
-          borderBottom: darkMode ? '1px solid #404040' : '1px solid #f3f4f6', 
-          alignItems: 'center' 
-        }}>
+        <Box sx={{ overflowX: 'auto', minWidth: { xs: '700px', md: 'auto' } }}>
+          {/* Table Header */}
+          <Box sx={{ 
+            display: 'grid', 
+            gridTemplateColumns: '60px 1fr 1fr 1fr 1fr 1fr 1fr', 
+            py: 2, 
+            px: { xs: 2, sm: 3 }, 
+            backgroundColor: darkMode ? '#2d2d2d' : 'white', 
+            borderBottom: darkMode ? '1px solid #404040' : '1px solid #f3f4f6', 
+            alignItems: 'center' 
+          }}>
           <Checkbox
             checked={checkedItems.length === processedOrders.length && processedOrders.length > 0}
             indeterminate={checkedItems.length > 0 && checkedItems.length < processedOrders.length}
@@ -325,7 +326,7 @@ const OrderList = () => {
               fontSize: '0.75rem', 
               fontWeight: 500, 
               textTransform: 'uppercase', 
-              display: { xs: 'none', sm: 'flex' },
+              display: 'flex',
               alignItems: 'center',
               cursor: 'pointer',
               '&:hover': { color: darkMode ? '#d1d5db' : '#374151' }
@@ -362,7 +363,7 @@ const OrderList = () => {
               fontSize: '0.75rem', 
               fontWeight: 500, 
               textTransform: 'uppercase', 
-              display: { xs: 'none', md: 'flex' },
+              display: 'flex',
               alignItems: 'center'
             }}
           >
@@ -375,7 +376,7 @@ const OrderList = () => {
               fontSize: '0.75rem', 
               fontWeight: 500, 
               textTransform: 'uppercase', 
-              display: { xs: 'none', md: 'flex' },
+              display: 'flex',
               alignItems: 'center'
             }}
           >
@@ -389,7 +390,7 @@ const OrderList = () => {
               fontSize: '0.75rem', 
               fontWeight: 500, 
               textTransform: 'uppercase', 
-              display: { xs: 'none', md: 'flex' },
+              display: 'flex',
               alignItems: 'center',
               cursor: 'pointer',
               '&:hover': { color: darkMode ? '#d1d5db' : '#374151' }
@@ -403,26 +404,22 @@ const OrderList = () => {
         </Box>
         
         {/* Table Rows */}
-        {paginatedOrders.map((order, index) => (
-          <Box
-            key={order.id}
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: { 
-                xs: '40px 1fr 1fr', 
-                sm: '50px 1fr 1fr 1fr', 
-                md: '60px 1fr 1fr 1fr 1fr 1fr 1fr' 
-              },
-              py: 2.5,
-              px: { xs: 2, sm: 3 },
-              alignItems: 'center',
-              borderBottom: index < paginatedOrders.length - 1 ? (darkMode ? '1px solid #404040' : '1px solid #f3f4f6') : 'none',
-              '&:hover': {
-                backgroundColor: darkMode ? '#363636' : '#f9fafb',
-              },
-              transition: 'background-color 0.2s ease'
-            }}
-          >
+          {paginatedOrders.map((order, index) => (
+            <Box
+              key={order.id}
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: '60px 1fr 1fr 1fr 1fr 1fr 1fr',
+                py: 2.5,
+                px: { xs: 2, sm: 3 },
+                alignItems: 'center',
+                borderBottom: index < paginatedOrders.length - 1 ? (darkMode ? '1px solid #404040' : '1px solid #f3f4f6') : 'none',
+                '&:hover': {
+                  backgroundColor: darkMode ? '#363636' : '#f9fafb',
+                },
+                transition: 'background-color 0.2s ease'
+              }}
+            >
             <Checkbox
               checked={checkedItems.includes(order.id)}
               onChange={() => handleItemSelect(order.id)}
@@ -438,27 +435,25 @@ const OrderList = () => {
             <Typography variant="body2" sx={{ fontSize: '0.875rem', fontWeight: 500, color: darkMode ? '#e5e7eb' : '#111827', display: 'flex', alignItems: 'center' }}>
               {order.id}
             </Typography>
-            <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <Avatar src={order.avatar} sx={{ width: 32, height: 32 }} alt={order.customer} />
               <Typography variant="body2" sx={{ fontSize: '0.875rem', color: darkMode ? '#e5e7eb' : '#111827', fontWeight: 500 }}>
                 {order.customer}
               </Typography>
             </Box>
-            <Typography variant="body2" sx={{ fontSize: '0.875rem', color: darkMode ? '#e5e7eb' : '#111827', display: 'flex', alignItems: 'center' }}>
+            <Typography variant="body2" sx={{ fontSize: '0.875rem', color: darkMode ? '#e5e7eb' : '#111827' }}>
               {order.project}
             </Typography>
-            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 1.5 }}>
-              <Typography variant="body2" sx={{ fontSize: '0.875rem', color: darkMode ? '#9ca3af' : '#6b7280' }}>
-                {order.address}
-              </Typography>
-            </Box>
-            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 1.5 }}>
+            <Typography variant="body2" sx={{ fontSize: '0.875rem', color: darkMode ? '#9ca3af' : '#6b7280' }}>
+              {order.address}
+            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
               <CalendarToday sx={{ fontSize: 16, color: darkMode ? '#9ca3af' : '#6b7280' }} />
               <Typography variant="body2" sx={{ fontSize: '0.875rem', color: darkMode ? '#9ca3af' : '#6b7280' }}>
                 {order.date}
               </Typography>
             </Box>
-            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 1.5 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
               <Box
                 sx={{
                   width: 8,
@@ -478,7 +473,8 @@ const OrderList = () => {
               </Typography>
             </Box>
           </Box>
-        ))}
+          ))}
+        </Box>
       </Box>
 
       {/* Pagination */}

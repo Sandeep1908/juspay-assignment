@@ -16,6 +16,8 @@ import {
   ListItemText,
   Chip,
   InputAdornment,
+  useMediaQuery,
+  useTheme as useMuiTheme,
 } from '@mui/material';
 import {
   Search,
@@ -37,8 +39,11 @@ const mockNotifications = [
   { id: 4, message: 'Andi Lane subscribed to you', time: 'Today, 11:59 AM', type: 'subscription' },
 ];
 
-const Header = () => {
+const Header = ({ onMenuClick }) => {
   const { darkMode, toggleDarkMode } = useTheme();
+  const muiTheme = useMuiTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down('md'));
+  const isTablet = useMediaQuery(muiTheme.breakpoints.down('lg'));
   const [notifMenuAnchor, setNotifMenuAnchor] = useState(null);
   const [userMenuAnchor, setUserMenuAnchor] = useState(null);
   
@@ -68,53 +73,87 @@ const Header = () => {
         color: 'text.primary',
       }}
     >
-      <Toolbar sx={{ justifyContent: 'space-between', px: 3 }}>
-        {/* Breadcrumb */}
+      <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 2, sm: 3 } }}>
+        {/* Left Section */}
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <MenuIcon sx={{ color: 'text.secondary', mr: 1, fontSize: '1.2rem' }} />
-          <Star sx={{ color: 'text.secondary', mr: 2, fontSize: '1.2rem' }} />
-          <Typography variant="body2" color="text.secondary">
-            Dashboards
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mx: 1 }}>
-            /
-          </Typography>
-          <Typography variant="body2" color="text.primary" fontWeight={500}>
-            Default
-          </Typography>
+          {/* Mobile menu button */}
+          {isMobile && (
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={onMenuClick}
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
+          
+          {/* Breadcrumb - hidden on mobile */}
+          <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center' }}>
+            <MenuIcon sx={{ color: 'text.secondary', mr: 1, fontSize: '1.2rem' }} />
+            <Star sx={{ color: 'text.secondary', mr: 2, fontSize: '1.2rem' }} />
+            <Typography variant="body2" color="text.secondary">
+              Dashboards
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mx: 1 }}>
+              /
+            </Typography>
+            <Typography variant="body2" color="text.primary" fontWeight={500}>
+              Default
+            </Typography>
+          </Box>
+          
+          {/* Mobile title */}
+          {isMobile && (
+            <Typography variant="h6" sx={{ fontWeight: 600 }}>
+              ByeWind
+            </Typography>
+          )}
         </Box>
 
         {/* Right Section */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          {/* Search */}
-          <TextField
-            size="small"
-            placeholder="Search..."
-            sx={{
-              width: 250,
-              '& .MuiOutlinedInput-root': {
-                backgroundColor: darkMode ? 'rgba(255,255,255,0.05)' : 'grey.50',
-                borderRadius: 2,
-              },
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Search fontSize="small" color="action" />
-                </InputAdornment>
-              ),
-            }}
-          />
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 2 } }}>
+          {/* Search - responsive width */}
+          {!isMobile && (
+            <TextField
+              size="small"
+              placeholder="Search..."
+              sx={{
+                width: { sm: 200, md: 250 },
+                '& .MuiOutlinedInput-root': {
+                  backgroundColor: darkMode ? 'rgba(255,255,255,0.05)' : 'grey.50',
+                  borderRadius: 2,
+                },
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Search fontSize="small" color="action" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          )}
+          
+          {/* Mobile search icon */}
+          {isMobile && (
+            <IconButton color="inherit">
+              <Search />
+            </IconButton>
+          )}
 
           {/* Theme Toggle */}
           <IconButton onClick={toggleDarkMode} color="inherit">
             {darkMode ? <LightMode /> : <DarkMode />}
           </IconButton>
 
-          {/* Settings */}
-          <IconButton color="inherit">
-            <Settings />
-          </IconButton>
+          {/* Settings - hidden on mobile */}
+          {!isMobile && (
+            <IconButton color="inherit">
+              <Settings />
+            </IconButton>
+          )}
 
           {/* Notifications */}
           <IconButton color="inherit" onClick={handleNotificationMenuOpen}>
@@ -128,9 +167,11 @@ const Header = () => {
             <Avatar sx={{ width: 32, height: 32, bgcolor: 'grey.300' }}>
               <Person fontSize="small" />
             </Avatar>
-            <Typography variant="body2" fontWeight={500}>
-              ByeWind
-            </Typography>
+            {!isMobile && (
+              <Typography variant="body2" fontWeight={500}>
+                ByeWind
+              </Typography>
+            )}
           </Box>
         </Box>
 

@@ -5,6 +5,8 @@ import {
   List,
   ListItem,
   Avatar,
+  useMediaQuery,
+  useTheme as useMuiTheme,
 } from '@mui/material';
 
 // Notification icons
@@ -103,25 +105,30 @@ const timeTextStyle = {
 };
 
 const RightSidebar = () => {
+  const muiTheme = useMuiTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down('lg'));
 
   return (
     <Box
       sx={{
-        width: 320,
-        height: '100vh',
+        width: { lg: 320, xl: 320 },
+        minWidth: { lg: 280 },
+        height: { xs: 'auto', lg: '100vh' },
         backgroundColor: 'background.paper',
-        borderLeft: '1px solid',
+        borderLeft: { xs: 'none', lg: '1px solid' },
+        borderTop: { xs: '1px solid', lg: 'none' },
         borderColor: 'divider',
         overflowY: 'auto',
-        p: 3,
+        p: { xs: 2, sm: 3 },
+        display: { xs: 'none', lg: 'block' },
       }}
     >
       {/* Notifications Section */}
-      <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: 'text.primary' }}>
+      <Typography variant="h6" sx={{ fontWeight: 600, mb: { xs: 1.5, sm: 2 }, color: 'text.primary', fontSize: { xs: '1rem', sm: '1.25rem' } }}>
         Notifications
       </Typography>
       
-      <List sx={{ p: 0, mb: 4 }}>
+      <List sx={{ p: 0, mb: { xs: 3, sm: 4 } }}>
         {NOTIFICATIONS.map((notification, index) => (
           <ListItem key={index} sx={{ p: 0, mb: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5, width: '100%' }}>
@@ -153,11 +160,11 @@ const RightSidebar = () => {
       </List>
 
       {/* Activities Section */}
-      <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: 'text.primary' }}>
+      <Typography variant="h6" sx={{ fontWeight: 600, mb: { xs: 1.5, sm: 2 }, color: 'text.primary', fontSize: { xs: '1rem', sm: '1.25rem' } }}>
         Activities
       </Typography>
       
-      <List sx={{ p: 0, mb: 4 }}>
+      <List sx={{ p: 0, mb: { xs: 3, sm: 4 } }}>
         {ACTIVITIES.map((activity, index) => (
           <ListItem key={index} sx={{ p: 0, mb: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5, width: '100%' }}>
@@ -182,7 +189,7 @@ const RightSidebar = () => {
       </List>
 
       {/* Contacts Section */}
-      <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: 'text.primary' }}>
+      <Typography variant="h6" sx={{ fontWeight: 600, mb: { xs: 1.5, sm: 2 }, color: 'text.primary', fontSize: { xs: '1rem', sm: '1.25rem' } }}>
         Contacts
       </Typography>
       

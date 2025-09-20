@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Card, CardContent, Typography, Box, Grid } from '@mui/material';
+import { Card, CardContent, Typography, Box, Grid, useMediaQuery, useTheme as useMuiTheme } from '@mui/material';
 import { TrendingUp, TrendingDown } from '@mui/icons-material';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { useTheme } from '../contexts/ThemeContext';
@@ -57,6 +57,8 @@ const statsCardData = [
 
 const ProjectionsChart = () => {
   const { darkMode } = useTheme();
+  const muiTheme = useMuiTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
   
   // Memoize chart series to prevent re-creation
   const barChartSeries = useMemo(() => [
@@ -79,7 +81,7 @@ const ProjectionsChart = () => {
 
   return (
     <Card sx={{ 
-      height: 250, 
+      height: { xs: 200, sm: 250 }, 
       backgroundColor: darkMode ? '#FFFFFF0D' : '#f8fafc',
       cursor: 'pointer',
       transition: 'all 0.3s ease',
@@ -88,11 +90,11 @@ const ProjectionsChart = () => {
         boxShadow: '0 6px 20px rgba(0,0,0,0.08)',
       }
     }}>
-      <CardContent sx={{ p: 2.5, height: '100%' }}>
-        <Typography variant="body1" sx={{ mb: 3, fontWeight: 600, fontSize: '1rem', color: darkMode ? '#ffffff' : '#374151' }}>
+      <CardContent sx={{ p: { xs: 1.5, sm: 2.5 }, height: '100%' }}>
+        <Typography variant="body1" sx={{ mb: { xs: 2, sm: 3 }, fontWeight: 600, fontSize: { xs: '0.9rem', sm: '1rem' }, color: darkMode ? '#ffffff' : '#374151' }}>
           Projections vs Actuals
         </Typography>
-       <Box sx={{ height: 250, width: '100%' }}>
+       <Box sx={{ height: { xs: 150, sm: 190 }, width: '100%' }}>
       <BarChart
         xAxis={[
           {
@@ -112,8 +114,8 @@ const ProjectionsChart = () => {
           },
         ]}
         series={barChartSeries}
-        height={190}
-        margin={{ left: 40, right: 20, top: 20, bottom: 40 }}
+        height={isMobile ? 120 : 190}
+        margin={{ left: isMobile ? 30 : 40, right: 20, top: 20, bottom: isMobile ? 30 : 40 }}
         grid={{ horizontal: true, vertical: false }}
         /** Make bars thin */
         slotProps={{
@@ -133,18 +135,20 @@ const ProjectionsChart = () => {
 
 const StatsCards = () => {
   const { darkMode } = useTheme();
+  const muiTheme = useMuiTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
   
   return (
-    <Grid container spacing={2} sx={{ mb: 3 }}>
-      <Grid item xs={12} md={6}>
-        <Grid container spacing={2}>
+    <Grid container spacing={{ xs: 1.5, sm: 2 }} sx={{ mb: { xs: 2, sm: 3 } }}>
+      <Grid item xs={12} lg={6}>
+        <Grid container spacing={{ xs: 1.5, sm: 2 }}>
           {statsCardData.map((statCard, idx) => (
-            <Grid item xs={6} key={idx}>
+            <Grid item xs={6} sm={3} lg={6} key={idx}>
           <Card
             sx={{
               backgroundColor: darkMode ? statCard.darkBg : statCard.lightBg,
               border: 'none',
-              height: 120,
+              height: { xs: 100, sm: 120 },
               cursor: 'pointer',
               transition: 'all 0.3s ease',
               '&:hover': {
@@ -156,16 +160,16 @@ const StatsCards = () => {
               }
             }}
           >
-            <CardContent sx={{ p: 2.5, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <CardContent sx={{ p: { xs: 1.5, sm: 2.5 }, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <Typography
                 variant="body2"
                 color={(statCard.title === 'Customers' || statCard.title === 'Growth') ? 'black' : (darkMode ? "text.secondary" : "black")}
-                sx={{ mb: 1, fontWeight: 500 }}
+                sx={{ mb: { xs: 0.5, sm: 1 }, fontWeight: 500, fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
               >
                 {sanitizeText(statCard.title)}
               </Typography>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 1 }}>
-                <Typography variant="h5" sx={{ fontWeight: 700, color: (statCard.title === 'Customers' || statCard.title === 'Growth') ? 'black' : 'text.primary', fontSize: '1.5rem' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: { xs: 0.5, sm: 1 }, flexDirection: { xs: 'column', sm: 'row' }, gap: { xs: 0.5, sm: 0 } }}>
+                <Typography variant="h5" sx={{ fontWeight: 700, color: (statCard.title === 'Customers' || statCard.title === 'Growth') ? 'black' : 'text.primary', fontSize: { xs: '1.2rem', sm: '1.1rem' } }}>
                   {sanitizeText(statCard.value)}
                 </Typography>
                 <Box
@@ -181,7 +185,7 @@ const StatsCards = () => {
                   ) : (
                     <TrendingDown fontSize="small" />
                   )}
-                  <Typography variant="body2" fontWeight={500}>
+                  <Typography variant="body2" fontWeight={500} sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
                     {sanitizeText(statCard.change)}
                   </Typography>
                 </Box>
@@ -192,7 +196,7 @@ const StatsCards = () => {
           ))}
         </Grid>
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} lg={6}>
         <ProjectionsChart />
       </Grid>
     </Grid>
