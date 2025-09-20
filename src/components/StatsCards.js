@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
-import { Card, CardContent, Typography, Box, Grid, useMediaQuery, useTheme as useMuiTheme } from '@mui/material';
+import { CardContent, Typography, Box, Grid, useMediaQuery, useTheme as useMuiTheme } from '@mui/material';
 import { TrendingUp, TrendingDown } from '@mui/icons-material';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { useTheme } from '../contexts/ThemeContext';
+import AnimatedCard from './common/AnimatedCard';
+import { useAnimatedList } from '../hooks/useAnimatedList';
 
-// Chart data for projections vs actuals - TODO: get from API
 const chartConfig = {
   months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
   actualValues: [18, 20, 18, 22, 14, 19],
@@ -19,7 +20,7 @@ const sanitizeText = (text) => {
   });
 };
 
-// Stats card data - hardcoded for now
+
 const statsCardData = [
   {
     title: 'Customers',
@@ -27,7 +28,7 @@ const statsCardData = [
     change: '+11.01%',
     trend: 'up',
     lightBg: '#E3F5FF',
-    darkBg: '#E3F5FF', // same for both modes
+    darkBg: '#E3F5FF', 
   },
   {
     title: 'Orders',
@@ -51,7 +52,7 @@ const statsCardData = [
     change: '+6.08%',
     trend: 'up',
     lightBg: '#E5ECF6',
-    darkBg: '#E3F5FF', // special case
+    darkBg: '#E3F5FF', 
   },
 ];
 
@@ -80,21 +81,14 @@ const ProjectionsChart = () => {
   // console.log('Chart data:', chartConfig);  
 
   return (
-    <Card sx={{ 
-      height: { xs: 200, sm: 250 }, 
-      backgroundColor: darkMode ? '#FFFFFF0D' : '#f8fafc',
-      cursor: 'pointer',
-      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-      animation: 'fadeInUp 0.6s ease 0.4s both',
-      '&:hover': {
-        transform: 'translateY(-4px) scale(1.01)',
-        boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
-      },
-      '@keyframes fadeInUp': {
-        '0%': { opacity: 0, transform: 'translateY(20px)' },
-        '100%': { opacity: 1, transform: 'translateY(0)' },
-      }
-    }}>
+    <AnimatedCard
+      animationType="fadeInUp"
+      animationDelay={0.4}
+      sx={{
+        height: { xs: 200, sm: 250 },
+        backgroundColor: darkMode ? '#FFFFFF0D' : '#f8fafc',
+      }}
+    >
       <CardContent sx={{ p: { xs: 1.5, sm: 2.5 }, height: '100%' }}>
         <Typography variant="body1" sx={{ mb: { xs: 2, sm: 3 }, fontWeight: 600, fontSize: { xs: '0.9rem', sm: '1rem' }, color: darkMode ? '#ffffff' : '#374151' }}>
           Projections vs Actuals
@@ -132,7 +126,7 @@ const ProjectionsChart = () => {
       />
     </Box>
       </CardContent>
-    </Card>
+    </AnimatedCard>
   );
 };
 
@@ -149,24 +143,19 @@ const StatsCards = () => {
         <Grid container spacing={{ xs: 1.5, sm: 2 }}>
           {statsCardData.map((statCard, idx) => (
             <Grid item xs={6} sm={3} lg={6} key={idx}>
-          <Card
+          <AnimatedCard
+            animationType="fadeInUp"
+            animationDelay={idx * 0.1}
             sx={{
               backgroundColor: darkMode ? statCard.darkBg : statCard.lightBg,
               border: 'none',
               height: { xs: 100, sm: 120 },
-              cursor: 'pointer',
-              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-              animation: `fadeInUp 0.6s ease ${idx * 0.1}s both`,
               '&:hover': {
                 transform: 'translateY(-8px) scale(1.02)',
                 boxShadow: '0 12px 40px rgba(0,0,0,0.15)',
               },
               '&:active': {
                 transform: 'translateY(-2px) scale(0.98)',
-              },
-              '@keyframes fadeInUp': {
-                '0%': { opacity: 0, transform: 'translateY(20px)' },
-                '100%': { opacity: 1, transform: 'translateY(0)' },
               }
             }}
           >
@@ -219,7 +208,7 @@ const StatsCards = () => {
                 </Box>
               </Box>
             </CardContent>
-          </Card>
+          </AnimatedCard>
             </Grid>
           ))}
         </Grid>

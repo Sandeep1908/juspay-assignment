@@ -3,25 +3,24 @@ import {
   Box,
   Typography,
   Avatar,
-  TextField,
-  InputAdornment,
   Checkbox,
-  IconButton,
   Pagination,
   useMediaQuery,
   useTheme as useMuiTheme,
 } from '@mui/material';
 import {
-  Search,
   Add,
   FilterList,
   CalendarToday,
-  MoreHoriz,
   KeyboardArrowUp,
   KeyboardArrowDown,
   SwapVert as SwapVertIcon,
 } from '@mui/icons-material';
 import { useTheme } from '../contexts/ThemeContext';
+import AnimatedButton from './common/AnimatedButton';
+import SearchField from './common/SearchField';
+import { useStaggeredAnimation } from '../hooks/useAnimatedList';
+import { STATUS_COLORS } from '../constants/theme';
 // Contact icons for user avatars
 import ContactIcon1 from '../assets/icons/contacts/IconSet (4).png';
 import ContactIcon2 from '../assets/icons/contacts/IconSet (5).png';
@@ -45,36 +44,18 @@ const mockOrdersData = [
   { id: '#CM9810', customer: 'Andi Lane', avatar: ContactIcon4, project: 'App Landing Page', address: 'Nest Lane Olivette', date: 'Feb 2, 2023', status: 'Rejected' },
 ];
 
-// Status color mapping - might need to adjust these colors later
-const getStatusColor = (status) => {
-  // Using switch instead of object for better readability
-  switch(status) {
-    case 'Complete':
-      return '#10b981'; // green
-    case 'In Progress':
-      return '#3b82f6'; // blue
-    case 'Pending':
-      return '#06b6d4'; // cyan
-    case 'Approved':
-      return '#f59e0b'; // amber
-    case 'Rejected':
-      return '#6b7280'; // gray
-    default:
-      return '#6b7280';
-  }
-};
+const getStatusColor = (status) => STATUS_COLORS[status] || STATUS_COLORS.Rejected;
 
 const OrderList = () => {
   const { darkMode } = useTheme();
   const muiTheme = useMuiTheme();
   const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
   const [searchQuery, setSearchQuery] = useState('');
-  const [checkedItems, setCheckedItems] = useState(['#CM9804']); // pre-select one item
+  const [checkedItems, setCheckedItems] = useState(['#CM9804']);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
-  const [filterStatus, setFilterStatus] = useState(''); // not used yet but keeping for future
-  const ITEMS_PER_PAGE = 10; // constant in caps
+  const ITEMS_PER_PAGE = 10;
 
   // Handle individual item selection
   const handleItemSelect = (orderId) => {
@@ -164,8 +145,7 @@ const OrderList = () => {
   const paginatedOrders = processedOrders.slice(startIdx, endIdx);
   const totalPages = Math.ceil(processedOrders.length / ITEMS_PER_PAGE);
   
-  // Debug info
-  // console.log(`Showing ${paginatedOrders.length} of ${processedOrders.length} orders`);
+  const animationDelays = useStaggeredAnimation(paginatedOrders.length);
 
   return (
     <Box sx={{ 
@@ -188,115 +168,52 @@ const OrderList = () => {
         boxShadow: darkMode ? '0 1px 3px rgba(0,0,0,0.3)' : '0 1px 3px rgba(0,0,0,0.1)'
       }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <IconButton 
-            sx={{ 
-              p: 1.5, 
+          <AnimatedButton
+            animationDelay={0.1}
+            hoverRotation={90}
+            sx={{
+              p: 1.5,
               backgroundColor: darkMode ? '#404040' : '#f9fafb',
-              border: darkMode ? '1px solid #555' : '1px solid #e5e7eb', 
+              border: darkMode ? '1px solid #555' : '1px solid #e5e7eb',
               borderRadius: 1.5,
-              transition: 'all 0.2s ease',
-              animation: 'slideInLeft 0.4s ease 0.1s both',
-              '&:hover': {
-                backgroundColor: darkMode ? '#4a4a4a' : '#f3f4f6',
-                transform: 'scale(1.05) rotate(90deg)',
-              },
-              '@keyframes slideInLeft': {
-                '0%': { opacity: 0, transform: 'translateX(-20px)' },
-                '100%': { opacity: 1, transform: 'translateX(0)' },
-              }
             }}
           >
             <Add fontSize="small" sx={{ color: darkMode ? '#d1d5db' : '#374151' }} />
-          </IconButton>
-          <IconButton 
-            sx={{ 
-              p: 1.5, 
+          </AnimatedButton>
+          
+          <AnimatedButton
+            animationDelay={0.2}
+            sx={{
+              p: 1.5,
               backgroundColor: darkMode ? '#404040' : '#f9fafb',
-              border: darkMode ? '1px solid #555' : '1px solid #e5e7eb', 
+              border: darkMode ? '1px solid #555' : '1px solid #e5e7eb',
               borderRadius: 1.5,
-              transition: 'all 0.2s ease',
-              animation: 'slideInLeft 0.4s ease 0.2s both',
-              '&:hover': {
-                backgroundColor: darkMode ? '#4a4a4a' : '#f3f4f6',
-                transform: 'scale(1.05)',
-              },
-              '@keyframes slideInLeft': {
-                '0%': { opacity: 0, transform: 'translateX(-20px)' },
-                '100%': { opacity: 1, transform: 'translateX(0)' },
-              }
             }}
           >
             <FilterList fontSize="small" sx={{ color: darkMode ? '#d1d5db' : '#374151' }} />
-          </IconButton>
-          <IconButton 
-            sx={{ 
-              p: 1.5, 
+          </AnimatedButton>
+          
+          <AnimatedButton
+            animationDelay={0.3}
+            hoverRotation={180}
+            sx={{
+              p: 1.5,
               backgroundColor: darkMode ? '#404040' : '#f9fafb',
-              border: darkMode ? '1px solid #555' : '1px solid #e5e7eb', 
+              border: darkMode ? '1px solid #555' : '1px solid #e5e7eb',
               borderRadius: 1.5,
-              transition: 'all 0.2s ease',
-              animation: 'slideInLeft 0.4s ease 0.3s both',
-              '&:hover': {
-                backgroundColor: darkMode ? '#4a4a4a' : '#f3f4f6',
-                transform: 'scale(1.05) rotate(180deg)',
-              },
-              '@keyframes slideInLeft': {
-                '0%': { opacity: 0, transform: 'translateX(-20px)' },
-                '100%': { opacity: 1, transform: 'translateX(0)' },
-              }
             }}
           >
             <SwapVertIcon fontSize="small" sx={{ color: darkMode ? '#d1d5db' : '#374151' }} />
-          </IconButton>
+          </AnimatedButton>
    
         </Box>
-        <TextField
-          size="small"
-          placeholder="Search"
+        <SearchField
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          darkMode={darkMode}
+          animationDelay={0.2}
+          sx={{ width: { xs: '100%', sm: 280 } }}
           inputProps={{ 'aria-label': 'Search orders' }}
-          sx={{ 
-            width: { xs: '100%', sm: 280 },
-            animation: 'slideInRight 0.4s ease 0.2s both',
-            '& .MuiOutlinedInput-root': {
-              backgroundColor: darkMode ? '#404040' : '#f9fafb',
-              borderRadius: 3,
-              border: darkMode ? '1px solid #555' : '1px solid #e5e7eb',
-              fontSize: '0.875rem',
-              transition: 'all 0.2s ease',
-              '&:hover': {
-                borderColor: darkMode ? '#666' : '#d1d5db',
-                transform: 'scale(1.02)',
-              },
-              '&.Mui-focused': {
-                borderColor: '#3b82f6',
-                backgroundColor: darkMode ? '#4a4a4a' : 'white',
-                transform: 'scale(1.02)',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-              }
-            },
-            '& .MuiOutlinedInput-input': {
-              py: 1.5,
-              px: 2,
-              color: darkMode ? '#e5e7eb' : '#6b7280',
-              '&::placeholder': {
-                color: darkMode ? '#9ca3af' : '#9ca3af',
-                opacity: 1
-              }
-            },
-            '@keyframes slideInRight': {
-              '0%': { opacity: 0, transform: 'translateX(20px)' },
-              '100%': { opacity: 1, transform: 'translateX(0)' },
-            }
-          }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start" sx={{ ml: 1 }}>
-                <Search fontSize="small" sx={{ color: darkMode ? '#9ca3af' : '#9ca3af' }} />
-              </InputAdornment>
-            ),
-          }}
         />
       </Box>
 
@@ -444,10 +361,16 @@ const OrderList = () => {
                 px: { xs: 2, sm: 3 },
                 alignItems: 'center',
                 borderBottom: index < paginatedOrders.length - 1 ? (darkMode ? '1px solid #404040' : '1px solid #f3f4f6') : 'none',
+                animation: `fadeInUp 0.4s ease ${animationDelays[index]}s both`,
                 '&:hover': {
                   backgroundColor: darkMode ? '#363636' : '#f9fafb',
+                  transform: 'translateX(4px)',
                 },
-                transition: 'background-color 0.2s ease'
+                transition: 'all 0.2s ease',
+                '@keyframes fadeInUp': {
+                  '0%': { opacity: 0, transform: 'translateY(10px)' },
+                  '100%': { opacity: 1, transform: 'translateY(0)' },
+                }
               }}
             >
             <Checkbox

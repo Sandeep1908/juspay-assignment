@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState, useMemo, useEffect } from 'react';
 
-// Theme context for managing dark/light mode across the app
+
 const ThemeContext = createContext();
 
-// Custom hook to access theme context
+
 export const useTheme = () => {
   const themeContext = useContext(ThemeContext);
   if (!themeContext) {
@@ -13,21 +13,21 @@ export const useTheme = () => {
 };
 
 export const ThemeContextProvider = ({ children }) => {
-  // Initialize theme from localStorage or default to light mode
+
   const [isDarkMode, setIsDarkMode] = useState(() => {
     try {
       const savedTheme = localStorage.getItem('app-dark-mode');
       if (savedTheme !== null) {
         return JSON.parse(savedTheme);
       }
-      return false; // default to light mode
+      return false; 
     } catch (err) {
       console.warn('Error reading theme from localStorage:', err);
       return false;
     }
   });
 
-  // Persist theme changes to localStorage
+  
   useEffect(() => {
     try {
       localStorage.setItem('app-dark-mode', JSON.stringify(isDarkMode));
