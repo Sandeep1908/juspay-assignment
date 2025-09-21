@@ -165,7 +165,12 @@ const OrderList = () => {
         px: { xs: 2, sm: 3 },
         backgroundColor: darkMode ? '#2d2d2d' : 'white',
         borderRadius: 2,
-        boxShadow: darkMode ? '0 1px 3px rgba(0,0,0,0.3)' : '0 1px 3px rgba(0,0,0,0.1)'
+        boxShadow: darkMode ? '0 1px 3px rgba(0,0,0,0.3)' : '0 1px 3px rgba(0,0,0,0.1)',
+        transition: 'all 0.3s ease',
+        '&:hover': {
+          boxShadow: darkMode ? '0 8px 25px rgba(0,0,0,0.4)' : '0 8px 25px rgba(0,0,0,0.15)',
+          transform: 'translateY(-2px)',
+        }
       }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <AnimatedButton
@@ -218,7 +223,16 @@ const OrderList = () => {
       </Box>
 
       {/* Table */}
-      <Box sx={{ backgroundColor: darkMode ? '#2d2d2d' : 'white', borderRadius: 2, overflow: 'hidden' }}>
+      <Box sx={{ 
+        backgroundColor: darkMode ? '#2d2d2d' : 'white', 
+        borderRadius: 2, 
+        overflow: 'hidden',
+        transition: 'all 0.3s ease',
+        '&:hover': {
+          boxShadow: darkMode ? '0 12px 40px rgba(0,0,0,0.5)' : '0 12px 40px rgba(0,0,0,0.1)',
+          transform: 'translateY(-4px)',
+        }
+      }}>
         <Box sx={{ overflowX: 'auto', minWidth: { xs: '700px', md: 'auto' } }}>
           {/* Table Header */}
           <Box sx={{ 

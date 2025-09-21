@@ -135,6 +135,12 @@ const RightSidebar = () => {
           color: 'text.primary', 
           fontSize: { xs: '1rem', sm: '1.25rem' },
           animation: 'fadeInUp 0.8s ease-out 0.2s both',
+          transition: 'all 0.2s ease',
+          cursor: 'pointer',
+          '&:hover': {
+            transform: 'translateX(5px)',
+            color: 'primary.main',
+          },
           '@keyframes fadeInUp': {
             '0%': { transform: 'translateY(20px)', opacity: 0 },
             '100%': { transform: 'translateY(0)', opacity: 1 },
@@ -173,6 +179,11 @@ const RightSidebar = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   flexShrink: 0,
+                  transition: 'all 0.2s ease',
+                  '&:hover': {
+                    transform: 'scale(1.1) rotate(5deg)',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                  }
                 }}
               >
                 <img src={notification.icon} alt="notification" style={{ width: 16, height: 16 }} />
@@ -199,6 +210,12 @@ const RightSidebar = () => {
           color: 'text.primary', 
           fontSize: { xs: '1rem', sm: '1.25rem' },
           animation: 'fadeInUp 0.8s ease-out 0.8s both',
+          transition: 'all 0.2s ease',
+          cursor: 'pointer',
+          '&:hover': {
+            transform: 'translateX(5px)',
+            color: 'primary.main',
+          },
         }}
       >
         Activities
@@ -224,6 +241,11 @@ const RightSidebar = () => {
                 sx={{
                   width: 32,
                   height: 32,
+                  transition: 'all 0.2s ease',
+                  '&:hover': {
+                    transform: 'scale(1.15)',
+                    boxShadow: '0 6px 20px rgba(0,0,0,0.2)',
+                  }
                 }}
               />
               <Box sx={{ flex: 1, minWidth: 0 }}>
@@ -248,6 +270,12 @@ const RightSidebar = () => {
           color: 'text.primary', 
           fontSize: { xs: '1rem', sm: '1.25rem' },
           animation: 'fadeInUp 0.8s ease-out 1.5s both',
+          transition: 'all 0.2s ease',
+          cursor: 'pointer',
+          '&:hover': {
+            transform: 'translateX(5px)',
+            color: 'primary.main',
+          },
         }}
       >
         Contacts
@@ -273,6 +301,13 @@ const RightSidebar = () => {
                 sx={{
                   width: 32,
                   height: 32,
+                  transition: 'all 0.2s ease',
+                  cursor: 'pointer',
+                  '&:hover': {
+                    transform: 'scale(1.2)',
+                    boxShadow: '0 8px 25px rgba(0,0,0,0.25)',
+                    border: '2px solid rgba(255,255,255,0.3)',
+                  }
                 }}
               />
               <Typography variant="body2" sx={{ fontWeight: 400, color: 'text.primary',fontSize:'12px' }}>
