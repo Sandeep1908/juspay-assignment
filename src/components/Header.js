@@ -6,15 +6,9 @@ import {
   Box,
   TextField,
   IconButton,
-  Badge,
-  Avatar,
   Menu,
-  MenuItem,
-  Paper,
   List,
   ListItem,
-  ListItemText,
-  Chip,
   InputAdornment,
   useMediaQuery,
   useTheme as useMuiTheme,
@@ -22,12 +16,11 @@ import {
 import {
   Search,
   Notifications,
-  Settings,
-  DarkMode,
   LightMode,
-  Person,
   Menu as MenuIcon,
   Star,
+  History,
+  MenuBook,
 } from '@mui/icons-material';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -45,7 +38,6 @@ const Header = ({ onMenuClick }) => {
   const isMobile = useMediaQuery(muiTheme.breakpoints.down('md'));
   const isTablet = useMediaQuery(muiTheme.breakpoints.down('lg'));
   const [notifMenuAnchor, setNotifMenuAnchor] = useState(null);
-  const [userMenuAnchor, setUserMenuAnchor] = useState(null);
   
   // const [searchQuery, setSearchQuery] = useState(''); // for future search functionality
 
@@ -53,13 +45,8 @@ const Header = ({ onMenuClick }) => {
     setNotifMenuAnchor(e.currentTarget);
   }, []);
 
-  const handleUserMenuOpen = useCallback((e) => {
-    setUserMenuAnchor(e.currentTarget);
-  }, []);
-
   const handleMenuClose = useCallback(() => {
     setNotifMenuAnchor(null);
-    setUserMenuAnchor(null);
   }, []);
 
   return (
@@ -218,7 +205,7 @@ const Header = ({ onMenuClick }) => {
             </IconButton>
           )}
 
-          {/* Theme Toggle */}
+          {/* Sun/Light Mode Icon */}
           <IconButton 
             onClick={toggleDarkMode} 
             color="inherit"
@@ -226,36 +213,28 @@ const Header = ({ onMenuClick }) => {
               transition: 'all 0.3s ease',
               '&:hover': {
                 transform: 'rotate(180deg) scale(1.1)',
-                backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)',
+                backgroundColor: 'rgba(0,0,0,0.04)',
               }
             }}
           >
-            <Box sx={{ 
-              transition: 'all 0.3s ease',
-              display: 'flex',
-              alignItems: 'center'
-            }}>
-              {darkMode ? <LightMode /> : <DarkMode />}
-            </Box>
+            <LightMode sx={{ fontSize: '1.2rem' }} />
           </IconButton>
 
-          {/* Settings - hidden on mobile */}
-          {!isMobile && (
-            <IconButton 
-              color="inherit"
-              sx={{
-                transition: 'all 0.2s ease',
-                '&:hover': {
-                  transform: 'rotate(90deg) scale(1.05)',
-                  backgroundColor: 'rgba(0,0,0,0.04)',
-                }
-              }}
-            >
-              <Settings sx={{ transition: 'transform 0.2s ease' }} />
-            </IconButton>
-          )}
+          {/* History/Clock Icon */}
+          <IconButton 
+            color="inherit"
+            sx={{
+              transition: 'all 0.2s ease',
+              '&:hover': {
+                transform: 'scale(1.1)',
+                backgroundColor: 'rgba(0,0,0,0.04)',
+              }
+            }}
+          >
+            <History sx={{ fontSize: '1.2rem' }} />
+          </IconButton>
 
-          {/* Notifications */}
+          {/* Notifications Bell */}
           <IconButton 
             color="inherit" 
             onClick={handleNotificationMenuOpen}
@@ -267,68 +246,24 @@ const Header = ({ onMenuClick }) => {
               }
             }}
           >
-            <Badge 
-              badgeContent={4} 
-              color="error"
-              sx={{
-                '& .MuiBadge-badge': {
-                  animation: 'pulse 2s infinite',
-                  '@keyframes pulse': {
-                    '0%': { transform: 'scale(1)' },
-                    '50%': { transform: 'scale(1.1)' },
-                    '100%': { transform: 'scale(1)' },
-                  }
-                }
-              }}
-            >
-              <Notifications sx={{ 
-                transition: 'transform 0.2s ease',
-                '&:hover': { transform: 'rotate(15deg)' }
-              }} />
-            </Badge>
+            <Notifications sx={{ fontSize: '1.2rem' }} />
           </IconButton>
 
-          {/* Profile */}
-          <Box 
-            sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: 1, 
-              cursor: 'pointer',
-              p: 0.5,
-              borderRadius: 2,
+          {/* Sidebar/Menu Book Icon */}
+          <IconButton 
+            color="inherit"
+            sx={{
               transition: 'all 0.2s ease',
               '&:hover': {
+                transform: 'scale(1.1)',
                 backgroundColor: 'rgba(0,0,0,0.04)',
-                transform: 'translateY(-1px)',
               }
-            }} 
-            onClick={handleUserMenuOpen}
+            }}
           >
-            <Avatar 
-              sx={{ 
-                width: 32, 
-                height: 32, 
-                bgcolor: 'grey.300',
-                transition: 'all 0.2s ease',
-                '&:hover': {
-                  transform: 'scale(1.05)',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                }
-              }}
-            >
-              <Person fontSize="small" />
-            </Avatar>
-            {!isMobile && (
-              <Typography 
-                variant="body2" 
-                fontWeight={500}
-                sx={{ transition: 'color 0.2s ease' }}
-              >
-                ByeWind
-              </Typography>
-            )}
-          </Box>
+            <MenuBook sx={{ fontSize: '1.2rem' }} />
+          </IconButton>
+
+
         </Box>
 
         {/* Notifications Menu */}
@@ -401,44 +336,7 @@ const Header = ({ onMenuClick }) => {
           </List>
         </Menu>
 
-        {/* Profile Menu */}
-        <Menu
-          anchorEl={userMenuAnchor}
-          open={Boolean(userMenuAnchor)}
-          onClose={handleMenuClose}
-          TransitionProps={{
-            timeout: 300,
-          }}
-          PaperProps={{
-            sx: { 
-              width: 200, 
-              mt: 1,
-              borderRadius: 2,
-              boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
-            },
-          }}
-        >
-          {['Profile', 'Settings', 'Logout'].map((item, index) => (
-            <MenuItem 
-              key={item}
-              onClick={handleMenuClose}
-              sx={{
-                transition: 'all 0.2s ease',
-                animation: `fadeInUp 0.2s ease ${index * 0.05}s both`,
-                '&:hover': {
-                  backgroundColor: 'rgba(0,0,0,0.04)',
-                  transform: 'translateX(4px)',
-                },
-                '@keyframes fadeInUp': {
-                  '0%': { opacity: 0, transform: 'translateY(5px)' },
-                  '100%': { opacity: 1, transform: 'translateY(0)' },
-                }
-              }}
-            >
-              {item}
-            </MenuItem>
-          ))}
-        </Menu>
+
       </Toolbar>
     </AppBar>
   );

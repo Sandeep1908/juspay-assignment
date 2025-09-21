@@ -115,7 +115,7 @@ const RightSidebar = () => {
         minWidth: { lg: 280 },
         height: { xs: 'auto', lg: '100vh' },
         backgroundColor: 'background.paper',
-        borderLeft: { xs: 'none', lg: '1px solid' },
+        borderLeft:'1px solid',
         borderTop: { xs: '1px solid', lg: 'none' },
         borderColor: 'divider',
         overflowY: 'auto',

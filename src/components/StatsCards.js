@@ -1,6 +1,11 @@
 import React, { useMemo } from 'react';
 import { CardContent, Typography, Box, Grid, useMediaQuery, useTheme as useMuiTheme } from '@mui/material';
-import { TrendingUp, TrendingDown } from '@mui/icons-material';
+// Import custom card icons
+import TrendUpIcon from '../assets/icons/cards/IconSet.png';
+import TrendDownIcon from '../assets/icons/cards/IconSet (1).png';
+// Import white icons for dark cards
+import WhiteTrendUpIcon from '../assets/icons/cards/white/ArrowRise.png';
+import WhiteTrendDownIcon from '../assets/icons/cards/white/ArrowFall.png';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { useTheme } from '../contexts/ThemeContext';
 import AnimatedCard from './common/AnimatedCard';
@@ -176,13 +181,17 @@ const StatsCards = () => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: 0.5,
-                    color: statCard.trend === 'up' ? 'success.main' : 'error.main',
+                    color: 'text.secondary',
                     transition: 'transform 0.2s ease',
                     '&:hover': {
                       transform: 'scale(1.1)',
                     }
                   }}
                 >
+
+                         <Typography variant="body2" fontWeight={500} sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
+                    {sanitizeText(statCard.change)}
+                  </Typography>
                   <Box sx={{
                     animation: statCard.trend === 'up' ? 'bounceUp 2s infinite' : 'bounceDown 2s infinite',
                     '@keyframes bounceUp': {
@@ -196,15 +205,17 @@ const StatsCards = () => {
                       '60%': { transform: 'translateY(1px)' },
                     }
                   }}>
-                    {statCard.trend === 'up' ? (
-                      <TrendingUp fontSize="small" />
-                    ) : (
-                      <TrendingDown fontSize="small" />
-                    )}
+                    <img 
+                      src={
+                        (darkMode && statCard.darkBg === '#FFFFFF0D') 
+                          ? (statCard.trend === 'up' ? WhiteTrendUpIcon : WhiteTrendDownIcon)
+                          : (statCard.trend === 'up' ? TrendUpIcon : TrendDownIcon)
+                      } 
+                      alt={statCard.trend === 'up' ? 'trending up' : 'trending down'}
+                      style={{ width: 16, height: 16 }}
+                    />
                   </Box>
-                  <Typography variant="body2" fontWeight={500} sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
-                    {sanitizeText(statCard.change)}
-                  </Typography>
+           
                 </Box>
               </Box>
             </CardContent>
