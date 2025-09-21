@@ -137,7 +137,8 @@ const Sidebar = ({ onMenuClick, mobileOpen, onMobileClose }) => {
               transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
               '&:hover': {
                 backgroundColor: darkMode ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
-                transform: 'translateX(4px)',
+                transform: 'translateX(4px) scale(1.02)',
+                transition: 'all 0.2s ease',
               },
               '&::before': activeItem === item.label ? {
                 content: '""',
@@ -273,9 +274,26 @@ const Sidebar = ({ onMenuClick, mobileOpen, onMobileClose }) => {
   );
 
   const drawer = (
-    <Box sx={{ p: { xs: 2, md: 2 } }}>
+    <Box sx={{ 
+      p: { xs: 2, md: 2 },
+      animation: 'slideInLeft 0.6s ease-out',
+      '@keyframes slideInLeft': {
+        '0%': { transform: 'translateX(-100%)', opacity: 0 },
+        '100%': { transform: 'translateX(0)', opacity: 1 },
+      },
+    }}>
       {/* Logo */}
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, px: 1 }}>
+      <Box sx={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        mb: 3, 
+        px: 1,
+        animation: 'fadeInUp 0.8s ease-out 0.2s both',
+        '@keyframes fadeInUp': {
+          '0%': { transform: 'translateY(20px)', opacity: 0 },
+          '100%': { transform: 'translateY(0)', opacity: 1 },
+        },
+      }}>
         <Avatar
           sx={{
             width: { xs: 28, md: 24 },
@@ -294,7 +312,10 @@ const Sidebar = ({ onMenuClick, mobileOpen, onMobileClose }) => {
       </Box>
 
         {/* Favorites Section */}
-        <Box sx={{ mb: 2 }}>
+        <Box sx={{ 
+          mb: 2,
+          animation: 'fadeInUp 0.8s ease-out 0.4s both',
+        }}>
           <Box sx={{ display: 'flex', gap: 2, mb: 2, px: 1 }}>
             <Typography
               variant="caption"
@@ -323,7 +344,10 @@ const Sidebar = ({ onMenuClick, mobileOpen, onMobileClose }) => {
         </Box>
 
         {/* Dashboards Section */}
-        <Box sx={{ mb: 2 }}>
+        <Box sx={{ 
+          mb: 2,
+          animation: 'fadeInUp 0.8s ease-out 0.8s both',
+        }}>
           <Typography
             variant="caption"
             sx={{
@@ -343,7 +367,9 @@ const Sidebar = ({ onMenuClick, mobileOpen, onMobileClose }) => {
         </Box>
 
         {/* Pages Section */}
-        <Box>
+        <Box sx={{
+          animation: 'fadeInUp 0.8s ease-out 1.2s both',
+        }}>
           <Typography
             variant="caption"
             sx={{

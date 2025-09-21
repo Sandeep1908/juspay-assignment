@@ -224,7 +224,7 @@ const OrderList = () => {
           <Box sx={{ 
             display: 'grid', 
             gridTemplateColumns: '60px 1fr 1fr 1fr 1fr 1fr 1fr', 
-            py: 2, 
+            // py: 2, 
             px: { xs: 2, sm: 3 }, 
             backgroundColor: darkMode ? '#2d2d2d' : 'white', 
             borderBottom: darkMode ? '1px solid #404040' : '1px solid #f3f4f6', 
@@ -357,7 +357,7 @@ const OrderList = () => {
               sx={{
                 display: 'grid',
                 gridTemplateColumns: '60px 1fr 1fr 1fr 1fr 1fr 1fr',
-                py: 2.5,
+                py: 1.5,
                 px: { xs: 2, sm: 3 },
                 alignItems: 'center',
                 borderBottom: index < paginatedOrders.length - 1 ? (darkMode ? '1px solid #404040' : '1px solid #f3f4f6') : 'none',

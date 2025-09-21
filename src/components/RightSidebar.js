@@ -97,11 +97,12 @@ const commonTextStyle = {
   color: 'text.primary',
   mb: 0.5,
   lineHeight: 1.4,
+  fontSize:12
 };
 
 const timeTextStyle = {
   color: 'text.secondary',
-  fontSize: '0.75rem',
+  fontSize: '0.59rem',
 };
 
 const RightSidebar = () => {
@@ -121,16 +122,49 @@ const RightSidebar = () => {
         overflowY: 'auto',
         p: { xs: 2, sm: 3 },
         display: { xs: 'none', lg: 'block' },
+        animation: 'slideInRight 0.6s ease-out',
+        '@keyframes slideInRight': {
+          '0%': { transform: 'translateX(100%)', opacity: 0 },
+          '100%': { transform: 'translateX(0)', opacity: 1 },
+        },
       }}
     >
       {/* Notifications Section */}
-      <Typography variant="h6" sx={{ fontWeight: 600, mb: { xs: 1.5, sm: 2 }, color: 'text.primary', fontSize: { xs: '1rem', sm: '1.25rem' } }}>
+      <Typography 
+        variant="h6" 
+        sx={{ 
+          fontWeight: 600, 
+          mb: { xs: 1.5, sm: 2 }, 
+          color: 'text.primary', 
+          fontSize: { xs: '1rem', sm: '1.25rem' },
+          animation: 'fadeInUp 0.8s ease-out 0.2s both',
+          '@keyframes fadeInUp': {
+            '0%': { transform: 'translateY(20px)', opacity: 0 },
+            '100%': { transform: 'translateY(0)', opacity: 1 },
+          },
+        }}
+      >
         Notifications
       </Typography>
       
       <List sx={{ p: 0, mb: { xs: 3, sm: 4 } }}>
         {NOTIFICATIONS.map((notification, index) => (
-          <ListItem key={index} sx={{ p: 0, mb: 2 }}>
+          <ListItem 
+            key={index} 
+            sx={{ 
+              p: 0, 
+              mb: 2,
+              animation: `fadeInUp 0.6s ease-out ${0.3 + index * 0.1}s both`,
+              '&:hover': {
+                transform: 'translateX(5px)',
+                transition: 'transform 0.2s ease',
+              },
+              '@keyframes fadeInUp': {
+                '0%': { transform: 'translateY(20px)', opacity: 0 },
+                '100%': { transform: 'translateY(0)', opacity: 1 },
+              },
+            }}
+          >
             <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5, width: '100%' }}>
               <Box
                 sx={{
@@ -160,13 +194,33 @@ const RightSidebar = () => {
       </List>
 
       {/* Activities Section */}
-      <Typography variant="h6" sx={{ fontWeight: 600, mb: { xs: 1.5, sm: 2 }, color: 'text.primary', fontSize: { xs: '1rem', sm: '1.25rem' } }}>
+      <Typography 
+        variant="h6" 
+        sx={{ 
+          fontWeight: 600, 
+          mb: { xs: 1.5, sm: 2 }, 
+          color: 'text.primary', 
+          fontSize: { xs: '1rem', sm: '1.25rem' },
+          animation: 'fadeInUp 0.8s ease-out 0.8s both',
+        }}
+      >
         Activities
       </Typography>
       
       <List sx={{ p: 0, mb: { xs: 3, sm: 4 } }}>
         {ACTIVITIES.map((activity, index) => (
-          <ListItem key={index} sx={{ p: 0, mb: 2 }}>
+          <ListItem 
+            key={index} 
+            sx={{ 
+              p: 0, 
+              mb: 2,
+              animation: `fadeInUp 0.6s ease-out ${0.9 + index * 0.1}s both`,
+              '&:hover': {
+                transform: 'translateX(5px)',
+                transition: 'transform 0.2s ease',
+              },
+            }}
+          >
             <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5, width: '100%' }}>
               <Avatar
                 src={activity.avatar}
@@ -189,13 +243,33 @@ const RightSidebar = () => {
       </List>
 
       {/* Contacts Section */}
-      <Typography variant="h6" sx={{ fontWeight: 600, mb: { xs: 1.5, sm: 2 }, color: 'text.primary', fontSize: { xs: '1rem', sm: '1.25rem' } }}>
+      <Typography 
+        variant="h6" 
+        sx={{ 
+          fontWeight: 600, 
+          mb: { xs: 1.5, sm: 2 }, 
+          color: 'text.primary', 
+          fontSize: { xs: '1rem', sm: '1.25rem' },
+          animation: 'fadeInUp 0.8s ease-out 1.5s both',
+        }}
+      >
         Contacts
       </Typography>
       
       <List sx={{ p: 0 }}>
         {CONTACTS.map((contact, index) => (
-          <ListItem key={index} sx={{ p: 0, mb: 2 }}>
+          <ListItem 
+            key={index} 
+            sx={{ 
+              p: 0, 
+              mb: 2,
+              animation: `fadeInUp 0.6s ease-out ${1.6 + index * 0.1}s both`,
+              '&:hover': {
+                transform: 'translateX(5px)',
+                transition: 'transform 0.2s ease',
+              },
+            }}
+          >
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, width: '100%' }}>
               <Avatar
                 src={contact.avatar}
@@ -204,7 +278,7 @@ const RightSidebar = () => {
                   height: 32,
                 }}
               />
-              <Typography variant="body2" sx={{ fontWeight: 400, color: 'text.primary' }}>
+              <Typography variant="body2" sx={{ fontWeight: 400, color: 'text.primary',fontSize:'12px' }}>
                 {contact.name}
               </Typography>
             </Box>
