@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -36,7 +36,7 @@ const Header = ({ onMenuClick }) => {
   const { darkMode, toggleDarkMode } = useTheme();
   const muiTheme = useMuiTheme();
   const isMobile = useMediaQuery(muiTheme.breakpoints.down('md'));
-  const isTablet = useMediaQuery(muiTheme.breakpoints.down('lg'));
+
   const [notifMenuAnchor, setNotifMenuAnchor] = useState(null);
   
   // const [searchQuery, setSearchQuery] = useState(''); // for future search functionality

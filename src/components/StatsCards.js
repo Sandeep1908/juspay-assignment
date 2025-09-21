@@ -9,7 +9,7 @@ import WhiteTrendDownIcon from '../assets/icons/cards/white/ArrowFall.png';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { useTheme } from '../contexts/ThemeContext';
 import AnimatedCard from './common/AnimatedCard';
-import { useAnimatedList } from '../hooks/useAnimatedList';
+
 
 const chartConfig = {
   months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -139,8 +139,6 @@ const ProjectionsChart = () => {
 
 const StatsCards = () => {
   const { darkMode } = useTheme();
-  const muiTheme = useMuiTheme();
-  const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
   
   return (
     <Grid container spacing={{ xs: 1.5, sm: 2 }} sx={{ mb: { xs: 2, sm: 3 } }}>

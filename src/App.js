@@ -36,7 +36,7 @@ const AppContent = () => {
   }, [darkMode]);
 
   const isMobile = useMediaQuery(currentTheme.breakpoints.down('md'));
-  const isTablet = useMediaQuery(currentTheme.breakpoints.between('md', 'lg'));
+
 
   const handleDrawerToggle = useCallback(() => {
     setMobileOpen(!mobileOpen);
@@ -67,7 +67,7 @@ const AppContent = () => {
       Orders: <OrderListPage />
     };
     return pageComponents[activePage] || pageComponents.eCommerce;
-  }, [activePage]);
+  }, [activePage, isMobile]);
 
   return (
     <ThemeProvider theme={currentTheme}>

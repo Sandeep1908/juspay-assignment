@@ -5,8 +5,8 @@ import {
   Avatar,
   Checkbox,
   Pagination,
-  useMediaQuery,
-  useTheme as useMuiTheme,
+ 
+ 
 } from '@mui/material';
 import {
   Add,
@@ -27,7 +27,7 @@ import ContactIcon2 from '../assets/icons/contacts/IconSet (5).png';
 import ContactIcon3 from '../assets/icons/contacts/IconSet (6).png';
 import ContactIcon4 from '../assets/icons/contacts/IconSet (7).png';
 import ContactIcon5 from '../assets/icons/contacts/IconSet (8).png';
-import ContactIcon6 from '../assets/icons/contacts/IconSet (9).png';
+
 
 // TODO: Move this to a separate data file later
 const mockOrdersData = [
@@ -48,8 +48,8 @@ const getStatusColor = (status) => STATUS_COLORS[status] || STATUS_COLORS.Reject
 
 const OrderList = () => {
   const { darkMode } = useTheme();
-  const muiTheme = useMuiTheme();
-  const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
+ 
+
   const [searchQuery, setSearchQuery] = useState('');
   const [checkedItems, setCheckedItems] = useState(['#CM9804']);
   const [currentPage, setCurrentPage] = useState(1);

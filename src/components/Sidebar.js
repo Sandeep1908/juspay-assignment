@@ -15,7 +15,6 @@ import {
 } from '@mui/material';
 import {
   ChevronRight,
-  ExpandMore,
 } from '@mui/icons-material';
 import { useTheme } from '../contexts/ThemeContext';
 // Light theme sidebar icons

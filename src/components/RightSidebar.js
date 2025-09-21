@@ -1,12 +1,10 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import {
   Box,
   Typography,
   List,
   ListItem,
   Avatar,
-  useMediaQuery,
-  useTheme as useMuiTheme,
 } from '@mui/material';
 
 // Notification icons
@@ -106,8 +104,7 @@ const timeTextStyle = {
 };
 
 const RightSidebar = () => {
-  const muiTheme = useMuiTheme();
-  const isMobile = useMediaQuery(muiTheme.breakpoints.down('lg'));
+
 
   return (
     <Box
